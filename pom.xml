@@ -7,6 +7,14 @@
     <groupId>cloud.huazai.component</groupId>
     <artifactId>huazai-components-parent</artifactId>
     <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>huazai-component-response</module>
+        <module>huazai-component-exception</module>
+        <module>huazai-component-operationlog</module>
+        <module>huazai-component-redislock</module>
+        <module>huazai-component-tool</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

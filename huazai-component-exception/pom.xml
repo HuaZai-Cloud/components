@@ -17,4 +17,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+
+        <dependency>
+            <groupId>cloud.huazai.component</groupId>
+            <artifactId>huazai-component-tool</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+
+
+
+
+    </dependencies>
+
 </project>

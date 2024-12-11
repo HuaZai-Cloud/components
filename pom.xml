@@ -46,4 +46,14 @@
         </dependencies>
     </dependencyManagement>
 
+    <!--    子模块都默认引入-->
+    <dependencies>
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
 </project>

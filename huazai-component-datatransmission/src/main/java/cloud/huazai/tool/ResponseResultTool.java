@@ -1,10 +1,9 @@
 package cloud.huazai.tool;
 
-import cloud.huazai.datatransmission.MultiResponseResult;
-import cloud.huazai.datatransmission.PageResponseResult;
-import cloud.huazai.datatransmission.ResponseResult;
-import cloud.huazai.datatransmission.SingleResponseResult;
-import com.alibaba.cola.dto.SingleResponse;
+import cloud.huazai.datatransmission.response.MultiResponseResult;
+import cloud.huazai.datatransmission.response.PageResponseResult;
+import cloud.huazai.datatransmission.response.ResponseResult;
+import cloud.huazai.datatransmission.response.SingleResponseResult;
 
 import java.util.ArrayList;
 import java.util.Collection;

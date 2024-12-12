@@ -1,8 +1,7 @@
-package cloud.huazai.datatransmission;
+package cloud.huazai.datatransmission.response;
 
 import cloud.huazai.tool.java.util.CollectionUtils;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import java.util.Collection;
 
 @Getter
 @ToString
-public class PageResponseResult<T> extends ResponseResult{
+public class PageResponseResult<T> extends ResponseResult {
 
     private int totalCount = 0;
 

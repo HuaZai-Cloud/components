@@ -1,13 +1,11 @@
 package cloud.huazai.tool;
 
-import cloud.huazai.datatransmission.MultiResponseResult;
-import cloud.huazai.datatransmission.PageResponseResult;
-import cloud.huazai.datatransmission.ResponseResult;
-import cloud.huazai.datatransmission.SingleResponseResult;
+import cloud.huazai.datatransmission.response.MultiResponseResult;
+import cloud.huazai.datatransmission.response.PageResponseResult;
+import cloud.huazai.datatransmission.response.ResponseResult;
+import cloud.huazai.datatransmission.response.SingleResponseResult;
 
 import java.util.ArrayList;
-
-import static org.junit.Assert.*;
 
 /**
  * ResponseResultToolTest

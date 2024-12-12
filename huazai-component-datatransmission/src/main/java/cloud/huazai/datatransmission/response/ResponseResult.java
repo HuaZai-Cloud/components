@@ -1,6 +1,6 @@
-package cloud.huazai.datatransmission;
+package cloud.huazai.datatransmission.response;
 
-import lombok.Data;
+import cloud.huazai.datatransmission.response.Response;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ResponseResult extends Response{
+public class ResponseResult extends Response {
 
     private boolean success;
 

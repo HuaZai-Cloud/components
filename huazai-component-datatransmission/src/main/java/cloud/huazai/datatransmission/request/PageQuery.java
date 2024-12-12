@@ -1,5 +1,6 @@
-package cloud.huazai.datatransmission;
+package cloud.huazai.datatransmission.request;
 
+import cloud.huazai.datatransmission.request.Query;
 import cloud.huazai.tool.java.lang.StringUtils;
 import lombok.Getter;
 
@@ -10,7 +11,7 @@ import lombok.Getter;
  * @since 2024/12/12
  */
 @Getter
-public class PageQuery extends Query{
+public class PageQuery extends Query {
 
     private static final int DEFAULT_PAGE_SIZE = 10;
 

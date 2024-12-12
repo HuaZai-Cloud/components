@@ -6,7 +6,8 @@
     <parent>
         <groupId>cloud.huazai.component</groupId>
         <artifactId>huazai-components-parent</artifactId>
-        <version>1.0.0</version>
+        <version>${huazai-components-parent-version}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>huazai-component-redislock</artifactId>

@@ -6,10 +6,10 @@
 
     <groupId>cloud.huazai.component</groupId>
     <artifactId>huazai-components-parent</artifactId>
-    <version>1.0.0</version>
+    <version>${huazai-components-parent-version}</version>
     <packaging>pom</packaging>
     <modules>
-        <module>huazai-component-response</module>
+        <module>huazai-component-datatransmission</module>
         <module>huazai-component-exception</module>
         <module>huazai-component-operationlog</module>
         <module>huazai-component-redislock</module>
@@ -22,6 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot-version>3.3.5</spring-boot-version>
         <spring-cloud-version>2023.0.3</spring-cloud-version>
+        <huazai-components-parent-version>1.0.0</huazai-components-parent-version>
     </properties>
 
     <dependencyManagement>

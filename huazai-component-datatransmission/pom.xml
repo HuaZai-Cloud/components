@@ -10,12 +10,36 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>huazai-component-operationlog</artifactId>
+    <artifactId>huazai-component-datatransmission</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>cloud.huazai.component</groupId>
+            <artifactId>huazai-component-tool</artifactId>
+            <version>${huazai-components-parent-version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.alibaba.cola</groupId>
+            <artifactId>cola-component-dto</artifactId>
+            <version>5.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+    </dependencies>
 
 </project>

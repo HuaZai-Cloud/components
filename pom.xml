@@ -11,7 +11,7 @@
     <modules>
         <module>huazai-component-datatransmission</module>
         <module>huazai-component-exception</module>
-        <module>huazai-component-operationlog</module>
+        <module>huazai-component-operationlog-spring-boot-starter</module>
         <module>huazai-component-redislock</module>
         <module>huazai-component-tool</module>
     </modules>

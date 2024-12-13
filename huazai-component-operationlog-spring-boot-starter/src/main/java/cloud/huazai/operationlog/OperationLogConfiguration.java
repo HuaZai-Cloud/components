@@ -17,6 +17,11 @@ import java.util.Arrays;
 public class OperationLogConfiguration {
 
     @Bean
+    public LogProperties logProperties() {
+        return new LogProperties();
+    }
+
+    @Bean
     public OperationLogProperties operationLogProperties() {
         return new OperationLogProperties();
     }

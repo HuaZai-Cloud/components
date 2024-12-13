@@ -3,19 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>cloud.huazai.component</groupId>
-        <artifactId>huazai-components-parent</artifactId>
-        <version>${huazai-components-parent-version}</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
 
+
+
+    <groupId>cloud.huazai.component</groupId>
     <artifactId>huazai-component-datatransmission</artifactId>
-
+    <version>${huazai-component-version}</version>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot-version>3.3.5</spring-boot-version>
+        <huazai-component-version>1.0.0</huazai-component-version>
     </properties>
 
     <dependencies>
@@ -23,7 +22,7 @@
         <dependency>
             <groupId>cloud.huazai.component</groupId>
             <artifactId>huazai-component-tool</artifactId>
-            <version>${huazai-components-parent-version}</version>
+            <version>${huazai-component-version}</version>
         </dependency>
 
 
@@ -34,12 +33,44 @@
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>com.alibaba.cola</groupId>
+            <artifactId>cola-component-exception</artifactId>
+            <version>5.0.0</version>
         </dependency>
 
 
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.34</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.3.5</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+
+    </build>
 
 </project>

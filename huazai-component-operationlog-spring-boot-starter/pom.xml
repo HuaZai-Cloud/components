@@ -6,29 +6,25 @@
     <parent>
         <groupId>cloud.huazai.component</groupId>
         <artifactId>huazai-components-parent</artifactId>
-        <version>${huazai-components-parent-version}</version>
-        <relativePath>../pom.xml</relativePath>
+        <version>1.0.0</version>
     </parent>
-
+    <groupId>cloud.huazai.component</groupId>
     <artifactId>huazai-component-operationlog-spring-boot-starter</artifactId>
-
+    <version>1.0.0</version>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot-version>3.3.5</spring-boot-version>
+        <huazai-component-version>1.0.0</huazai-component-version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.alibaba.cola</groupId>
-            <artifactId>cola-component-catchlog-starter</artifactId>
-            <version>5.0.0</version>
-        </dependency>
 
         <dependency>
             <groupId>cloud.huazai.component</groupId>
             <artifactId>huazai-component-exception</artifactId>
-            <version>${huazai-components-parent-version}</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
@@ -55,6 +51,39 @@
             <version>2.0.53</version>
             <scope>provided</scope>
         </dependency>
+
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.34</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+
+    </build>
 
 </project>

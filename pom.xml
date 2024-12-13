@@ -6,7 +6,7 @@
 
     <groupId>cloud.huazai.component</groupId>
     <artifactId>huazai-components-parent</artifactId>
-    <version>${huazai-components-parent-version}</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <modules>
         <module>huazai-component-datatransmission</module>
@@ -53,8 +53,36 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.34</version>
             <scope>provided</scope>
         </dependency>
+
+
+
     </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!--be careful 在parent pom 里面一定要加这个属性-->
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+        </plugins>
+
+
+    </build>
+
 
 </project>

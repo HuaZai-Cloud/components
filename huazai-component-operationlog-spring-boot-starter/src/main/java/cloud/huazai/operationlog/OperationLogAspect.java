@@ -84,8 +84,6 @@ public class OperationLogAspect {
     public void operationLogMethods() {}
 
 
-
-
     @Pointcut("execution(public * *(..)) && (controllerMethods() || serviceMethods() || repositoryMethods())")
     public void enableOperationLogMethods() {}
 

@@ -1,20 +1,21 @@
 package cloud.huazai.operationlog;
 
+import cloud.huazai.exception.BaseException;
 import cloud.huazai.exception.BusinessException;
-import com.alibaba.cola.catchlog.ResponseHandlerFactory;
-import com.alibaba.cola.exception.BaseException;
-import com.alibaba.cola.exception.BizException;
-import com.alibaba.cola.exception.SysException;
+import cloud.huazai.exception.SysException;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONWriter;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+
 
 /**
  * OperationLogAspect
@@ -30,54 +31,63 @@ public class OperationLogAspect {
 
     private final OperationLogProperties properties;
 
+    // 使用 ThreadLocal 避免重复记录日志
+    private static final ThreadLocal<Boolean> alreadyLogged = ThreadLocal.withInitial(() -> false);
+
+
     public OperationLogAspect(OperationLogProperties properties) {
         this.properties = properties;
     }
 
-    @Around("componentMethods()")
+    @Around("enableOperationLogMethods() || operationLogMethods()")
     public Object logOperation(ProceedingJoinPoint joinPoint) throws Throwable {
-        String methodName = joinPoint.getSignature().getName();
-        Object[] args = joinPoint.getArgs();
 
-        logger.info("开始执行方法: {}，参数: {}", methodName, args);
-
-        Object result;
-        try {
-            result = joinPoint.proceed();
-            logger.info("方法 {} 执行成功，返回值: {}", methodName, result);
-        } catch (Throwable ex) {
-            logger.error("方法 {} 执行异常: {}", methodName, ex.getMessage());
-            throw ex;
+        if (alreadyLogged.get()) {
+            return joinPoint.proceed(); // 如果已经记录过日志，直接执行方法
         }
 
-        return result;
-    }
-
-    @Pointcut("@within(CatchAndLog) && execution(public * *(..))")
-    public void pointcut() {
-    }
-
-    @Around("pointcut()")
-    public Object around(ProceedingJoinPoint joinPoint) {
-        long startTime = System.currentTimeMillis();
-        this.logRequest(joinPoint);
-        Object response = null;
-
         try {
-            response = joinPoint.proceed();
-        } catch (Throwable var9) {
-            response = this.handleException(joinPoint, var9);
+            alreadyLogged.set(true); // 设置标记，表示当前线程已记录日志
+
+            long startTime = System.currentTimeMillis();
+            // String methodName = joinPoint.getSignature().getName();
+            // Object[] args = joinPoint.getArgs();
+
+            loggerRequest(joinPoint);
+            Object response = null;
+            try {
+                response = joinPoint.proceed();
+            } catch (Throwable throwable) {
+                loggerException(joinPoint, throwable);
+                throw throwable;
+            } finally {
+                loggerResponse( startTime,  response);
+            }
+
+            return response;
+
         } finally {
-            this.logResponse(startTime, response);
+            alreadyLogged.remove(); // 清理标记
+
         }
 
-        return response;
     }
+
+
+
+
+    // 记录 @OperationLog 标记的方法日志
+    // @Pointcut("@annotation(cloud.huazai.operationlog.OperationLog)")
+    // public void operationLogMethods() {}
+
+    @Pointcut("@within(OperationLog) && execution(public * *(..))")
+    public void operationLogMethods() {}
+
 
 
 
     @Pointcut("execution(public * *(..)) && (controllerMethods() || serviceMethods() || repositoryMethods())")
-    public void componentMethods() {}
+    public void enableOperationLogMethods() {}
 
     @Pointcut("within(@org.springframework.stereotype.Controller *)")
     public boolean controllerMethods() {
@@ -101,53 +111,68 @@ public class OperationLogAspect {
 
 
 
-    private Object handleException(ProceedingJoinPoint joinPoint, Throwable e) {
-        MethodSignature ms = (MethodSignature)joinPoint.getSignature();
-        Class<?> returnType = ms.getReturnType();
-        if (e instanceof BusinessException) {
-            logger.warn("BIZ EXCEPTION : {}", e.getMessage());
-            if (logger.isDebugEnabled()) {
-                logger.error(e.getMessage(), e);
-            }
-            return ResponseHandlerFactory.get().handle(returnType, ((BizException)e).getErrCode(), e.getMessage());
-        } else if (e instanceof SysException) {
-            logger.error("SYS EXCEPTION: {}", e.getMessage(), e);
-            return ResponseHandlerFactory.get().handle(returnType, ((SysException)e).getErrCode(), e.getMessage());
-        } else {
-            logger.error("UNKNOWN EXCEPTION: {}", e.getMessage(), e);
-            return ResponseHandlerFactory.get().handle(returnType, "UNKNOWN_ERROR", e.getMessage());
+
+
+    private void loggerException(ProceedingJoinPoint joinPoint, Throwable e) {
+
+        String methodName = joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+
+        // 进入异常首先记录请求参数
+        logger.error("START PROCESSING: {}",methodName);
+        for (Object arg : args) {
+            logger.error("REQUEST: {}", JSON.toJSONString(arg, JSONWriter.Feature.IgnoreErrorGetter));
         }
+
+
+        switch (e) {
+            case BusinessException businessException -> {
+                logger.warn("BIZ EXCEPTION : {}", e.getMessage());
+                if (logger.isDebugEnabled()) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            case SysException sysException -> logger.error("SYS EXCEPTION: {}", e.getMessage(), e);
+            case BaseException baseException -> logger.error("Base EXCEPTION: {}", e.getMessage(), e);
+            case null, default -> logger.error("UNKNOWN EXCEPTION: {}", (e!= null? e.getMessage() : ""), e);
+        }
+
     }
 
-    private void logResponse(long startTime, Object response) {
+
+    private void loggerResponse(long startTime, Object response) {
         try {
             long endTime = System.currentTimeMillis();
             if (logger.isDebugEnabled()) {
                 logger.debug("RESPONSE: {}", JSON.toJSONString(response));
                 logger.debug("COST: {}ms", endTime - startTime);
             }
-        } catch (Exception var6) {
-            logger.error("logResponse error: {}", var6.getMessage(), var6);
+        } catch (Exception e) {
+            logger.error("logResponse error: {}", e.getMessage(), e);
         }
+
 
     }
 
-    private void logRequest(ProceedingJoinPoint joinPoint) {
+
+
+    private void loggerRequest(ProceedingJoinPoint joinPoint) {
+
         if (logger.isDebugEnabled()) {
+
             try {
-                logger.debug("START PROCESSING: {}", joinPoint.getSignature().toShortString());
+                String methodName = joinPoint.getSignature().getName();
                 Object[] args = joinPoint.getArgs();
-                Object[] var3 = args;
-                int var4 = args.length;
 
-                for(int var5 = 0; var5 < var4; ++var5) {
-                    Object arg = var3[var5];
-                    logger.debug("REQUEST: {}", logger.toJSONString(arg, new SerializerFeature[]{SerializerFeature.IgnoreErrorGetter}));
+                logger.debug("START PROCESSING: {}",methodName);
+
+                for (Object arg : args) {
+                    logger.debug("REQUEST: {}", JSON.toJSONString(arg, JSONWriter.Feature.IgnoreErrorGetter));
                 }
-            } catch (Exception var7) {
-                logger.error("logReqeust error: {}", var7.getMessage(), var7);
+            } catch (Exception e) {
+                logger.error("logReqeust error: {}", e.getMessage(), e);
             }
-
         }
+
     }
 }

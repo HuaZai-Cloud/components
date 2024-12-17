@@ -22,7 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot-version>3.3.5</spring-boot-version>
         <spring-cloud-version>2023.0.3</spring-cloud-version>
-        <huazai-components-parent-version>1.0.0</huazai-components-parent-version>
+        <huazai-component-version>1.0.0</huazai-component-version>
     </properties>
 
     <dependencyManagement>
@@ -47,42 +47,7 @@
         </dependencies>
     </dependencyManagement>
 
-    <!--    子模块都默认引入-->
-    <dependencies>
-        <!--lombok-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
-            <scope>provided</scope>
-        </dependency>
 
-
-
-    </dependencies>
-
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot-version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <!--be careful 在parent pom 里面一定要加这个属性-->
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-
-        </plugins>
-
-
-    </build>
 
 
 </project>

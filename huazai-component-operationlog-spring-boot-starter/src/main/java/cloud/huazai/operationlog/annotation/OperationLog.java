@@ -1,4 +1,4 @@
-package cloud.huazai.operationlog;
+package cloud.huazai.operationlog.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,9 +12,8 @@ import java.lang.annotation.Target;
  * @since 2024/12/12
  */
 
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OperationLog {
-
 
 }

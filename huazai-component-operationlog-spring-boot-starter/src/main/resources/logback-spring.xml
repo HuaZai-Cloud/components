@@ -1,10 +1,11 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
 
+    <springProperty scope="context" name="service_name" source="spring.application.name" defaultValue="application"/>
     <!--定义参数,后面可以通过${APP_NAME}使用-->
-    <property name="APP_NAME" value="start-test" />
+    <property name="APP_NAME" value="${service_name}" />
     <property name="LOG_PATH" value="${user.home}/logs/${APP_NAME}" />
-    <property name="LOG_FILE" value="${LOG_PATH}/application.log" />
+    <property name="LOG_FILE" value="${LOG_PATH}/${service_name}.log" />
 
     <appender name="APPLICATION" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--定义日志输出的路径-->

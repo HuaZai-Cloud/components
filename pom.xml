@@ -6,7 +6,7 @@
 
     <groupId>cloud.huazai.component</groupId>
     <artifactId>huazai-components-parent</artifactId>
-    <version>1.0.0</version>
+    <version>${huazai-component-version}</version>
     <packaging>pom</packaging>
     <modules>
         <module>huazai-component-datatransmission</module>
@@ -23,6 +23,7 @@
         <spring-boot-version>3.3.5</spring-boot-version>
         <spring-cloud-version>2023.0.3</spring-cloud-version>
         <huazai-component-version>1.0.0</huazai-component-version>
+        <fastjson2-version>2.0.53</fastjson2-version>
     </properties>
 
     <dependencyManagement>
@@ -44,10 +45,58 @@
                 <scope>import</scope>
             </dependency>
 
+            <dependency>
+                <groupId>cloud.huazai.component</groupId>
+                <artifactId>huazai-component-tool</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson2-version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
-
+<build>
+    <plugins>
+        <!-- 添加flatten-maven-plugin插件 -->
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>flatten-maven-plugin</artifactId>
+            <version>1.6.0</version>
+            <inherited>true</inherited>
+            <executions>
+                <execution>
+                    <id>flatten</id>
+                    <phase>process-resources</phase>
+                    <goals>
+                        <goal>flatten</goal>
+                    </goals>
+                    <configuration>
+                        <!-- 避免IDE将 .flattened-pom.xml 自动识别为功能模块 -->
+                        <updatePomFile>true</updatePomFile>
+                        <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                        <pomElements>
+                            <parent>expand</parent>
+                            <distributionManagement>remove</distributionManagement>
+                            <repositories>remove</repositories>
+                        </pomElements>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>flatten.clean</id>
+                    <phase>clean</phase>
+                    <goals>
+                        <goal>clean</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 
 
 </project>

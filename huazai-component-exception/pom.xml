@@ -7,7 +7,8 @@
     <parent>
         <groupId>cloud.huazai.component</groupId>
         <artifactId>huazai-components-parent</artifactId>
-        <version>1.0.0</version>
+        <version>${huazai-component-version}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>huazai-component-exception</artifactId>
@@ -19,8 +20,6 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-boot-version>3.3.5</spring-boot-version>
-        <huazai-component-version>1.0.0</huazai-component-version>
     </properties>
 
     <dependencies>
@@ -28,14 +27,12 @@
         <dependency>
             <groupId>cloud.huazai.component</groupId>
             <artifactId>huazai-component-tool</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
             <scope>provided</scope>
         </dependency>
 

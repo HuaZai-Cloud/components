@@ -37,6 +37,26 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cloud.huazai.component</groupId>
+            <artifactId>huazai-component-tool</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- redis -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
+
+<!--        </dependency>-->
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>lock4j-redisson-spring-boot-starter</artifactId>

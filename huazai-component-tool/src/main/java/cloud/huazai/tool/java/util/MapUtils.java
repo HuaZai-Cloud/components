@@ -20,6 +20,8 @@ public class MapUtils {
 
         System.out.println("map = " + map);
 
+        System.out.println("map = " + map);
+
         return !isEmpty(map);
     }
 }

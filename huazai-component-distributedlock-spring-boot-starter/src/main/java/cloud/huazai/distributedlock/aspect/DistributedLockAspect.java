@@ -1,19 +1,23 @@
-package cloud.huazai.redislock.aspect;
+package cloud.huazai.distributedlock.aspect;
 
-import cloud.huazai.redislock.annotation.RedisLock;
+import cloud.huazai.distributedlock.annotation.DistributedLock;
+import cloud.huazai.distributedlock.exception.DistributedLockException;
+import cloud.huazai.tool.java.constant.StringConstant;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,17 +29,21 @@ import java.util.concurrent.TimeUnit;
 
 @Aspect
 @Component
-public class RedisLockAspect {
+public class DistributedLockAspect {
+
+    private static final String REDISSON_LOCK_EXCEPTION_INFO = "[RedissonLock] [Exception] {} {} {}";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DistributedLockAspect.class);
 
     private final RedissonClient redissonClient;
     private final ExpressionParser parser = new SpelExpressionParser();
 
-    public RedisLockAspect(RedissonClient redissonClient) {
+    public DistributedLockAspect(RedissonClient redissonClient) {
         this.redissonClient = redissonClient;
     }
 
     @Around("@annotation(lockAnnotation)")
-    public Object handleDistributedLock(ProceedingJoinPoint joinPoint, RedisLock lockAnnotation) throws Throwable {
+    public Object handleDistributedLock(ProceedingJoinPoint joinPoint, DistributedLock lockAnnotation) throws Throwable {
         String baseKey = lockAnnotation.key();
         String[] keySuffix = lockAnnotation.keySuffix();
         long leaseTime = lockAnnotation.leaseTime();
@@ -52,7 +60,9 @@ public class RedisLockAspect {
             if (lock.tryLock(waitTime, leaseTime, TimeUnit.SECONDS)) {
                 return joinPoint.proceed();
             } else {
-                throw new IllegalStateException(errorMessage + ": " + lockKey);
+                String packageNameAndMethodName = getPackageNameAndMethodName(joinPoint);
+                LOGGER.error(REDISSON_LOCK_EXCEPTION_INFO, packageNameAndMethodName,lockKey, errorMessage);
+                throw new DistributedLockException(errorMessage);
             }
         } finally {
             if (lock.isHeldByCurrentThread()) {
@@ -67,7 +77,6 @@ public class RedisLockAspect {
         }
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
         Object[] args = joinPoint.getArgs();
         String[] parameterNames = signature.getParameterNames();
 
@@ -79,17 +88,20 @@ public class RedisLockAspect {
         StringBuilder suffixBuilder = new StringBuilder();
         for (String suffixPart : keySuffixArray) {
             Object resolvedValue = parser.parseExpression(suffixPart).getValue(context);
-            suffixBuilder.append(resolvedValue).append(":");
+            suffixBuilder.append(resolvedValue).append(StringConstant.COLON);
         }
 
         if (!suffixBuilder.isEmpty()) {
             suffixBuilder.setLength(suffixBuilder.length() - 1);
         }
 
-        return baseKey + ":" + suffixBuilder.toString();
+        return baseKey + StringConstant.COLON + suffixBuilder.toString();
     }
 
-
-
+    private String getPackageNameAndMethodName(JoinPoint joinPoint) {
+        String packageName = joinPoint.getTarget().getClass().getPackage().getName();
+        String shortString = joinPoint.getSignature().toShortString();
+        return packageName + StringConstant.DOT + shortString;
+    }
 
 }

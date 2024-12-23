@@ -1,6 +1,7 @@
-package cloud.huazai.redislock.config;
+package cloud.huazai.distributedlock.config;
 
-import cloud.huazai.redislock.aspect.RedisLockAspect;
+import cloud.huazai.distributedlock.aspect.DistributedLockAspect;
+import cloud.huazai.tool.java.constant.StringConstant;
 import cloud.huazai.tool.java.lang.StringUtils;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -18,13 +19,15 @@ import org.springframework.context.annotation.Configuration;
  * @since 2024/12/20
  */
 @Configuration
-@EnableConfigurationProperties(RedisLockProperties.class)
+@EnableConfigurationProperties(DistributedLockProperties.class)
 @ConditionalOnProperty(prefix = "spring.redis", name = "host")
-public class RedisLockAutoConfiguration {
+public class DistributedLockAutoConfiguration {
 
-    private final RedisLockProperties redisLockProperties;
+    private static final String SERVER_CONFIG_ADDRESS_PREFIX = "redis://";
 
-    public RedisLockAutoConfiguration(RedisLockProperties redisLockProperties) {
+    private final DistributedLockProperties redisLockProperties;
+
+    public DistributedLockAutoConfiguration(DistributedLockProperties redisLockProperties) {
         this.redisLockProperties = redisLockProperties;
     }
 
@@ -33,7 +36,7 @@ public class RedisLockAutoConfiguration {
     public RedissonClient redissonClient() {
         Config config = new Config();
         SingleServerConfig singleServerConfig = config.useSingleServer();
-        singleServerConfig.setAddress("redis://" + redisLockProperties.getHost() + ":" + redisLockProperties.getPort());
+        singleServerConfig.setAddress(SERVER_CONFIG_ADDRESS_PREFIX + redisLockProperties.getHost() + StringConstant.COLON + redisLockProperties.getPort());
         singleServerConfig.setPingConnectionInterval(5000);
         if (StringUtils.isNotBlank(redisLockProperties.getPassword())) {
             singleServerConfig.setPassword(redisLockProperties.getPassword());
@@ -45,7 +48,7 @@ public class RedisLockAutoConfiguration {
     }
 
     @Bean
-    public RedisLockAspect redisLockAspect(RedissonClient redissonClient) {
-        return new RedisLockAspect(redissonClient);
+    public DistributedLockAspect redisLockAspect(RedissonClient redissonClient) {
+        return new DistributedLockAspect(redissonClient);
     }
 }

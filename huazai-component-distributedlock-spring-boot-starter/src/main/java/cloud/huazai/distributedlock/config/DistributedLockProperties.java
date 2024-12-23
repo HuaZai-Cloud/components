@@ -1,4 +1,4 @@
-package cloud.huazai.redislock.config;
+package cloud.huazai.distributedlock.config;
 
 
 import lombok.Getter;
@@ -14,7 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "spring.redis")
-public class RedisLockProperties {
+public class DistributedLockProperties {
 
     private String host;
     private String port;

@@ -1,6 +1,7 @@
 package cloud.huazai.operationlog.aspect;
 
 
+import cloud.huazai.tool.java.constant.StringConstant;
 import cloud.huazai.tool.java.lang.StringUtils;
 import cloud.huazai.tool.java.util.CollectionUtils;
 import com.alibaba.fastjson2.JSON;
@@ -13,7 +14,6 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,6 +24,10 @@ import java.util.List;
 @Component
 public class OperationLogAspect {
 
+    private static final String OPERATION_LOG_REQUEST_INFO = "[OperationLog] [Request] {} {}";
+    private static final String OPERATION_LOG_RESPONSE_INFO = "[OperationLog] [Response] {} {}";
+    private static final String OPERATION_LOG_EXCEPTION_INFO = "[OperationLog] [Exception] {} {}";
+
     private static final Logger logger = LoggerFactory.getLogger(OperationLogAspect.class);
 
     // 定义切点：拦截所有使用了 @OperationLog 注解的方法
@@ -32,13 +36,13 @@ public class OperationLogAspect {
 
     // 请求前日志记录
     @Before("operationLogMethods()")
-    public void logRequest(JoinPoint joinPoint) throws NoSuchMethodException {
+    public void logRequest(JoinPoint joinPoint) {
 
-        String packageNameAndMethodName = packageNameAndMethodName(joinPoint);
+        String packageNameAndMethodName = getPackageNameAndMethodName(joinPoint);
 
        String params = getRequestParams(joinPoint);
 
-        logger.info("[OperationLog] [Request] {} {}", packageNameAndMethodName, StringUtils.isNotBlank(params) ? params : "");
+        logger.info(OPERATION_LOG_REQUEST_INFO, packageNameAndMethodName, StringUtils.isNotBlank(params) ? params : "");
     }
 
 
@@ -48,11 +52,11 @@ public class OperationLogAspect {
     @AfterReturning(value = "operationLogMethods()", returning = "response")
     public void logResponse(JoinPoint joinPoint, Object response) {
 
-        String packageNameAndMethodName = packageNameAndMethodName(joinPoint);
+        String packageNameAndMethodName = getPackageNameAndMethodName(joinPoint);
 
        String responseInfo = getResponseInfo(response);
 
-        logger.info("[OperationLog] [Response] {} {}", packageNameAndMethodName, StringUtils.isNotBlank(responseInfo) ? responseInfo : "");
+        logger.info(OPERATION_LOG_RESPONSE_INFO, packageNameAndMethodName, StringUtils.isNotBlank(responseInfo) ? responseInfo : "");
     }
 
 
@@ -61,21 +65,21 @@ public class OperationLogAspect {
     @AfterThrowing(value = "operationLogMethods()", throwing = "ex")
     public void logException(JoinPoint joinPoint, Exception ex) {
 
-        String packageNameAndMethodName = packageNameAndMethodName(joinPoint);
+        String packageNameAndMethodName = getPackageNameAndMethodName(joinPoint);
 
         if (!logger.isInfoEnabled()) {
             String params = getRequestParams(joinPoint);
-            logger.error("[OperationLog] [Request] {} {}", packageNameAndMethodName, StringUtils.isNotBlank(params) ? params : "");
+            logger.error(OPERATION_LOG_REQUEST_INFO, packageNameAndMethodName, StringUtils.isNotBlank(params) ? params : "");
         }
 
-        logger.error("[OperationLog] [Exception] {} {}", packageNameAndMethodName, ex.getMessage());
+        logger.error(OPERATION_LOG_EXCEPTION_INFO, packageNameAndMethodName, ex.getMessage());
     }
 
 
-    private String packageNameAndMethodName(JoinPoint joinPoint) {
+    private String getPackageNameAndMethodName(JoinPoint joinPoint) {
         String packageName = joinPoint.getTarget().getClass().getPackage().getName();
         String shortString = joinPoint.getSignature().toShortString();
-        return packageName + "." + shortString;
+        return packageName + StringConstant.DOT + shortString;
     }
 
     private String getRequestParams(JoinPoint joinPoint) {
@@ -93,7 +97,7 @@ public class OperationLogAspect {
         if (CollectionUtils.isEmpty(paramList)) {
             return null;
         }
-        return String.join(",", paramList);
+        return String.join(StringConstant.COMMA, paramList);
     }
 
     private String getResponseInfo(Object response) {

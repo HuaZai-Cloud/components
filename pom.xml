@@ -12,7 +12,7 @@
         <module>huazai-component-datatransmission</module>
         <module>huazai-component-exception</module>
         <module>huazai-component-operationlog-spring-boot-starter</module>
-        <module>huazai-component-redislock</module>
+        <module>huazai-component-distributedlock-spring-boot-starter</module>
         <module>huazai-component-tool</module>
     </modules>
 
@@ -48,6 +48,12 @@
             <dependency>
                 <groupId>cloud.huazai.component</groupId>
                 <artifactId>huazai-component-tool</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cloud.huazai.component</groupId>
+                <artifactId>huazai-component-exception</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

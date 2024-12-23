@@ -17,10 +17,12 @@ import java.util.Collection;
 
 public class ResponseResultTool {
 
+    private static final String SUCCESS_CODE ="200";
+
     public static ResponseResult buildSuccess() {
         ResponseResult response = new ResponseResult();
         response.setSuccess(true);
-        response.setCode("200");
+        response.setCode(SUCCESS_CODE);
         return response;
     }
 
@@ -35,7 +37,7 @@ public class ResponseResultTool {
     public static <T> SingleResponseResult<T> buildSuccess(T data) {
         SingleResponseResult<T> response = new SingleResponseResult<>();
         response.setSuccess(true);
-        response.setCode("200");
+        response.setCode(SUCCESS_CODE);
         response.setData(data);
         return response;
     }
@@ -44,15 +46,15 @@ public class ResponseResultTool {
     public static <T> MultiResponseResult<T> buildSuccess(Collection<T> collData) {
         MultiResponseResult<T> response = new MultiResponseResult<>();
         response.setSuccess(true);
-        response.setCode("200");
+        response.setCode(SUCCESS_CODE);
         response.setData(collData);
         return response;
     }
 
-    public static <T> PageResponseResult<T> buildSuccess(Collection<T> collData,int totalCount, int pageSize, int pageIndex) {
+    public static <T> PageResponseResult<T> buildSuccess(Collection<T> collData, int totalCount, int pageSize, int pageIndex) {
         PageResponseResult<T> response = new PageResponseResult<>();
         response.setSuccess(true);
-        response.setCode("200");
+        response.setCode(SUCCESS_CODE);
         response.setData(collData);
         response.setTotalCount(totalCount);
         response.setPageSize(pageSize);
@@ -63,14 +65,13 @@ public class ResponseResultTool {
     public static <T> PageResponseResult<T> buildSuccess(int pageSize, int pageIndex) {
         PageResponseResult<T> response = new PageResponseResult<>();
         response.setSuccess(true);
-        response.setCode("200");
+        response.setCode(SUCCESS_CODE);
         response.setData(new ArrayList<>());
         response.setTotalCount(0);
         response.setPageSize(pageSize);
         response.setPageIndex(pageIndex);
         return response;
     }
-
 
 
 }

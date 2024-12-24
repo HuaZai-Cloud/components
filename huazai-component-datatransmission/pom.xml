@@ -8,7 +8,7 @@
     <parent>
         <groupId>cloud.huazai.component</groupId>
         <artifactId>huazai-components-parent</artifactId>
-        <version>${huazai-component-version}</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

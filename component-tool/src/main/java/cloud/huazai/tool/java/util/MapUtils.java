@@ -18,6 +18,7 @@ public class MapUtils {
 
     public static boolean isNotEmpty(Map<?,?> map) {
         System.out.println("map = " + map);
+        System.out.println("map = " + map);
         return !isEmpty(map);
     }
 }

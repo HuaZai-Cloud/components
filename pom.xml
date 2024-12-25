@@ -9,6 +9,9 @@
     <version>${revision}</version>
     <packaging>pom</packaging>
 
+    <name>components-parent</name>
+    <description>Component parent project</description>
+
     <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>
 
     <licenses>

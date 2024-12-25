@@ -12,8 +12,8 @@
     </parent>
 
     <artifactId>component-tool</artifactId>
-    <name>${project.artifactId}</name>
-    <description>${project.artifactId}</description>
+    <name>component-tool</name>
+    <description>Java tool class library, through static method encapsulation, reduces the learning cost of relevant APIs and improves work efficiency.</description>
     <packaging>jar</packaging>
 
     <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>

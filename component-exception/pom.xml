@@ -12,8 +12,8 @@
     </parent>
 
     <artifactId>component-exception</artifactId>
-    <name>${project.artifactId}</name>
-    <description>${project.artifactId}</description>
+    <name>component-exception</name>
+    <description>Exception Information Component</description>
     <packaging>jar</packaging>
 
     <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>

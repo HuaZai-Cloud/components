@@ -13,8 +13,8 @@
     </parent>
 
     <artifactId>component-datatransmission</artifactId>
-    <name>${project.artifactId}</name>
-    <description>${project.artifactId}</description>
+    <name>component-datatransmission</name>
+    <description>Unified data transmission rules</description>
     <packaging>jar</packaging>
 
     <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>

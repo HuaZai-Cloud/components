@@ -12,8 +12,8 @@
     </parent>
 
     <artifactId>component-operationlog-spring-boot-starter</artifactId>
-    <name>${project.artifactId}</name>
-    <description>${project.artifactId}</description>
+    <name>operationlog-starte</name>
+    <description>Use AOP to record the operation log,Ready to use out of the box</description>
     <packaging>jar</packaging>
 
     <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>

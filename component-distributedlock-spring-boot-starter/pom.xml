@@ -12,8 +12,8 @@
     </parent>
 
     <artifactId>component-distributedlock-spring-boot-starter</artifactId>
-    <name>${project.artifactId}</name>
-    <description>${project.artifactId}</description>
+    <name>component-distributedlock-spring-boot-starter</name>
+    <description>Distributed locks made with redisson and AOP,Ready to use out of the box</description>
     <packaging>jar</packaging>
 
     <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>

@@ -35,6 +35,14 @@
                 <role>Architect</role>
             </roles>
         </developer>
+        <developer>
+            <id>devon</id>
+            <name>devon</name>
+            <email>devon@huazai.cloud</email>
+            <roles>
+                <role>Architect</role>
+            </roles>
+        </developer>
     </developers>
 
 

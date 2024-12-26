@@ -16,7 +16,7 @@ public class DateUtils {
 
     // ------------------------------------------------- Date ----------------------------------------------------------
 
-    public static Date nowDate() {
+    public static Date now() {
         return new Date();
     }
 
@@ -105,24 +105,28 @@ public class DateUtils {
     }
 
     public static LocalDateTime atStartOfDay(LocalDateTime localDateTime){
-        return localDateTime.toLocalDate().atStartOfDay();
+        return localDateTime.toLocalDate().atTime(LocalTime.MIN);
+    }
+
+    public static LocalDateTime atEndOfDay(LocalDateTime localDateTime) {
+        return localDateTime.toLocalDate().atTime(LocalTime.MAX);
     }
 
 
     // -------------------------------------------- ZonedDateTime -----------------------------------------------------
 
 
-    public static ZonedDateTime nowZonedDateTime(String timeZone) {
-        return nowZonedDateTime(TimeZone.getTimeZone(timeZone));
+    public static ZonedDateTime now(String timeZone) {
+        return now(TimeZone.getTimeZone(timeZone));
     }
 
-    public static ZonedDateTime nowZonedDateTime(TimeZone timeZone) {
+    public static ZonedDateTime now(TimeZone timeZone) {
         ZoneId zoneId = timeZone.toZoneId();
         return ZonedDateTime.now(zoneId);
     }
 
 
-    public static ZonedDateTime nowZonedDateTime(TimeZoneID timeZoneID, int offsetHour) {
+    public static ZonedDateTime now(TimeZoneID timeZoneID, int offsetHour) {
         return ZonedDateTime.now(ZoneId.ofOffset(timeZoneID.name(), ZoneOffset.ofHours(offsetHour)));
     }
 

@@ -1,6 +1,7 @@
 package cloud.huazai.tool.java.date;
 
 import java.time.*;
+import java.time.temporal.Temporal;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -15,8 +16,23 @@ public class DateUtils {
 
     // ------------------------------------------------- Date ----------------------------------------------------------
 
-    public static Date nowDate(){
+    public static Date nowDate() {
         return new Date();
+    }
+
+    public static Date toDate(Temporal temporal) {
+
+        if (temporal instanceof ZonedDateTime) {
+            return toDate(((ZonedDateTime) temporal).toLocalDateTime());
+
+        } else if (temporal instanceof LocalDateTime) {
+            return toDate((LocalDateTime) temporal);
+
+        } else if (temporal instanceof LocalDate) {
+            return toDate(((LocalDate) temporal).atStartOfDay());
+        }
+
+        throw new IllegalArgumentException("temporal should be ZonedDateTime, LocalDateTime or LocalDate, is: " + temporal);
     }
 
     public static Date toDate(ZonedDateTime zonedDateTime) {
@@ -37,22 +53,11 @@ public class DateUtils {
     }
 
     public static Date toDate(int year, int month, int dayOfMonth) {
-        return toDate(toLocalDate(year, month, dayOfMonth));
+        return toDate(year, month, dayOfMonth,0,0,0);
     }
 
     // ---------------------------------------------- LocalDate -------------------------------------------------------
 
-    public static LocalDate nowLocalDate() {
-        return LocalDate.now();
-    }
-
-    public static LocalDate toLocalDate(ZonedDateTime zonedDateTime) {
-        return zonedDateTime.toLocalDate();
-    }
-
-    public static LocalDate toLocalDate(LocalDateTime localDateTime) {
-        return localDateTime.toLocalDate();
-    }
 
     public static LocalDate toLocalDate(Date date) {
         return toLocalDateTime(date).toLocalDate();
@@ -63,23 +68,12 @@ public class DateUtils {
     }
 
 
-
     // ---------------------------------------------- LocalTime -------------------------------------------------------
-    public static LocalTime nowLocalTime() {
-        return LocalTime.now();
-    }
 
     public static LocalTime toLocalTime(Date date) {
         return toLocalDateTime(date).toLocalTime();
     }
 
-    public static LocalTime toLocalTime(LocalDateTime localDateTime) {
-        return localDateTime.toLocalTime();
-    }
-
-    public static LocalTime toLocalTime(ZonedDateTime zonedDateTime) {
-        return zonedDateTime.toLocalTime();
-    }
 
     public static LocalTime toLocalTime(int hour, int minute, int second) {
         return LocalTime.of(hour, minute, second);
@@ -88,9 +82,7 @@ public class DateUtils {
 
 
     // -------------------------------------------- LocalDateTime -----------------------------------------------------
-    public static LocalDateTime nowLocalDateTime() {
-        return LocalDateTime.now();
-    }
+
 
     public static LocalDateTime toLocalDateTime(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -100,7 +92,7 @@ public class DateUtils {
         return localDate.atStartOfDay();
     }
 
-    public static LocalDateTime toLocalDateTime(LocalDate localDate,LocalTime localTime) {
+    public static LocalDateTime toLocalDateTime(LocalDate localDate, LocalTime localTime) {
         return localDate.atTime(localTime);
     }
 
@@ -109,22 +101,16 @@ public class DateUtils {
     }
 
     public static LocalDateTime toLocalDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second) {
-        return  toLocalDate(year, month, dayOfMonth).atTime(toLocalTime(hour, minute, second));
+        return toLocalDate(year, month, dayOfMonth).atTime(toLocalTime(hour, minute, second));
+    }
+
+    public static LocalDateTime atStartOfDay(LocalDateTime localDateTime){
+        return localDateTime.toLocalDate().atStartOfDay();
     }
 
 
     // -------------------------------------------- ZonedDateTime -----------------------------------------------------
-    public static ZonedDateTime nowZonedDateTime() {
-        return ZonedDateTime.now();
-    }
 
-    public static ZonedDateTime nowZoneDateTime(String zoneId) {
-        return nowZoneDateTime(ZoneId.of(zoneId));
-    }
-
-    public static ZonedDateTime nowZoneDateTime(ZoneId zoneId) {
-        return ZonedDateTime.now(zoneId);
-    }
 
     public static ZonedDateTime nowZonedDateTime(String timeZone) {
         return nowZonedDateTime(TimeZone.getTimeZone(timeZone));
@@ -137,7 +123,7 @@ public class DateUtils {
 
 
     public static ZonedDateTime nowZonedDateTime(TimeZoneID timeZoneID, int offsetHour) {
-        return nowZoneDateTime(ZoneId.ofOffset(timeZoneID.name(), ZoneOffset.ofHours(offsetHour)));
+        return ZonedDateTime.now(ZoneId.ofOffset(timeZoneID.name(), ZoneOffset.ofHours(offsetHour)));
     }
 
 
@@ -149,30 +135,9 @@ public class DateUtils {
         return ZonedDateTime.of(localDate, localTime, zone);
     }
 
-    public static ZonedDateTime toZonedDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second,  ZoneId zone) {
+    public static ZonedDateTime toZonedDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second, ZoneId zone) {
         return ZonedDateTime.of(toLocalDateTime(year, month, dayOfMonth, hour, minute, second), zone);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

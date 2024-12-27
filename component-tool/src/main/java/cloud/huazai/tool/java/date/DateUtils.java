@@ -169,6 +169,10 @@ public class DateUtils {
         return dateTime.plusYears(yearsToOffset);
     }
 
+    public static LocalDateTime demo() {
+       return LocalDateTime.now();
+    }
+
 
 
 

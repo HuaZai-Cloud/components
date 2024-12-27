@@ -17,48 +17,49 @@ public class DateUtils {
 
     // ------------------------------------------------- Date ----------------------------------------------------------
 
+    @Deprecated
     public static Date now() {
         return new Date();
     }
 
-    public static Date toDate(Temporal temporal) {
 
-        if (temporal instanceof ZonedDateTime) {
-            return toDate(((ZonedDateTime) temporal).toLocalDateTime());
+    @Deprecated
+    public static <T extends Temporal> Date toDate(T temporal) {
 
-        } else if (temporal instanceof LocalDateTime) {
-            return toDate((LocalDateTime) temporal);
-
-        } else if (temporal instanceof LocalDate) {
-            return toDate(((LocalDate) temporal).atStartOfDay());
-        }
-
-        throw new IllegalArgumentException("temporal should be ZonedDateTime, LocalDateTime or LocalDate, is: " + temporal);
+        return switch (temporal) {
+            case LocalDate localDate -> Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+            case LocalTime localTime ->
+                    Date.from(localTime.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant());
+            case LocalDateTime localDateTime -> Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+            case ZonedDateTime zonedDateTime ->
+                    Date.from(zonedDateTime.toLocalDateTime().atZone(ZoneId.systemDefault()).toInstant());
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
     }
 
-    public static Date toDate(ZonedDateTime zonedDateTime) {
-        return toDate(zonedDateTime.toLocalDateTime());
-    }
-
-    public static Date toDate(LocalDateTime localDateTime) {
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-    }
-
-    public static Date toDate(LocalDate localDate) {
-        return toDate(localDate.atStartOfDay());
-    }
-
-
+    @Deprecated
     public static Date toDate(int year, int month, int dayOfMonth, int hour, int minute, int second) {
         return toDate(toLocalDateTime(year, month, dayOfMonth, hour, minute, second));
     }
 
+    @Deprecated
     public static Date toDate(int year, int month, int dayOfMonth) {
         return toDate(year, month, dayOfMonth,0,0,0);
     }
 
     // ---------------------------------------------- LocalDate -------------------------------------------------------
 
+    public static <T extends Temporal> LocalDate toLocalDate(T temporal) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate;
+            case LocalTime localTime -> LocalDate.now();
+            case LocalDateTime localDateTime -> localDateTime.toLocalDate();
+            case ZonedDateTime zonedDateTime -> zonedDateTime.toLocalDate();
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
 
     public static LocalDate toLocalDate(Date date) {
         return toLocalDateTime(date).toLocalDate();
@@ -70,6 +71,8 @@ public class DateUtils {
 
 
     // ---------------------------------------------- LocalTime -------------------------------------------------------
+
+
 
     public static LocalTime toLocalTime(Date date) {
         return toLocalDateTime(date).toLocalTime();
@@ -85,33 +88,50 @@ public class DateUtils {
     // -------------------------------------------- LocalDateTime -----------------------------------------------------
 
 
+
+
     public static LocalDateTime toLocalDateTime(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-    public static LocalDateTime toLocalDateTime(LocalDate localDate) {
-        return localDate.atStartOfDay();
+    public static <T extends Temporal> LocalDateTime toLocalDateTime(T temporal) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate.atStartOfDay();
+            case LocalTime localTime -> localTime.atDate(LocalDate.now());
+            case LocalDateTime localDateTime -> localDateTime;
+            case ZonedDateTime zonedDateTime -> zonedDateTime.toLocalDateTime();
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
     }
 
     public static LocalDateTime toLocalDateTime(LocalDate localDate, LocalTime localTime) {
         return localDate.atTime(localTime);
     }
 
-    public static LocalDateTime toLocalDateTime(ZonedDateTime zonedDateTime) {
-        return zonedDateTime.toLocalDateTime();
-    }
 
     public static LocalDateTime toLocalDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second) {
         return toLocalDate(year, month, dayOfMonth).atTime(toLocalTime(hour, minute, second));
     }
 
-    public static LocalDateTime atStartOfDay(LocalDateTime localDateTime){
-        return localDateTime.toLocalDate().atTime(LocalTime.MIN);
+    public static LocalDateTime atStartOfDay(LocalDateTime dateTime) {
+        return atStartOfDay(dateTime.toLocalDate());
     }
+
+    public static LocalDateTime atStartOfDay(LocalDate date){
+        return date.atTime(LocalTime.MIN);
+    }
+
+    public static LocalDateTime atStartOfDay(Date date){
+        return atStartOfDay(toLocalDateTime(date));
+    }
+
 
     public static LocalDateTime atEndOfDay(LocalDateTime localDateTime) {
         return localDateTime.toLocalDate().atTime(LocalTime.MAX);
     }
+
+
 
     public static LocalDateTime atEndOfDayToSecond(LocalDateTime dateTime) {
         return dateTime.toLocalDate().atTime(toLocalTime(23, 59, 59));

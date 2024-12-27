@@ -2,6 +2,7 @@ package cloud.huazai.tool.java.date;
 
 import java.time.*;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -111,6 +112,64 @@ public class DateUtils {
     public static LocalDateTime atEndOfDay(LocalDateTime localDateTime) {
         return localDateTime.toLocalDate().atTime(LocalTime.MAX);
     }
+
+    public static LocalDateTime atEndOfDayToSecond(LocalDateTime dateTime) {
+        return dateTime.toLocalDate().atTime(toLocalTime(23, 59, 59));
+    }
+
+    public static LocalDateTime atStartOfWeek(LocalDateTime dateTime, DayOfWeek dayOfWeekStart) {
+        return atStartOfDay(dateTime.with(TemporalAdjusters.previousOrSame(dayOfWeekStart)));
+    }
+
+    public static LocalDateTime atEndOfWeek(LocalDateTime dateTime,DayOfWeek dayOfWeekEnd) {
+        return atEndOfDay(dateTime.with(TemporalAdjusters.previousOrSame(dayOfWeekEnd)));
+    }
+
+    public static LocalDateTime atStartOfMonth(LocalDateTime dateTime) {
+       return atStartOfDay(dateTime.with(TemporalAdjusters.firstDayOfMonth()));
+    }
+
+    public static LocalDateTime atEndOfMonth(LocalDateTime dateTime) {
+        return atEndOfDay(dateTime.with(TemporalAdjusters.lastDayOfMonth()));
+    }
+
+    public static LocalDateTime atStartOfYear(LocalDateTime dateTime) {
+        return atStartOfDay(dateTime.with(TemporalAdjusters.firstDayOfYear()));
+    }
+
+    public static LocalDateTime atEndOfYear(LocalDateTime dateTime) {
+        return atEndOfDay(dateTime.with(TemporalAdjusters.lastDayOfYear()));
+    }
+
+    public static LocalDateTime offsetSecond(LocalDateTime dateTime, long secondsToOffset) {
+        return dateTime.plusSeconds(secondsToOffset);
+    }
+
+    public static LocalDateTime offsetMinute(LocalDateTime dateTime, long minutesToOffset) {
+        return dateTime.plusMinutes(minutesToOffset);
+    }
+
+    public static LocalDateTime offsetHour(LocalDateTime dateTime, long hoursToOffset) {
+        return dateTime.plusHours(hoursToOffset);
+    }
+
+    public static LocalDateTime offsetDay(LocalDateTime dateTime, long daysToOffset) {
+        return dateTime.plusDays(daysToOffset);
+    }
+
+    public static LocalDateTime offsetWeek(LocalDateTime dateTime, long weeksToOffset) {
+        return dateTime.plusWeeks(weeksToOffset);
+    }
+
+    public static LocalDateTime offsetMonth(LocalDateTime dateTime, long monthsToOffset) {
+        return dateTime.plusMonths(monthsToOffset);
+    }
+
+    public static LocalDateTime offsetYear(LocalDateTime dateTime, long yearsToOffset) {
+        return dateTime.plusYears(yearsToOffset);
+    }
+
+
 
 
     // -------------------------------------------- ZonedDateTime -----------------------------------------------------

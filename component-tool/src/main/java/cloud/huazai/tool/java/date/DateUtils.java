@@ -45,7 +45,7 @@ public class DateUtils {
 
     @Deprecated
     public static Date toDate(int year, int month, int dayOfMonth) {
-        return toDate(year, month, dayOfMonth,0,0,0);
+        return toDate(year, month, dayOfMonth, 0, 0, 0);
     }
 
     // ---------------------------------------------- LocalDate -------------------------------------------------------
@@ -53,7 +53,6 @@ public class DateUtils {
     public static <T extends Temporal> LocalDate toLocalDate(T temporal) {
         return switch (temporal) {
             case LocalDate localDate -> localDate;
-            case LocalTime localTime -> LocalDate.now();
             case LocalDateTime localDateTime -> localDateTime.toLocalDate();
             case ZonedDateTime zonedDateTime -> zonedDateTime.toLocalDate();
             case null, default ->
@@ -73,7 +72,6 @@ public class DateUtils {
     // ---------------------------------------------- LocalTime -------------------------------------------------------
 
 
-
     public static LocalTime toLocalTime(Date date) {
         return toLocalDateTime(date).toLocalTime();
     }
@@ -86,8 +84,6 @@ public class DateUtils {
 
 
     // -------------------------------------------- LocalDateTime -----------------------------------------------------
-
-
 
 
     public static LocalDateTime toLocalDateTime(Date date) {
@@ -114,82 +110,193 @@ public class DateUtils {
         return toLocalDate(year, month, dayOfMonth).atTime(toLocalTime(hour, minute, second));
     }
 
-    public static LocalDateTime atStartOfDay(LocalDateTime dateTime) {
-        return atStartOfDay(dateTime.toLocalDate());
+
+    public static <T extends Temporal> LocalDateTime atStartOfDay(T temporal) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate.atStartOfDay();
+            case LocalDateTime localDateTime -> localDateTime.toLocalDate().atStartOfDay();
+            case ZonedDateTime zonedDateTime -> zonedDateTime.toLocalDate().atStartOfDay();
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
     }
 
-    public static LocalDateTime atStartOfDay(LocalDate date){
-        return date.atTime(LocalTime.MIN);
-    }
 
-    public static LocalDateTime atStartOfDay(Date date){
+    public static LocalDateTime atStartOfDay(Date date) {
         return atStartOfDay(toLocalDateTime(date));
     }
 
 
-    public static LocalDateTime atEndOfDay(LocalDateTime localDateTime) {
-        return localDateTime.toLocalDate().atTime(LocalTime.MAX);
+    public static <T extends Temporal> LocalDateTime atEndOfDay(T temporal) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate.atTime(LocalTime.MAX);
+            case LocalDateTime localDateTime -> localDateTime.toLocalDate().atTime(LocalTime.MAX);
+            case ZonedDateTime zonedDateTime -> zonedDateTime.toLocalDate().atTime(LocalTime.MAX);
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+    public static LocalDateTime atEndOfDay(Date date) {
+        return atEndOfDay(toLocalDateTime(date));
     }
 
 
-
-    public static LocalDateTime atEndOfDayToSecond(LocalDateTime dateTime) {
-        return dateTime.toLocalDate().atTime(toLocalTime(23, 59, 59));
+    public static <T extends Temporal> LocalDateTime atEndOfDayToSecond(T temporal) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate.atTime(toLocalTime(23, 59, 59));
+            case LocalDateTime localDateTime -> localDateTime.toLocalDate().atTime(toLocalTime(23, 59, 59));
+            case ZonedDateTime zonedDateTime -> zonedDateTime.toLocalDate().atTime(toLocalTime(23, 59, 59));
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
     }
 
-    public static LocalDateTime atStartOfWeek(LocalDateTime dateTime, DayOfWeek dayOfWeekStart) {
-        return atStartOfDay(dateTime.with(TemporalAdjusters.previousOrSame(dayOfWeekStart)));
+    public static LocalDateTime atEndOfDayToSecond(Date date) {
+        return atEndOfDayToSecond(toLocalDateTime(date));
     }
 
-    public static LocalDateTime atEndOfWeek(LocalDateTime dateTime,DayOfWeek dayOfWeekEnd) {
-        return atEndOfDay(dateTime.with(TemporalAdjusters.previousOrSame(dayOfWeekEnd)));
-    }
-
-    public static LocalDateTime atStartOfMonth(LocalDateTime dateTime) {
-       return atStartOfDay(dateTime.with(TemporalAdjusters.firstDayOfMonth()));
-    }
-
-    public static LocalDateTime atEndOfMonth(LocalDateTime dateTime) {
-        return atEndOfDay(dateTime.with(TemporalAdjusters.lastDayOfMonth()));
-    }
-
-    public static LocalDateTime atStartOfYear(LocalDateTime dateTime) {
-        return atStartOfDay(dateTime.with(TemporalAdjusters.firstDayOfYear()));
-    }
-
-    public static LocalDateTime atEndOfYear(LocalDateTime dateTime) {
-        return atEndOfDay(dateTime.with(TemporalAdjusters.lastDayOfYear()));
-    }
-
-    public static LocalDateTime offsetSecond(LocalDateTime dateTime, long secondsToOffset) {
-        return dateTime.plusSeconds(secondsToOffset);
-    }
-
-    public static LocalDateTime offsetMinute(LocalDateTime dateTime, long minutesToOffset) {
-        return dateTime.plusMinutes(minutesToOffset);
-    }
-
-    public static LocalDateTime offsetHour(LocalDateTime dateTime, long hoursToOffset) {
-        return dateTime.plusHours(hoursToOffset);
-    }
-
-    public static LocalDateTime offsetDay(LocalDateTime dateTime, long daysToOffset) {
-        return dateTime.plusDays(daysToOffset);
-    }
-
-    public static LocalDateTime offsetWeek(LocalDateTime dateTime, long weeksToOffset) {
-        return dateTime.plusWeeks(weeksToOffset);
-    }
-
-    public static LocalDateTime offsetMonth(LocalDateTime dateTime, long monthsToOffset) {
-        return dateTime.plusMonths(monthsToOffset);
-    }
-
-    public static LocalDateTime offsetYear(LocalDateTime dateTime, long yearsToOffset) {
-        return dateTime.plusYears(yearsToOffset);
+    public static <T extends Temporal> LocalDateTime atStartOfWeek(T temporal, DayOfWeek dayOfWeekStart) {
+        return switch (temporal) {
+            case LocalDate localDate -> atStartOfDay(localDate.with(TemporalAdjusters.previousOrSame(dayOfWeekStart)));
+            case LocalDateTime localDateTime ->
+                    atStartOfDay(localDateTime.with(TemporalAdjusters.previousOrSame(dayOfWeekStart)));
+            case ZonedDateTime zonedDateTime ->
+                    atStartOfDay(zonedDateTime.with(TemporalAdjusters.previousOrSame(dayOfWeekStart)));
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
     }
 
 
+    public static <T extends Temporal> LocalDateTime atEndOfWeek(T temporal, DayOfWeek dayOfWeekEnd) {
+        return switch (temporal) {
+            case LocalDate localDate -> atEndOfDay(localDate.with(TemporalAdjusters.previousOrSame(dayOfWeekEnd)));
+            case LocalDateTime localDateTime ->
+                    atEndOfDay(localDateTime.with(TemporalAdjusters.previousOrSame(dayOfWeekEnd)));
+            case ZonedDateTime zonedDateTime ->
+                    atEndOfDay(zonedDateTime.with(TemporalAdjusters.previousOrSame(dayOfWeekEnd)));
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+    public static <T extends Temporal> LocalDateTime atStartOfMonth(T temporal) {
+        return switch (temporal) {
+            case LocalDate localDate -> atStartOfDay(localDate.with(TemporalAdjusters.firstDayOfMonth()));
+            case LocalDateTime localDateTime -> atStartOfDay(localDateTime.with(TemporalAdjusters.firstDayOfMonth()));
+            case ZonedDateTime zonedDateTime -> atStartOfDay(zonedDateTime.with(TemporalAdjusters.firstDayOfMonth()));
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+
+    public static <T extends Temporal> LocalDateTime atEndOfMonth(T temporal) {
+        return switch (temporal) {
+            case LocalDate localDate -> atEndOfDay(localDate.with(TemporalAdjusters.lastDayOfMonth()));
+            case LocalDateTime localDateTime -> atEndOfDay(localDateTime.with(TemporalAdjusters.lastDayOfMonth()));
+            case ZonedDateTime zonedDateTime -> atEndOfDay(zonedDateTime.with(TemporalAdjusters.lastDayOfMonth()));
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+
+    public static <T extends Temporal> LocalDateTime atStartOfYear(T temporal) {
+        return switch (temporal) {
+            case LocalDate localDate -> atStartOfDay(localDate.with(TemporalAdjusters.firstDayOfYear()));
+            case LocalDateTime localDateTime -> atStartOfDay(localDateTime.with(TemporalAdjusters.firstDayOfYear()));
+            case ZonedDateTime zonedDateTime -> atStartOfDay(zonedDateTime.with(TemporalAdjusters.firstDayOfYear()));
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+
+    public static <T extends Temporal> LocalDateTime atEndOfYear(T temporal) {
+        return switch (temporal) {
+            case LocalDate localDate -> atEndOfDay(localDate.with(TemporalAdjusters.lastDayOfYear()));
+            case LocalDateTime localDateTime -> atEndOfDay(localDateTime.with(TemporalAdjusters.lastDayOfYear()));
+            case ZonedDateTime zonedDateTime -> atEndOfDay(zonedDateTime.with(TemporalAdjusters.lastDayOfYear()));
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+    public static <T extends Temporal> LocalDateTime offsetSecond(T temporal, long secondsToOffset) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate.atTime(LocalTime.now()).plusSeconds(secondsToOffset);
+            case LocalDateTime localDateTime -> localDateTime.plusSeconds(secondsToOffset);
+            case ZonedDateTime zonedDateTime -> zonedDateTime.plusSeconds(secondsToOffset).toLocalDateTime();
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+
+    public static <T extends Temporal> LocalDateTime offsetMinute(T temporal, long minutesToOffset) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate.atTime(LocalTime.now()).plusMinutes(minutesToOffset);
+            case LocalDateTime localDateTime -> localDateTime.plusMinutes(minutesToOffset);
+            case ZonedDateTime zonedDateTime -> zonedDateTime.plusMinutes(minutesToOffset).toLocalDateTime();
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+    public static <T extends Temporal> LocalDateTime offsetHour(T temporal, long hoursToOffset) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate.atTime(LocalTime.now()).plusHours(hoursToOffset);
+            case LocalDateTime localDateTime -> localDateTime.plusHours(hoursToOffset);
+            case ZonedDateTime zonedDateTime -> zonedDateTime.plusHours(hoursToOffset).toLocalDateTime();
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+    public static <T extends Temporal> LocalDateTime offsetDay(T temporal, long daysToOffset) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate.atTime(LocalTime.now()).plusDays(daysToOffset);
+            case LocalDateTime localDateTime -> localDateTime.plusDays(daysToOffset);
+            case ZonedDateTime zonedDateTime -> zonedDateTime.plusDays(daysToOffset).toLocalDateTime();
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+
+    public static <T extends Temporal> LocalDateTime offsetWeek(T temporal, long weeksToOffset) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate.atTime(LocalTime.now()).plusWeeks(weeksToOffset);
+            case LocalDateTime localDateTime -> localDateTime.plusWeeks(weeksToOffset);
+            case ZonedDateTime zonedDateTime -> zonedDateTime.plusWeeks(weeksToOffset).toLocalDateTime();
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+
+    public static <T extends Temporal> LocalDateTime offsetMonth(T temporal, long monthsToOffset) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate.atTime(LocalTime.now()).plusMonths(monthsToOffset);
+            case LocalDateTime localDateTime -> localDateTime.plusMonths(monthsToOffset);
+            case ZonedDateTime zonedDateTime -> zonedDateTime.plusMonths(monthsToOffset).toLocalDateTime();
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
+
+
+    public static <T extends Temporal> LocalDateTime offsetYear(T temporal, long yearsToOffset) {
+        return switch (temporal) {
+            case LocalDate localDate -> localDate.atTime(LocalTime.now()).plusYears(yearsToOffset);
+            case LocalDateTime localDateTime -> localDateTime.plusYears(yearsToOffset);
+            case ZonedDateTime zonedDateTime -> zonedDateTime.plusYears(yearsToOffset).toLocalDateTime();
+            case null, default ->
+                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+        };
+    }
 
 
 

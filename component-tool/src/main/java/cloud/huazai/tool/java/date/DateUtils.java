@@ -1,6 +1,7 @@
 package cloud.huazai.tool.java.date;
 
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
@@ -79,7 +80,10 @@ public class DateUtils {
 
     public static LocalTime toLocalTime(int hour, int minute, int second) {
         return LocalTime.of(hour, minute, second);
+    }
 
+    public static LocalTime toLocalTime(int hour, int minute, int second,int millis) {
+        return LocalTime.of(hour, minute, second,millis);
     }
 
 
@@ -108,6 +112,10 @@ public class DateUtils {
 
     public static LocalDateTime toLocalDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second) {
         return toLocalDate(year, month, dayOfMonth).atTime(toLocalTime(hour, minute, second));
+    }
+
+    public static LocalDateTime toLocalDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second,int millis) {
+        return toLocalDate(year, month, dayOfMonth).atTime(toLocalTime(hour, minute, second,millis));
     }
 
 
@@ -298,6 +306,51 @@ public class DateUtils {
         };
     }
 
+    public static long betweenYear(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.YEARS);
+    }
+
+    public static long betweenMonth(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.MONTHS);
+    }
+
+    public static long betweenDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.DAYS);
+    }
+
+    public static long betweenWeek(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.WEEKS);
+    }
+
+    public static long betweenHour(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.HOURS);
+    }
+
+    public static long betweenMinute(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.MINUTES);
+    }
+
+    public static long betweenSecond(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.SECONDS);
+    }
+
+
+    public static long betweenMillis(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return startDateTime.toLocalDate().until(endDateTime.toLocalDate(), ChronoUnit.MILLIS);
+    }
+
+    //  Duration between = Duration.between(startDateTime, endDateTime);
+    public static TemporalPeriod toTemporalPeriod(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+
+        Period period = Period.between(startDateTime.toLocalDate(), endDateTime.toLocalDate());
+        long hours = startDateTime.toLocalTime().until(endDateTime.toLocalTime(), ChronoUnit.HOURS);
+        long minutes = startDateTime.toLocalTime().until(endDateTime.toLocalTime(), ChronoUnit.MINUTES) % TemporalPeriod.MINUTES_PER_HOUR;
+        long seconds = startDateTime.toLocalTime().until(endDateTime.toLocalTime(), ChronoUnit.SECONDS) % TemporalPeriod.SECONDS_PER_MINUTE;
+        long millis = startDateTime.toLocalTime().until(endDateTime.toLocalTime(), ChronoUnit.MILLIS) % TemporalPeriod.MILLIS_PER_SECOND;
+
+        return TemporalPeriod.create(period.getYears(),period.getMonths(),period.getDays(),hours,minutes,seconds,millis);
+
+    }
 
 
     // -------------------------------------------- ZonedDateTime -----------------------------------------------------

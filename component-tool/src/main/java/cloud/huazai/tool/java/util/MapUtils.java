@@ -1,7 +1,11 @@
 package cloud.huazai.tool.java.util;
 
+import cloud.huazai.tool.java.lang.StringUtils;
+
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collector;
 
 /**
  * MapUtils
@@ -12,11 +16,30 @@ import java.util.Map;
 
 public class MapUtils {
 
+    private static final String defaultMessage = "Collection Is Empty";
+
+    public static Map<?,?> immutableEmptyMap() {
+        return Map.of();
+    }
+
+    public static Map<?,?> emptyMap() {
+        return new HashMap<>();
+    }
+
     public static boolean isEmpty(Map<?, ?> map) {
         return map == null || map.isEmpty();
     }
 
     public static boolean isNotEmpty(Map<?, ?> map) {
         return !isEmpty(map);
+    }
+
+    public static void requireNonEmpty(Map<?, ?> map, String message) {
+        if (StringUtils.isBlank(message)) {
+            message = defaultMessage;
+        }
+        if (isEmpty(map)) {
+            throw new NullPointerException(message);
+        }
     }
 }

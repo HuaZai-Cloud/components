@@ -9,6 +9,8 @@ package cloud.huazai.tool.java.lang;
 
 public class StringUtils {
 
+    private static final String defaultMessage = "Object Is Blank";
+
     public static boolean isBlank(CharSequence cs) {
         int strLength = length(cs);
         if (strLength != 0) {
@@ -30,6 +32,9 @@ public class StringUtils {
     }
 
     public static void requireNonBlank(CharSequence cs,String message) {
+        if (StringUtils.isBlank(message)) {
+            message = defaultMessage;
+        }
         if (isBlank(cs)) {
             throw new NullPointerException(message);
         }

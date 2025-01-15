@@ -11,10 +11,18 @@ import lombok.NonNull;
 
 public class ObjectUtils {
 
-    public static <T> void requireNonNull(T obj,String message) {
-        StringUtils.requireNonBlank(message,"message");
+    private static final String defaultMessage = "Object Is Null";
+
+
+    public static <T> void requireNonNull(T obj, String message) {
+        if (StringUtils.isBlank(message)) {
+            message = defaultMessage;
+        }
+        StringUtils.requireNonBlank(message, "message");
         if (obj == null) {
             throw new NullPointerException(message);
         }
     }
+
+
 }

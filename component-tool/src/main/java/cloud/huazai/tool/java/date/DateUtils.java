@@ -100,8 +100,7 @@ public class DateUtils {
             case LocalTime localTime -> localTime.atDate(LocalDate.now());
             case LocalDateTime localDateTime -> localDateTime;
             case ZonedDateTime zonedDateTime -> zonedDateTime.toLocalDateTime();
-            case null, default ->
-                    throw new IllegalArgumentException("Unsupported Temporal type: " + (temporal != null ? temporal.getClass().getName() : ""));
+            case null, default -> LocalDateTime.now();
         };
     }
 
@@ -306,51 +305,6 @@ public class DateUtils {
         };
     }
 
-    public static long betweenYear(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.until(endDateTime, ChronoUnit.YEARS);
-    }
-
-    public static long betweenMonth(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.until(endDateTime, ChronoUnit.MONTHS);
-    }
-
-    public static long betweenDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.until(endDateTime, ChronoUnit.DAYS);
-    }
-
-    public static long betweenWeek(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.until(endDateTime, ChronoUnit.WEEKS);
-    }
-
-    public static long betweenHour(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.until(endDateTime, ChronoUnit.HOURS);
-    }
-
-    public static long betweenMinute(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.until(endDateTime, ChronoUnit.MINUTES);
-    }
-
-    public static long betweenSecond(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.until(endDateTime, ChronoUnit.SECONDS);
-    }
-
-
-    public static long betweenMillis(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.toLocalDate().until(endDateTime.toLocalDate(), ChronoUnit.MILLIS);
-    }
-
-    //  Duration between = Duration.between(startDateTime, endDateTime);
-    public static TemporalPeriod toTemporalPeriod(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-
-        Period period = Period.between(startDateTime.toLocalDate(), endDateTime.toLocalDate());
-        long hours = startDateTime.toLocalTime().until(endDateTime.toLocalTime(), ChronoUnit.HOURS);
-        long minutes = startDateTime.toLocalTime().until(endDateTime.toLocalTime(), ChronoUnit.MINUTES) % TemporalPeriod.MINUTES_PER_HOUR;
-        long seconds = startDateTime.toLocalTime().until(endDateTime.toLocalTime(), ChronoUnit.SECONDS) % TemporalPeriod.SECONDS_PER_MINUTE;
-        long millis = startDateTime.toLocalTime().until(endDateTime.toLocalTime(), ChronoUnit.MILLIS) % TemporalPeriod.MILLIS_PER_SECOND;
-
-        return TemporalPeriod.create(period.getYears(),period.getMonths(),period.getDays(),hours,minutes,seconds,millis);
-
-    }
 
 
     // -------------------------------------------- ZonedDateTime -----------------------------------------------------
@@ -381,6 +335,58 @@ public class DateUtils {
 
     public static ZonedDateTime toZonedDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second, ZoneId zone) {
         return ZonedDateTime.of(toLocalDateTime(year, month, dayOfMonth, hour, minute, second), zone);
+    }
+
+    // -------------------------------------------- between -----------------------------------------------------
+
+
+    public  static <T extends Temporal> long betweenYear(T startDateTime, T endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.YEARS);
+    }
+
+    public static <T extends Temporal> long betweenMonth(T startDateTime, T endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.MONTHS);
+    }
+
+    public static <T extends Temporal> long betweenDay(T startDateTime, T endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.DAYS);
+    }
+
+    public static <T extends Temporal> long betweenWeek(T startDateTime, T endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.WEEKS);
+    }
+
+    public static <T extends Temporal> long betweenHour(T startDateTime, T endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.HOURS);
+    }
+
+    public static <T extends Temporal> long betweenMinute(T startDateTime, T endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.MINUTES);
+    }
+
+    public static <T extends Temporal> long betweenSecond(T startDateTime, T endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.SECONDS);
+    }
+
+
+    public static <T extends Temporal> long betweenMillis(T startDateTime, T endDateTime) {
+        return startDateTime.until(endDateTime, ChronoUnit.MILLIS);
+    }
+
+
+    public static <T extends Temporal> TemporalPeriod toTemporalPeriod(T startDateTime, T endDateTime) {
+
+        LocalDateTime startDateTimeTemp = toLocalDateTime(startDateTime);
+        LocalDateTime endDateTimeTemp = toLocalDateTime(endDateTime);
+
+        Period period = Period.between(startDateTimeTemp.toLocalDate(), endDateTimeTemp.toLocalDate());
+        long hours = startDateTimeTemp.toLocalTime().until(endDateTimeTemp.toLocalTime(), ChronoUnit.HOURS);
+        long minutes = startDateTimeTemp.toLocalTime().until(endDateTimeTemp.toLocalTime(), ChronoUnit.MINUTES) % TemporalPeriod.MINUTES_PER_HOUR;
+        long seconds = startDateTimeTemp.toLocalTime().until(endDateTimeTemp.toLocalTime(), ChronoUnit.SECONDS) % TemporalPeriod.SECONDS_PER_MINUTE;
+        long millis = startDateTimeTemp.toLocalTime().until(endDateTimeTemp.toLocalTime(), ChronoUnit.MILLIS) % TemporalPeriod.MILLIS_PER_SECOND;
+
+        return TemporalPeriod.create(period.getYears(),period.getMonths(),period.getDays(),hours,minutes,seconds,millis);
+
     }
 
 

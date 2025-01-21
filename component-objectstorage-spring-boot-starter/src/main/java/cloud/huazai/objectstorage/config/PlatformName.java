@@ -1,4 +1,4 @@
-package cloud.huazai.objectstorage;
+package cloud.huazai.objectstorage.config;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

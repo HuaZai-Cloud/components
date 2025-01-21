@@ -1,5 +1,6 @@
-package cloud.huazai.objectstorage;
+package cloud.huazai.objectstorage.config;
 
+import cloud.huazai.objectstorage.config.PlatformName;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class PlatformNameValidator implements ConstraintValidator<PlatformName, String> {
 
-    private final List<String> allowedPlatforms = Arrays.asList("oss", "cos", "tos");
+    private final List<String> allowedPlatforms = Arrays.asList(Platform.OSS.getPlatform(), Platform.COS.getPlatform(), Platform.TOS.getPlatform());
 
     @Override
     public void initialize(PlatformName constraintAnnotation) {

@@ -1,4 +1,4 @@
-package cloud.huazai.objectstorage;
+package cloud.huazai.objectstorage.config;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

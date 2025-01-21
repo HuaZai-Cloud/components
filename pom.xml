@@ -54,6 +54,7 @@
         <module>component-operationlog-spring-boot-starter</module>
         <module>component-distributedlock-spring-boot-starter</module>
         <module>component-tool</module>
+        <module>component-objectstorage-spring-boot-starter</module>
     </modules>
 
     <properties>

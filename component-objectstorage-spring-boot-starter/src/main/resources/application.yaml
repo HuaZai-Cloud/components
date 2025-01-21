@@ -1,0 +1,18 @@
+huazai:
+  objectstorage:
+    platforms:
+      oss:
+        accessKey: your-access-key
+        secretKey: your-secret-key
+        endpoint: your-oss-endpoint
+        region: your-oss-region
+      cos:
+        accessKey: your-access-key
+        secretKey: your-secret-key
+        endpoint: your-cos-endpoint
+        region: your-cos-region
+      tos:
+        accessKey: your-access-key
+        secretKey: your-secret-key
+        endpoint: your-tos-endpoint
+        region: your-tos-region

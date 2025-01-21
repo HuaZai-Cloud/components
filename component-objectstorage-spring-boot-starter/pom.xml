@@ -6,8 +6,11 @@
     <parent>
         <groupId>cloud.huazai.component</groupId>
         <artifactId>components-parent</artifactId>
-        <version>1.1.0</version>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+
+
 
     <artifactId>component-objectstorage-spring-boot-starter</artifactId>
 
@@ -16,5 +19,59 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+
+<dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <!-- Spring Boot Validation dependency -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <!-- Hibernate Validator (Bean Validation implementation) -->
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>6.2.0.Final</version>  <!-- Make sure to use the appropriate version -->
+    </dependency>
+
+    <!--lombok-->
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>cloud.huazai.component</groupId>
+        <artifactId>component-tool</artifactId>
+        <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>cloud.huazai.component</groupId>
+        <artifactId>component-exception</artifactId>
+        <scope>provided</scope>
+    </dependency>
+
+</dependencies>
 
 </project>

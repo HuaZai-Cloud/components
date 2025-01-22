@@ -2,10 +2,8 @@ package cloud.huazai.tool.java.util;
 
 import cloud.huazai.tool.java.lang.StringUtils;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collector;
 
 /**
  * MapUtils

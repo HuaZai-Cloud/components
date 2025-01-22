@@ -22,15 +22,15 @@ import java.util.Map;
 public class ObjectStorageProperties {
 
 
-    private Map<@PlatformName String, PlatformConfig> platforms;
+    private Map<String, StorageConfig> platformMap;
 
-    public void setPlatforms(Map<String, PlatformConfig> platforms) {
-        this.platforms = platforms;
+    public void setPlatformMap(Map<String, StorageConfig> platforms) {
+        this.platformMap = platforms;
     }
 
     @Getter
     @Setter
-    public static class PlatformConfig {
+    public static class StorageConfig {
 
         @NotBlank(message = "Access key is required.")
         private String accessKey;
@@ -43,5 +43,8 @@ public class ObjectStorageProperties {
 
         @NotBlank(message = "Region is required.")
         private String region;
+
+        @NotBlank(message = "BucketName is required.")
+        private String bucketName;
     }
 }

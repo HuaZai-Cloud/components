@@ -12,7 +12,7 @@ import lombok.Getter;
 @Getter
 public enum Platform {
 
-    OSS("oss"),
+    ALIYUN("aliyun"),
     COS("cos"),
     TOS("tos"),
 

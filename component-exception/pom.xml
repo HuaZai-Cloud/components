@@ -102,7 +102,7 @@
                 <version>0.6.0</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <publishingServerId>huazai</publishingServerId>
+                    <publishingServerId>ossrh</publishingServerId>
                     <autoPublish>true</autoPublish>
                     <waitUntil>published</waitUntil>
                 </configuration>
@@ -113,15 +113,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.2.0</version>
-                <configuration>
-                    <includes>
-                        <include>**/src/main/java/**</include>
-                    </includes>
-                </configuration>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
-                        <phase>verify</phase>
                         <goals>
                             <goal>jar-no-fork</goal>
                         </goals>
@@ -134,19 +128,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.3.2</version>
-                <configuration>
-                    <show>public</show>
-                    <nohelp>true</nohelp>
-                </configuration>
                 <executions>
                     <execution>
-                        <phase>prepare-package</phase>
+                        <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+
 
             <!-- gpg-->
             <plugin>
@@ -160,9 +151,14 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
+                        <configuration>
+                            <keyname>${gpg.keyname}</keyname>
+                            <passphrase>${gpg.passphrase}</passphrase>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 

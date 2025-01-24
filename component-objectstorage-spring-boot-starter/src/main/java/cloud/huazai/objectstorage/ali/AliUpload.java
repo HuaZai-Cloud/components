@@ -1,7 +1,7 @@
-package cloud.huazai.objectstorage.aliyun;
+package cloud.huazai.objectstorage.ali;
 
 import cloud.huazai.objectstorage.config.ObjectStorageProperties;
-import cloud.huazai.objectstorage.config.Platform;
+import cloud.huazai.objectstorage.constant.PlatformType;
 import cloud.huazai.objectstorage.object.ObjectStorageUpload;
 import com.aliyun.oss.OSS;
 
@@ -21,7 +21,7 @@ import java.io.*;
  */
 
 @Component
-public class OssUpload implements ObjectStorageUpload {
+public class AliUpload implements ObjectStorageUpload {
 
     @Resource
     private OSS ossClient;
@@ -61,7 +61,8 @@ public class OssUpload implements ObjectStorageUpload {
 
     @Override
     public String basicsUpload(String bucketName, InputStream inputStream, String name) {
-        ObjectStorageProperties.StorageConfig aliyunConfig = properties.getPlatformMap().get(Platform.ALIYUN.getPlatform());
+
+        ObjectStorageProperties.ProviderProperties providerProperties = properties.getProviders().get(PlatformType.ALI.getPlatform());
 
         // 创建PutObjectRequest对象。
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, name, inputStream);
@@ -74,7 +75,7 @@ public class OssUpload implements ObjectStorageUpload {
         }
         String objectKeyFromRequest = putObjectRequest.getKey();
 
-        return "https://" + bucketName + "." + aliyunConfig.getEndpoint() + "/" + objectKeyFromRequest;
+        return "https://" + bucketName + "." + providerProperties.getEndpoint() + "/" + objectKeyFromRequest;
     }
 
     @PreDestroy

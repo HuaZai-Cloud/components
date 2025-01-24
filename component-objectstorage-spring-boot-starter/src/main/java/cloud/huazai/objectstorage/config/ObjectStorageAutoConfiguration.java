@@ -1,12 +1,11 @@
 package cloud.huazai.objectstorage.config;
 
+import cloud.huazai.objectstorage.constant.PlatformType;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.swing.plaf.synth.Region;
 
 /**
  * ObjectStorageAutoConfiguration
@@ -15,8 +14,8 @@ import javax.swing.plaf.synth.Region;
  * @since 2025/1/22
  */
 
-@Configuration
-@EnableConfigurationProperties(ObjectStorageProperties.class)
+// @Configuration
+// @EnableConfigurationProperties(ObjectStorageProperties.class)
 public class ObjectStorageAutoConfiguration {
 
     private final ObjectStorageProperties properties;
@@ -28,8 +27,8 @@ public class ObjectStorageAutoConfiguration {
     // 根据不同的平台名称动态创建客户端
     @Bean
     public OSS aliyunOSSClient() {
-        ObjectStorageProperties.StorageConfig aliyunConfig = properties.getPlatformMap().get(Platform.ALIYUN.getPlatform());
-        return new OSSClientBuilder().build(aliyunConfig.getEndpoint(), aliyunConfig.getAccessKey(), aliyunConfig.getSecretKey());
+        ObjectStorageProperties.ProviderProperties providerProperties = properties.getProviders().get(PlatformType.ALI.getPlatform());
+        return new OSSClientBuilder().build(providerProperties.getEndpoint(), providerProperties.getAccessKey(), providerProperties.getSecretKey());
     }
 
     // @Bean

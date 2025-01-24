@@ -1,6 +1,6 @@
 package cloud.huazai.objectstorage.bucket;
 
-import cloud.huazai.objectstorage.config.Platform;
+import cloud.huazai.objectstorage.constant.PlatformType;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import java.util.List;
 
 public interface ObjectStorageBucket {
 
-    void createBucket(Platform platform, String bucketName);
+    void createBucket(PlatformType platform, String bucketName);
 
-    List<String> getBucket(Platform platform);
+    List<String> getBucket(PlatformType platform);
 
-    void deleteBucket(Platform platform, String bucketName);
+    void deleteBucket(PlatformType platform, String bucketName);
 }

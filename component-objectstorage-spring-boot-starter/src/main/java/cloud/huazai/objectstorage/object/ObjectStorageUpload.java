@@ -1,7 +1,5 @@
 package cloud.huazai.objectstorage.object;
 
-import cloud.huazai.objectstorage.config.ObjectStorageProperties;
-import cloud.huazai.objectstorage.config.Platform;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -14,7 +12,7 @@ import java.io.InputStream;
  * @since 2025/1/21
  */
 
-public interface ObjectStorageUpload {
+public interface ObjectStorageUpload extends ObjectStorageClient {
 
 
     String basicsUpload(String bucketName, File file);

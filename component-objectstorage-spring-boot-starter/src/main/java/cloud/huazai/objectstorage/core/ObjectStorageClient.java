@@ -10,8 +10,7 @@ import java.io.InputStream;
  */
 
 public interface ObjectStorageClient {
-    void uploadFile(String fileName, byte[] fileContent);
-    byte[] downloadFile(String fileName);
+
 
     String uploadFile(String fileName,String filePath, InputStream inputStream);
 }

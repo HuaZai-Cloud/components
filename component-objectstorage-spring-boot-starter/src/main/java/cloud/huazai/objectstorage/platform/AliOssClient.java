@@ -29,20 +29,6 @@ public class AliOssClient implements ObjectStorageClient {
         this.bucket = properties.getBucket();
     }
 
-    @Override
-    public void uploadFile(String fileName, byte[] fileContent) {
-        ossClient.putObject(bucket, fileName, new ByteArrayInputStream(fileContent));
-    }
-
-    @Override
-    public byte[] downloadFile(String fileName) {
-        OSSObject ossObject = ossClient.getObject(bucket, fileName);
-        try {
-            return IOUtils.toByteArray(ossObject.getObjectContent());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public String uploadFile(String fileName, String filePath, InputStream inputStream) {

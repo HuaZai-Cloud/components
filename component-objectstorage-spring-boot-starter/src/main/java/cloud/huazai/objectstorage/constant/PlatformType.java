@@ -17,10 +17,10 @@ public enum PlatformType {
 
 
     ;
-    private final String platform;
+    private final String platformName;
 
-    PlatformType(String platform) {
-        this.platform = platform;
+    PlatformType(String platformName) {
+        this.platformName = platformName;
     }
 
 }

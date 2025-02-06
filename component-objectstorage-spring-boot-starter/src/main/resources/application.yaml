@@ -1,6 +1,7 @@
 huazai:
   objectstorage:
     aliyun:
+      type: ali
       accessKey: your-access-key
       secretKey: your-secret-key
       endpoint: your-oss-endpoint

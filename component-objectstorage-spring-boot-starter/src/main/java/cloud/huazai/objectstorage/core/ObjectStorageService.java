@@ -19,16 +19,6 @@ public class ObjectStorageService {
         this.factory = factory;
     }
 
-    public void uploadFile(String platformName, String fileName, byte[] fileContent) {
-        ObjectStorageClient client = factory.getClient(platformName);
-        client.uploadFile(fileName, fileContent);
-    }
-
-    public byte[] downloadFile(String platformName, String fileName) {
-        ObjectStorageClient client = factory.getClient(platformName);
-        return client.downloadFile(fileName);
-    }
-
     public String uploadFile(String platformName, String fileName,String filePath, InputStream inputStream) {
         ObjectStorageClient client = factory.getClient(platformName);
         return client.uploadFile(fileName, filePath, inputStream);

@@ -29,8 +29,8 @@ public class ObjectStorageService {
         return client.downloadFile(fileName);
     }
 
-    public String uploadFile(String platformName, String fileName, InputStream inputStream) {
+    public String uploadFile(String platformName, String fileName,String filePath, InputStream inputStream) {
         ObjectStorageClient client = factory.getClient(platformName);
-        return client.uploadFile(fileName, , inputStream);
+        return client.uploadFile(fileName, filePath, inputStream);
     }
 }

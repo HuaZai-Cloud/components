@@ -25,6 +25,7 @@ public class ObjectStorageAutoConfiguration {
     @ConditionalOnMissingBean
     public ObjectStorageFactory objectStorageFactory(ObjectStorageProperties properties) {
         return new ObjectStorageFactory(properties);
+
     }
 
     @Bean

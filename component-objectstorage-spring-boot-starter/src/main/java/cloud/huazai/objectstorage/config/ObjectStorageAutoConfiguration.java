@@ -25,10 +25,7 @@ public class ObjectStorageAutoConfiguration {
     @ConditionalOnMissingBean
     public ObjectStorageFactory objectStorageFactory(ObjectStorageProperties properties) {
 
-        System.out.println("测试推送");
         return new ObjectStorageFactory(properties);
-
-
 
     }
 

@@ -20,15 +20,16 @@ public class CollectionUtils {
 
 
     public static <T> Collection<T> immutableEmptyCollection() {
-        return List.of();
+
+        return Collections.emptyList();
     }
 
     public static <T> List<T> immutableEmptyList() {
-        return List.of();
+        return Collections.emptyList();
     }
 
     public static <T> Set<T> immutableEmptySet() {
-        return Set.of();
+        return Collections.emptySet();
     }
 
     public static <T> Collection<T> emptyCollection() {

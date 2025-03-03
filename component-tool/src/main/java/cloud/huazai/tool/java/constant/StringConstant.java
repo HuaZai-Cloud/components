@@ -9,6 +9,8 @@ package cloud.huazai.tool.java.constant;
 
 public interface StringConstant {
 
+     String BLANK = "";
+
      String SPACE = " ";
 
      String TAB = "  ";

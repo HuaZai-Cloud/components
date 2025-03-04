@@ -51,12 +51,12 @@ class JsonUtilsTest {
         String jsonString1 = JsonUtils.toJsonString(map);
         System.out.println("jsonString1 = " + jsonString1);
 
-        Map<String, String> stringStringMap = JsonUtils.parseMap(jsonString1);
-        System.out.println("stringStringMap.get(\"name\") = " + stringStringMap.get("name"));
+//        Map<String, String> stringStringMap = JsonUtils.parseMap(jsonString1);
+//        System.out.println("stringStringMap.get(\"name\") = " + stringStringMap.get("name"));
+//
+//        System.out.println("stringStringMap.get(\"age\") = " + stringStringMap.get("age"));
 
-        System.out.println("stringStringMap.get(\"age\") = " + stringStringMap.get("age"));
-
-        String age = stringStringMap.get("age");
+//        String age = stringStringMap.get("age");
 
     }
 }

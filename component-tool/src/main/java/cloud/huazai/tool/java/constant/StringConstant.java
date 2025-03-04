@@ -55,6 +55,8 @@ public interface StringConstant {
 
     String EMPTY_JSON = "{}";
 
+    String EMPTY_COLLECTION = "[]";
+
     String BACKSLASH = "\\";
 
     String DOUBLE_QUOTES = "\"";
@@ -64,5 +66,7 @@ public interface StringConstant {
     String LF = "\n";
 
     String CRLF = "\r\n";
+
+    String NULL = "null";
 
 }

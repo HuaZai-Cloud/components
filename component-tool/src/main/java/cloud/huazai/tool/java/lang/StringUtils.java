@@ -3,7 +3,6 @@ package cloud.huazai.tool.java.lang;
 import cloud.huazai.tool.java.constant.StringConstant;
 import lombok.NonNull;
 
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -18,9 +17,15 @@ import java.util.stream.Collectors;
 
 public class StringUtils {
 
-    static final String BLANK = StringConstant.BLANK;
+    public static final String BLANK = StringConstant.BLANK;
+
+    public static final String NULL = StringConstant.NULL;
 
     private static final String defaultMessage = "Object Is Blank";
+
+    public static boolean isString(Object obj){
+        return obj instanceof String;
+    }
 
     public static boolean isBlank(CharSequence str) {
         int strLength = length(str);
@@ -99,7 +104,7 @@ public class StringUtils {
                 if (delimIndex > 0 && str.charAt(delimIndex - 1) == '\\') {
                     if (delimIndex > 1 && str.charAt(delimIndex - 2) == '\\') {
                         stuBui.append(str, handledPosition, delimIndex - 1);
-                        stuBui.append(str(params[paramIndex]));
+                        stuBui.append(toString(params[paramIndex]));
                         handledPosition = delimIndex + 2;
                     } else {
                         --paramIndex;
@@ -109,7 +114,7 @@ public class StringUtils {
                     }
                 } else {
                     stuBui.append(str, handledPosition, delimIndex);
-                    stuBui.append(str(params[paramIndex]));
+                    stuBui.append(toString(params[paramIndex]));
                     handledPosition = delimIndex + 2;
                 }
             }
@@ -123,20 +128,12 @@ public class StringUtils {
 
 
 
-    public static String str(Object obj) {
-        if (null == obj) {
+    public static String toString(Object obj) {
+
+        if (obj == null) {
             return null;
-        } else if (obj instanceof String) {
-            return (String)obj;
-        } else if (obj instanceof byte[]) {
-            return str((byte[])((byte[])obj));
-        } else if (obj instanceof Byte[]) {
-            return str((Byte[])((Byte[])obj));
-        } else if (obj instanceof ByteBuffer) {
-            return str((ByteBuffer)obj);
-        } else {
-            return ArrayUtils.isArray(obj) ? ArrayUtils.toString(obj) : obj.toString();
         }
+        return ObjectUtils.toString(obj);
     }
 
 

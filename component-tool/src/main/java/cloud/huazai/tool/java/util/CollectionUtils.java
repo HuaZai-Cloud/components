@@ -1,11 +1,10 @@
 package cloud.huazai.tool.java.util;
 
 
+import cloud.huazai.tool.java.lang.ObjectUtils;
 import cloud.huazai.tool.java.lang.StringUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * CollectionUtils
@@ -20,15 +19,16 @@ public class CollectionUtils {
 
 
     public static <T> Collection<T> immutableEmptyCollection() {
-        return List.of();
+
+        return Collections.emptyList();
     }
 
     public static <T> List<T> immutableEmptyList() {
-        return List.of();
+        return Collections.emptyList();
     }
 
     public static <T> Set<T> immutableEmptySet() {
-        return Set.of();
+        return Collections.emptySet();
     }
 
     public static <T> Collection<T> emptyCollection() {
@@ -41,6 +41,10 @@ public class CollectionUtils {
 
     public static <T> Set<T> emptySet() {
         return new HashSet<>();
+    }
+
+    public static boolean isCollection(Object obj) {
+        return ObjectUtils.isNotNull(obj) && obj instanceof Collection;
     }
 
     public static boolean isEmpty(Collection<?> coll) {

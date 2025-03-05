@@ -1,6 +1,7 @@
 package cloud.huazai.tool.java.lang;
 
 import cloud.huazai.tool.java.util.CollectionUtils;
+import cloud.huazai.tool.java.util.JsonUtils;
 import cloud.huazai.tool.java.util.MapUtils;
 import lombok.NonNull;
 
@@ -33,14 +34,14 @@ public class ObjectUtils {
 
         if (obj instanceof String) {
             return (String) obj;
-        }else if (ArrayUtils.isArray(obj)) {
+        } else if (ArrayUtils.isArray(obj)) {
             return ArrayUtils.toString(obj);
-        }else if (CollectionUtils.isCollection(obj)) {
-            return ((Collection<?>) obj).toString();
-        }else if (MapUtils.isMap(obj)){
-            return ((Map<?, ?>) obj).toString();
+        } else if (CollectionUtils.isCollection(obj)) {
+            return CollectionUtils.toJsonString((Collection<?>) obj); // 转为 JSON 格式
+        } else if (MapUtils.isMap(obj)) {
+            return JsonUtils.toJsonString((Map<?, ?>) obj); // 转为 JSON 格式
         }
-        return StringUtils.BLANK;
+        return obj.toString();
     }
 
 

@@ -115,33 +115,31 @@ public class JsonUtils {
         }
     }
 
-    private static Object parseValue(String value, Class<?> type, Type genericType) {
+    private static Object parseValue(String value, Class<?> clazz, Type genericType) {
         if (value == null || value.equals("null")) {
             return null;
         }
-        if (type == String.class) {
-            return value.startsWith("\"") && value.endsWith("\"") ? value.substring(1, value.length() - 1) : value;
+        try {
+            if (clazz == String.class) {
+                return value.replaceAll("^\"|\"$", ""); // 去掉首尾双引号
+            }
+            if (Number.class.isAssignableFrom(clazz) || clazz.isPrimitive()) {
+                return NumberUtils.parseNumber(value, clazz); // 使用工具类解析数字
+            }
+            if (clazz == Boolean.class || clazz == boolean.class) {
+                return Boolean.parseBoolean(value);
+            }
+            if (clazz == List.class || clazz == Collection.class) {
+                Class<?> itemType = (Class<?>) ((ParameterizedType) genericType).getActualTypeArguments()[0];
+                return parseArray(value, itemType);
+            }
+            if (clazz == Map.class) {
+                return parseMap(value);
+            }
+            return fromJsonString(value, clazz); // 递归解析其他对象
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to parse value: " + value, e);
         }
-        if (type == Integer.class || type == int.class) {
-            return Integer.parseInt(value);
-        }
-        if (type == Long.class || type == long.class) {
-            return Long.parseLong(value);
-        }
-        if (type == Double.class || type == double.class) {
-            return Double.parseDouble(value);
-        }
-        if (type == Boolean.class || type == boolean.class) {
-            return Boolean.parseBoolean(value);
-        }
-        if (type == List.class || type == Collection.class) {
-            return parseArray(value, (Class<?>) ((ParameterizedType) genericType).getActualTypeArguments()[0]);
-        }
-        if (type == Map.class) {
-            return parseMap(value);
-        }
-        // 如果是其他对象类型，递归解析
-        return fromJsonString(value, type);
     }
 
 
@@ -151,7 +149,7 @@ public class JsonUtils {
             return StringUtils.NULL;
         }
         if (StringUtils.isString(value)) {
-            return StringConstant.DOUBLE_QUOTES+ escapeJsonString((String) value) + StringConstant.DOUBLE_QUOTES;
+            return "\"" + escapeJsonString((String) value) + "\"";
         }
         if (value instanceof Number || value instanceof Boolean) {
             return value.toString();
@@ -159,15 +157,13 @@ public class JsonUtils {
         if (CollectionUtils.isCollection(value)) {
             return formatCollection((Collection<?>) value);
         }
-
         if (MapUtils.isMap(value)) {
             return formatMap((Map<?, ?>) value);
         }
         if (ArrayUtils.isArray(value)) {
             return formatArray(value);
         }
-        // 如果是其他对象，递归调用 formatObject
-        return formatObject(value);
+        return formatObject(value); // 非递归调用，避免栈溢出
     }
 
     private static String formatCollection(Collection<?> collection) {

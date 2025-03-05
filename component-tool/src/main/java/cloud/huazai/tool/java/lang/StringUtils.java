@@ -6,6 +6,7 @@ import lombok.NonNull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -68,7 +69,10 @@ public class StringUtils {
         if (isBlank(separator)) {
             separator = StringConstant.COMMA;
         }
-        return Arrays.stream(str.split(separator)).collect(Collectors.toList());
+        if (separator.isEmpty()) {
+            return Arrays.asList(str.split("")); // 按字符分割
+        }
+        return Arrays.stream(str.split(Pattern.quote(separator))).collect(Collectors.toList());
     }
 
     public static <T> String join(@NonNull Collection<T> collection, String separator) {
@@ -80,50 +84,27 @@ public class StringUtils {
                 .collect(Collectors.joining(separator));  // 使用指定分隔符连接
     }
 
+
     public static String format(@NonNull CharSequence str, Object... params) {
-        return ArrayUtils.isNotEmpty(params) && isNotBlank(str) ? format(str.toString(), params) : str.toString();
-    }
-
-    public static String format(@NonNull String str, Object... params) {
         if (isNotBlank(str) && ArrayUtils.isNotEmpty(params)) {
-            int strLength = str.length();
-            StringBuilder stuBui = new StringBuilder(strLength + 50);
+            String strString = str.toString();
+            StringBuilder result = new StringBuilder(strString.length() + params.length * 10);
             int handledPosition = 0;
+            int paramIndex = 0;
 
-            for(int paramIndex = 0; paramIndex < params.length; ++paramIndex) {
-                int delimIndex = str.indexOf("{}", handledPosition);
+            while (paramIndex < params.length) {
+                int delimIndex = strString.indexOf("{}", handledPosition);
                 if (delimIndex == -1) {
-                    if (handledPosition == 0) {
-                        return str;
-                    }
-
-                    stuBui.append(str, handledPosition, strLength);
-                    return stuBui.toString();
+                    break;
                 }
-
-                if (delimIndex > 0 && str.charAt(delimIndex - 1) == '\\') {
-                    if (delimIndex > 1 && str.charAt(delimIndex - 2) == '\\') {
-                        stuBui.append(str, handledPosition, delimIndex - 1);
-                        stuBui.append(toString(params[paramIndex]));
-                        handledPosition = delimIndex + 2;
-                    } else {
-                        --paramIndex;
-                        stuBui.append(str, handledPosition, delimIndex - 1);
-                        stuBui.append('{');
-                        handledPosition = delimIndex + 1;
-                    }
-                } else {
-                    stuBui.append(str, handledPosition, delimIndex);
-                    stuBui.append(toString(params[paramIndex]));
-                    handledPosition = delimIndex + 2;
-                }
+                result.append(strString, handledPosition, delimIndex)
+                        .append(toString(params[paramIndex++]));
+                handledPosition = delimIndex + 2;
             }
-
-            stuBui.append(str, handledPosition, str.length());
-            return stuBui.toString();
-        } else {
-            return str;
+            result.append(strString, handledPosition, strString.length());
+            return result.toString();
         }
+        return str.toString();
     }
 
 

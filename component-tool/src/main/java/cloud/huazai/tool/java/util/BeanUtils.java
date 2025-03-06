@@ -4,32 +4,25 @@ import cloud.huazai.tool.java.lang.ArrayUtils;
 import lombok.NonNull;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class BeanUtils {
 
-    public static void copyProperties(@NonNull Object source, @NonNull Object target, String... ignoreProperties)  {
-        copy(source, target, ignoreProperties);
+    public static void copyProperties(@NonNull Object source, @NonNull Object target, String... ignoreProperties) {
+        copyProperties(source, source.getClass(), target, target.getClass(), ArrayUtils.isNotEmpty(ignoreProperties) ? Arrays.asList(ignoreProperties) : CollectionUtils.emptyList());
     }
 
-    private static void copy(@NonNull Object source, @NonNull Object target, String... ignoreProperties)  {
+    private static void copyProperties(@NonNull Object source, Class<?> sourceClazz, @NonNull Object target, Class<?> targetClazz, List<String> ignorePropertieList) {
 
-        List<String> ignoreList = new ArrayList<>();
-        if (ArrayUtils.isNotEmpty(ignoreProperties)) {
-             ignoreList = Arrays.asList(ignoreProperties);
-        }
-        Class<?> sourceClass = source.getClass();
-        Class<?> targetClass = target.getClass();
-        Field[] sourceFields = sourceClass.getDeclaredFields();
+        Field[] sourceFields = sourceClazz.getDeclaredFields();
         for (Field sourceField : sourceFields) {
             String fieldName = sourceField.getName();
-            if (ignoreList.contains(fieldName)) {
+            if (ignorePropertieList.contains(fieldName)) {
                 continue;
             }
             try {
-                Field targetField = targetClass.getDeclaredField(fieldName);
+                Field targetField = targetClazz.getDeclaredField(fieldName);
                 sourceField.setAccessible(true);
                 targetField.setAccessible(true);
 

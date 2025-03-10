@@ -60,10 +60,6 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>cloud.huazai.component</groupId>
-            <artifactId>component-tool</artifactId>
-        </dependency>
 
         <!--lombok-->
         <dependency>

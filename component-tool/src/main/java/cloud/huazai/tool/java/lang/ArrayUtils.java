@@ -29,25 +29,10 @@ public class ArrayUtils {
     }
 
     private static String toArrayString(Object obj) {
-        if (obj instanceof long[]) {
-            return Arrays.toString(((long[]) obj));
-        } else if (obj instanceof int[]) {
-            return Arrays.toString(((int[]) obj));
-        } else if (obj instanceof short[]) {
-            return Arrays.toString(((short[]) obj));
-        } else if (obj instanceof char[]) {
-            return Arrays.toString(((char[]) obj));
-        } else if (obj instanceof byte[]) {
-            return Arrays.toString(((byte[]) obj));
-        } else if (obj instanceof boolean[]) {
-            return Arrays.toString(((boolean[]) obj));
-        } else if (obj instanceof float[]) {
-            return Arrays.toString(((float[]) obj));
-        } else if (obj instanceof double[]) {
-            return Arrays.toString(((double[]) obj));
-        } else  {
-            return Arrays.deepToString(((Object[]) obj));
+        if (obj.getClass().getComponentType().isPrimitive()) {
+            return Arrays.toString((Object[]) obj);
         }
+        return Arrays.deepToString((Object[]) obj);
     }
 
     public static int length(Object array) {

@@ -65,11 +65,13 @@ public class CollectionUtils {
     }
 
     public static <T> Collection<Collection<T>> partition(Collection<T> collection, int size) {
-
+        if (size <= 0) {
+            throw new IllegalArgumentException("Size must be greater than 0");
+        }
         Collection<Collection<T>> result = new ArrayList<>((collection.size() + size - 1) / size);
         Iterator<T> iterator = collection.iterator();
         while (iterator.hasNext()) {
-            Collection<T> chunk = new ArrayList<>(size);
+            Collection<T> chunk = new ArrayList<>(Math.min(size, collection.size()));
             for (int i = 0; i < size && iterator.hasNext(); i++) {
                 chunk.add(iterator.next());
             }
@@ -78,7 +80,9 @@ public class CollectionUtils {
         return result;
     }
 
-
+    public static <T> String toJsonString(Collection<T> collection) {
+        return JsonUtils.toJsonString(collection);
+    }
 
 
 

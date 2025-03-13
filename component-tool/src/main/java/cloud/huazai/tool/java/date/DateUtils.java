@@ -369,14 +369,13 @@ public class DateUtils {
         LocalDateTime startDateTimeTemp = toLocalDateTime(startDateTime);
         LocalDateTime endDateTimeTemp = toLocalDateTime(endDateTime);
 
-        Period period = Period.between(startDateTimeTemp.toLocalDate(), endDateTimeTemp.toLocalDate());
-        long hours = startDateTimeTemp.toLocalTime().until(endDateTimeTemp.toLocalTime(), ChronoUnit.HOURS);
-        long minutes = startDateTimeTemp.toLocalTime()
-                .until(endDateTimeTemp.toLocalTime(), ChronoUnit.MINUTES) % TemporalPeriod.MINUTES_PER_HOUR;
-        long seconds = startDateTimeTemp.toLocalTime()
-                .until(endDateTimeTemp.toLocalTime(), ChronoUnit.SECONDS) % TemporalPeriod.SECONDS_PER_MINUTE;
-        long millis = startDateTimeTemp.toLocalTime()
-                .until(endDateTimeTemp.toLocalTime(), ChronoUnit.MILLIS) % TemporalPeriod.MILLIS_PER_SECOND;
+        Period period =calculateDatePeriod(startDateTimeTemp, endDateTimeTemp);
+        Duration timeDuration = calculateTimeDuration(startDateTimeTemp, endDateTimeTemp);
+
+        long hours = timeDuration.toHours();
+        long minutes = timeDuration.toMinutes() % TemporalPeriod.MINUTES_PER_HOUR;
+        long seconds = timeDuration.getSeconds() % TemporalPeriod.SECONDS_PER_MINUTE;
+        long millis = timeDuration.toMillis() % TemporalPeriod.MILLIS_PER_SECOND;
 
         return TemporalPeriod.create(period.getYears(), period.getMonths(), period.getDays(), hours, minutes, seconds, millis);
 
@@ -399,39 +398,40 @@ public class DateUtils {
     }
 
     public static <T extends Temporal> String format(@NonNull T dateTime, @NonNull DateTimeFormatter formatter) {
-        if (dateTime instanceof LocalDate) {
-            return ((LocalDate) dateTime).format(formatter);
-        } else if (dateTime instanceof LocalDateTime) {
-            return ((LocalDateTime) dateTime).format(formatter);
-        } else if (dateTime instanceof ZonedDateTime) {
-            return ((ZonedDateTime) dateTime).format(formatter);
-        } else if (dateTime instanceof LocalTime) {
-            return ((LocalTime) dateTime).format(formatter);
-        } else {
-            throw new IllegalArgumentException("Unsupported Temporal type: " + (dateTime.getClass().getName()));
-        }
+        return formatter.format(dateTime);
     }
 
-    private static LocalDateTime parse(@NonNull String dateTime, @NonNull String format) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-        return LocalDateTime.parse(dateTime, formatter);
+
+    public static LocalDate parseLocalDate(@NonNull String dateTime, @NonNull String format) {
+        return parse(dateTime, format, LocalDate.class);
     }
+
+    public static LocalTime parseLocalTime(@NonNull String dateTime, @NonNull String format) {
+        return parse(dateTime, format, LocalTime.class);
+    }
+
+    public static LocalDateTime parseLocalDateTime(@NonNull String dateTime, @NonNull String format) {
+        return parse(dateTime, format, LocalDateTime.class);
+    }
+
+    public static ZonedDateTime parseZonedDateTime(@NonNull String dateTime, @NonNull String format) {
+        return parse(dateTime, format, ZonedDateTime.class);
+    }
+
 
     public static boolean isValidDateTime(@NonNull String dateTimeStr, @NonNull String format) {
         return isValidDateTime(dateTimeStr, format, false);
     }
     public static boolean isValidDateTime(@NonNull String dateTimeStr, @NonNull String format , boolean strict) {
-        DateTimeFormatter formatter ;
-        if (strict) {
-            formatter = DateTimeFormatter.ofPattern(format).withResolverStyle(ResolverStyle.STRICT);
-        }else{
-            formatter = DateTimeFormatter.ofPattern(format);
-        }
+        DateTimeFormatter formatter = createFormatter(format, strict);
 
         return canParse(dateTimeStr, formatter, LocalDate.class)
                 || canParse(dateTimeStr, formatter, LocalTime.class)
-                || canParse(dateTimeStr, formatter, LocalDateTime.class);
+                || canParse(dateTimeStr, formatter, LocalDateTime.class)
+                || canParse(dateTimeStr, formatter, ZonedDateTime.class);
     }
+
+    // -----------------private--------------------------------------------private-------------------------------------
 
     private static <T> boolean canParse(String dateTimeStr, DateTimeFormatter formatter, Class<T> targetClass) {
         try {
@@ -441,10 +441,52 @@ public class DateUtils {
                 LocalTime.parse(dateTimeStr, formatter);
             } else if (targetClass == LocalDateTime.class) {
                 LocalDateTime.parse(dateTimeStr, formatter);
+            } else if (targetClass == ZonedDateTime.class) {
+                ZonedDateTime.parse(dateTimeStr, formatter);
             }
             return true;
         } catch (DateTimeParseException e) {
             return false;
+        }
+    }
+
+    private static Period calculateDatePeriod(@NonNull LocalDateTime start,@NonNull LocalDateTime end) {
+        return Period.between(start.toLocalDate(), end.toLocalDate());
+    }
+
+    private static Duration calculateTimeDuration(@NonNull LocalDateTime start,@NonNull LocalDateTime end) {
+        Duration duration = Duration.between(start.toLocalTime(), end.toLocalTime());
+        if (end.toLocalDate().isAfter(start.toLocalDate()) && duration.isNegative()) {
+            duration = duration.plusDays(1);
+        }
+        return duration;
+    }
+
+
+    private static <T> T parse(String dateTimeStr, String format, Class<T> targetClass) {
+        DateTimeFormatter formatter = createFormatter(format, false);
+        if (targetClass == LocalDate.class) {
+            return targetClass.cast(LocalDate.parse(dateTimeStr, formatter));
+        }
+        if (targetClass == LocalTime.class) {
+            return targetClass.cast(LocalTime.parse(dateTimeStr, formatter));
+        }
+        if (targetClass == LocalDateTime.class) {
+            return targetClass.cast(LocalDateTime.parse(dateTimeStr, formatter));
+        }
+        if (targetClass == ZonedDateTime.class) {
+            return targetClass.cast(ZonedDateTime.parse(dateTimeStr, formatter));
+        }
+
+        throw new IllegalArgumentException("Unsupported Temporal type: " + targetClass.getName()
+                + ". Supported types are LocalDate, LocalTime, LocalDateTime, and ZonedDateTime.");
+    }
+
+    public static DateTimeFormatter createFormatter(String format, boolean strict) {
+        if (strict) {
+            return DateTimeFormatter.ofPattern(format).withResolverStyle(ResolverStyle.STRICT);
+        } else {
+            return DateTimeFormatter.ofPattern(format);
         }
     }
 

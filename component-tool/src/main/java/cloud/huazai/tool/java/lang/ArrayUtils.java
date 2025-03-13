@@ -39,4 +39,16 @@ public class ArrayUtils {
         return null == array ? 0 : Array.getLength(array);
     }
 
+    public static int indexOf(char[] array, char value) {
+        if (null != array) {
+            for(int i = 0; i < array.length; ++i) {
+                if (value == array[i]) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
+    }
+
 }

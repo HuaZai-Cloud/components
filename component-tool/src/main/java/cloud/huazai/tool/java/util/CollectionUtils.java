@@ -1,11 +1,10 @@
 package cloud.huazai.tool.java.util;
 
 
+import cloud.huazai.tool.java.lang.ObjectUtils;
 import cloud.huazai.tool.java.lang.StringUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * CollectionUtils
@@ -20,15 +19,16 @@ public class CollectionUtils {
 
 
     public static <T> Collection<T> immutableEmptyCollection() {
-        return List.of();
+
+        return Collections.emptyList();
     }
 
     public static <T> List<T> immutableEmptyList() {
-        return List.of();
+        return Collections.emptyList();
     }
 
     public static <T> Set<T> immutableEmptySet() {
-        return Set.of();
+        return Collections.emptySet();
     }
 
     public static <T> Collection<T> emptyCollection() {
@@ -41,6 +41,10 @@ public class CollectionUtils {
 
     public static <T> Set<T> emptySet() {
         return new HashSet<>();
+    }
+
+    public static boolean isCollection(Object obj) {
+        return ObjectUtils.isNotNull(obj) && obj instanceof Collection;
     }
 
     public static boolean isEmpty(Collection<?> coll) {
@@ -61,11 +65,13 @@ public class CollectionUtils {
     }
 
     public static <T> Collection<Collection<T>> partition(Collection<T> collection, int size) {
-
+        if (size <= 0) {
+            throw new IllegalArgumentException("Size must be greater than 0");
+        }
         Collection<Collection<T>> result = new ArrayList<>((collection.size() + size - 1) / size);
         Iterator<T> iterator = collection.iterator();
         while (iterator.hasNext()) {
-            Collection<T> chunk = new ArrayList<>(size);
+            Collection<T> chunk = new ArrayList<>(Math.min(size, collection.size()));
             for (int i = 0; i < size && iterator.hasNext(); i++) {
                 chunk.add(iterator.next());
             }
@@ -74,7 +80,9 @@ public class CollectionUtils {
         return result;
     }
 
-
+    public static <T> String toJsonString(Collection<T> collection) {
+        return JsonUtils.toJsonString(collection);
+    }
 
 
 

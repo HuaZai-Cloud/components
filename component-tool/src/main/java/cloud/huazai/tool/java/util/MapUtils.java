@@ -1,7 +1,9 @@
 package cloud.huazai.tool.java.util;
 
+import cloud.huazai.tool.java.lang.ObjectUtils;
 import cloud.huazai.tool.java.lang.StringUtils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +19,7 @@ public class MapUtils {
     private static final String defaultMessage = "Collection Is Empty";
 
     public static Map<?,?> immutableEmptyMap() {
-        return Map.of();
+        return Collections.emptyMap();
     }
 
     public static Map<?,?> emptyMap() {
@@ -30,6 +32,10 @@ public class MapUtils {
 
     public static boolean isNotEmpty(Map<?, ?> map) {
         return !isEmpty(map);
+    }
+
+    public static boolean isMap(Object obj) {
+        return ObjectUtils.isNotNull(obj) && obj instanceof Map;
     }
 
     public static void requireNonEmpty(Map<?, ?> map, String message) {

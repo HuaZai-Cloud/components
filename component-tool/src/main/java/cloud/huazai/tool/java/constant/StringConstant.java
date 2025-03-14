@@ -9,6 +9,8 @@ package cloud.huazai.tool.java.constant;
 
 public interface StringConstant {
 
+     String BLANK = "";
+
      String SPACE = " ";
 
      String TAB = "  ";
@@ -53,6 +55,8 @@ public interface StringConstant {
 
     String EMPTY_JSON = "{}";
 
+    String EMPTY_COLLECTION = "[]";
+
     String BACKSLASH = "\\";
 
     String DOUBLE_QUOTES = "\"";
@@ -62,5 +66,7 @@ public interface StringConstant {
     String LF = "\n";
 
     String CRLF = "\r\n";
+
+    String NULL = "null";
 
 }

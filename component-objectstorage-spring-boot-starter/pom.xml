@@ -86,19 +86,16 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>cloud.huazai.component</groupId>
             <artifactId>component-tool</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>cloud.huazai.component</groupId>
             <artifactId>component-exception</artifactId>
-            <scope>provided</scope>
         </dependency>
 
 

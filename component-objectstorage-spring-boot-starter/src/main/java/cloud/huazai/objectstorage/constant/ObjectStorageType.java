@@ -1,6 +1,5 @@
 package cloud.huazai.objectstorage.constant;
 
-import lombok.Data;
 import lombok.Getter;
 
 /**

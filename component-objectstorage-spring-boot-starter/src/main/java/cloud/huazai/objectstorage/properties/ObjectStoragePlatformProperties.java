@@ -12,7 +12,6 @@ import lombok.Data;
 @Data
 public class ObjectStoragePlatformProperties {
 
-    private String type;
     private String accessKey;
     private String secretKey;
     private String endpoint;

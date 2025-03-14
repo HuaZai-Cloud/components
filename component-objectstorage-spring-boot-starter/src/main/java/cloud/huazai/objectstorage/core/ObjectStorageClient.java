@@ -11,6 +11,5 @@ import java.io.InputStream;
 
 public interface ObjectStorageClient {
 
-
     String uploadFile(String fileName,String filePath, InputStream inputStream);
 }

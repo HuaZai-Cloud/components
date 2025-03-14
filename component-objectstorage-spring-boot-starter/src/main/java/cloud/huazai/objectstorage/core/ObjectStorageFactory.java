@@ -1,6 +1,6 @@
 package cloud.huazai.objectstorage.core;
 
-import cloud.huazai.objectstorage.constant.ObjectStorageType;
+import cloud.huazai.objectstorage.constant.ObjectStoragePlatform;
 import cloud.huazai.objectstorage.platform.AliOssClient;
 import cloud.huazai.objectstorage.properties.ObjectStoragePlatformProperties;
 import cloud.huazai.objectstorage.properties.ObjectStorageProperties;
@@ -18,28 +18,29 @@ import java.util.Map;
 
 @Component
 public class ObjectStorageFactory {
-    private final Map<String, ObjectStorageClient> clients = new HashMap<>();
+    private final Map<ObjectStoragePlatform, ObjectStorageClient> clients = new HashMap<>();
 
     public ObjectStorageFactory(ObjectStorageProperties properties) {
         for (Map.Entry<String, ObjectStoragePlatformProperties> entry : properties.getPlatforms().entrySet()) {
             String platformName = entry.getKey();
             ObjectStoragePlatformProperties platformProperties = entry.getValue();
-            ObjectStorageClient client = createClient(platformName,platformProperties);
-            clients.put(platformName, client);
+            ObjectStoragePlatform platform = ObjectStoragePlatform.fromString(platformName);
+            ObjectStorageClient client = createClient(platform,platformProperties);
+            clients.put(platform, client);
         }
     }
 
-    private ObjectStorageClient createClient(String platformName,ObjectStoragePlatformProperties properties) {
-        return switch (platformName.toLowerCase()) {
-            case ObjectStorageType.ALI -> new AliOssClient(properties);
+    private ObjectStorageClient createClient(ObjectStoragePlatform platform, ObjectStoragePlatformProperties properties) {
+        return switch (platform) {
+            case ALI -> new AliOssClient(properties);
             // case ObjectStorageType.TENCENT -> new TencentCosClient(properties);
 
 
-            default -> throw new IllegalArgumentException("Unsupported platform type: " + platformName);
+            default -> throw new IllegalArgumentException("Unsupported platform type: " + platform.name());
         };
     }
 
-    public ObjectStorageClient getClient(String platformName) {
-        return clients.get(platformName);
+    public ObjectStorageClient getClient(ObjectStoragePlatform platform) {
+        return clients.get(platform);
     }
 }

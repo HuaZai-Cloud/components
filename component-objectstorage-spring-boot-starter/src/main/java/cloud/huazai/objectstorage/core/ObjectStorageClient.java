@@ -1,6 +1,7 @@
 package cloud.huazai.objectstorage.core;
 
 import java.io.InputStream;
+import java.util.Date;
 
 /**
  * ObjectStorageClient
@@ -11,5 +12,7 @@ import java.io.InputStream;
 
 public interface ObjectStorageClient {
 
-    String uploadFile(String fileName,String filePath, InputStream inputStream);
+    String uploadFile(String fileName,String filePath, InputStream inputStream,Date expiration);
+
+    String getSignedUrl(String fileName, String filePath, Date expiration);
 }

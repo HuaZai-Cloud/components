@@ -19,12 +19,18 @@ import java.util.Date;
  */
 
 public class AliOssClient implements ObjectStorageClient {
-    private final OSS ossClient;
-    private final String bucket;
+    private static volatile OSS ossClient;
+    private static String bucket;
 
     public AliOssClient(ObjectStoragePlatformProperties properties) {
-        this.ossClient = new OSSClientBuilder().build(properties.getEndpoint(), properties.getAccessKey(), properties.getSecretKey());
-        this.bucket = properties.getBucket();
+        if (ossClient == null) {
+            synchronized (AliOssClient.class) {
+                if (ossClient == null) {
+                    ossClient = new OSSClientBuilder().build(properties.getEndpoint(), properties.getAccessKey(), properties.getSecretKey());
+                    bucket = properties.getBucket();
+                }
+            }
+        }
     }
 
 
@@ -47,6 +53,19 @@ public class AliOssClient implements ObjectStorageClient {
 
         URL url = ossClient.generatePresignedUrl(bucket, filePath + fileName, expiration);
         return url.toString();
+    }
+
+
+
+
+
+
+    @Override
+    public void shutdownClient() {
+        if (ossClient != null) {
+            ossClient.shutdown();
+            ossClient = null;
+        }
     }
 
 

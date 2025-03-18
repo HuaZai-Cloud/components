@@ -18,7 +18,6 @@ import java.util.Map;
 
 @Setter
 @Getter
-@Component
 @ConfigurationProperties(prefix = ObjectStorageConstant.HUA_ZAI+ StringConstant.DOT+ObjectStorageConstant.OBJECT_STORAGE)
 public class ObjectStorageProperties {
 

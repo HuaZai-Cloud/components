@@ -35,4 +35,9 @@ public class ObjectStorageService {
         ObjectStorageClient client = factory.getClient(platform);
         return client.getSignedUrl(fileName, filePath, expiration);
     }
+
+    public void shutdownObjectStorageClient(ObjectStoragePlatform platform) {
+        ObjectStorageClient client = factory.getClient(platform);
+        client.shutdownClient();
+    }
 }

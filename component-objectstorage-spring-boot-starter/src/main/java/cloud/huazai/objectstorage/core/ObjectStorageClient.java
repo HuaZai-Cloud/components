@@ -12,9 +12,11 @@ import java.util.Date;
 
 public interface ObjectStorageClient {
 
-    String uploadFile(String fileName,String filePath, InputStream inputStream,Date expiration);
+    String uploadFile(String filePath,String fileName, InputStream inputStream,Date expiration);
 
-    String getSignedUrl(String fileName, String filePath, Date expiration);
+    String multipartUploadFile(String filePath,String fileName,long fileSize,long partSize, InputStream inputStream,Date expiration);
+
+    String getSignedUrl(String filePath,String fileName,  Date expiration);
 
     void shutdownClient();
 }

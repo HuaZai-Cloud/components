@@ -1,7 +1,5 @@
 package cloud.huazai.objectstorage.constant;
 
-import cloud.huazai.tool.java.lang.StringUtils;
-import cloud.huazai.tool.java.util.CollectionUtils;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -18,7 +16,7 @@ import java.util.stream.Collectors;
 public enum ObjectStoragePlatform {
 
     ALI,
-    TENCENT,
+    BYTEDANCE,
 
     ;
     public static ObjectStoragePlatform fromString(String platformName) {

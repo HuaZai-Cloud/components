@@ -14,6 +14,7 @@ public class ObjectStoragePlatformProperties {
 
     private String accessKey;
     private String secretKey;
+    private String region;
     private String endpoint;
     private String bucket;
 

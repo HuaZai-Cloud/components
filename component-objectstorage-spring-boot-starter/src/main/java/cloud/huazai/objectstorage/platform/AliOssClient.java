@@ -94,11 +94,10 @@ public class AliOssClient implements ObjectStorageClient {
         return getSignedUrl(fileName, filePath, expiration);
     }
 
-
-
-
-
-
+    @Override
+    public void deleteFile(String filePath, String fileName) {
+        ossClient.deleteObject(bucket, filePath + fileName);
+    }
 
     @Override
     public String getSignedUrl(String filePath,String fileName,  Date expiration) {

@@ -16,6 +16,8 @@ public interface ObjectStorageClient {
 
     String multipartUploadFile(String filePath,String fileName,long fileSize,long partSize, InputStream inputStream,Date expiration);
 
+    void deleteFile(String filePath, String fileName);
+
     String getSignedUrl(String filePath,String fileName,  Date expiration);
 
     void shutdownClient();

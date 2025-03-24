@@ -100,6 +100,11 @@ public class ObjectStorageService {
         return client.multipartUploadFile( filePath,fileName, fileSize,partSize,inputStream,expiration);
     }
 
+    public void deleteFile(ObjectStoragePlatform platform,String filePath, String fileName) {
+        ObjectStorageClient client = factory.getClient(platform);
+        client.deleteFile(filePath, fileName);
+    }
+
 
 
     public String getSignedUrl(ObjectStoragePlatform platform,String filePath, String fileName,  Date expiration) {

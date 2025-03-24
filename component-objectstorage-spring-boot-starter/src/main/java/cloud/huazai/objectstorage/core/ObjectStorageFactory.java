@@ -2,6 +2,7 @@ package cloud.huazai.objectstorage.core;
 
 import cloud.huazai.objectstorage.constant.ObjectStoragePlatform;
 import cloud.huazai.objectstorage.platform.AliOssClient;
+import cloud.huazai.objectstorage.platform.ByteDanceTosClient;
 import cloud.huazai.objectstorage.properties.ObjectStoragePlatformProperties;
 import cloud.huazai.objectstorage.properties.ObjectStorageProperties;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ public class ObjectStorageFactory {
     private ObjectStorageClient createClient(ObjectStoragePlatform platform, ObjectStoragePlatformProperties properties) {
         return switch (platform) {
             case ALI -> new AliOssClient(properties);
-            // case ObjectStorageType.TENCENT -> new TencentCosClient(properties);
+             case BYTEDANCE -> new ByteDanceTosClient(properties);
 
 
             default -> throw new IllegalArgumentException("Unsupported platform type: " + platform.name());

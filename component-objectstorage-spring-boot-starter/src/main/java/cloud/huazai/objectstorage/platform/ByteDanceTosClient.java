@@ -2,8 +2,11 @@ package cloud.huazai.objectstorage.platform;
 
 import cloud.huazai.objectstorage.core.ObjectStorageClient;
 import cloud.huazai.objectstorage.properties.ObjectStoragePlatformProperties;
+import cloud.huazai.objectstorage.util.ObjectStorageUtils;
 import cloud.huazai.tool.java.date.DateUtils;
+import cloud.huazai.tool.java.lang.StringUtils;
 import com.volcengine.tos.*;
+import com.volcengine.tos.comm.HttpMethod;
 import com.volcengine.tos.comm.io.TosRepeatableBoundedFileInputStream;
 import com.volcengine.tos.credential.CredentialsProvider;
 import com.volcengine.tos.credential.StaticCredentialsProvider;
@@ -13,9 +16,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ByteDanceTosClient implements ObjectStorageClient {
 
@@ -28,7 +29,7 @@ public class ByteDanceTosClient implements ObjectStorageClient {
                 if (tosClient == null) {
                     // 创建 TOSV2 客户端实例
                     CredentialsProvider   cred = new StaticCredentialsProvider(properties.getAccessKey(), properties.getSecretKey());
-                    TOSClientConfiguration clientConfiguration = TOSClientConfiguration.builder().endpoint(properties.getEndpoint()).credentialsProvider(cred).build();
+                    TOSClientConfiguration clientConfiguration = TOSClientConfiguration.builder().region(properties.getRegion()).endpoint(properties.getEndpoint()).credentialsProvider(cred).build();
                     tosClient =   new TOSV2ClientBuilder().build(clientConfiguration);
 //                    tosClient = new TOSV2ClientBuilder().build(properties.getRegion(), properties.getEndpoint(), properties.getAccessKey(), properties.getSecretKey());
                     bucket = properties.getBucket();
@@ -41,6 +42,16 @@ public class ByteDanceTosClient implements ObjectStorageClient {
     public String uploadFile(String filePath, String fileName, InputStream inputStream, Date expiration) {
 
         PutObjectInput putObjectInput = new PutObjectInput().setBucket(bucket).setKey(filePath + fileName).setContent(inputStream);
+
+        String contentType = ObjectStorageUtils.getContentTypeByFileName(fileName);
+        if (StringUtils.isNotBlank(contentType)) {
+            ObjectMetaRequestOptions options = new ObjectMetaRequestOptions();
+            options.setContentType(contentType);
+            options.setContentDisposition("inline");
+            putObjectInput.setOptions(options);
+        }
+
+
         tosClient.putObject(putObjectInput);
         return getSignedUrl(filePath, fileName, expiration);
     }
@@ -52,11 +63,12 @@ public class ByteDanceTosClient implements ObjectStorageClient {
             // 1. 初始化分片上传
             String uploadId = null;
             CreateMultipartUploadInput create = new CreateMultipartUploadInput().setBucket(bucket).setKey(filePath + fileName);
-//            ObjectMetaRequestOptions options = new ObjectMetaRequestOptions();
-//            // SDK 默认会根据 objectKey 后缀识别 Content-Type，也可以自定义设置
-//            options.setContentType("text/plain");
-
-//            create.setOptions(options);
+            String contentType = ObjectStorageUtils.getContentTypeByFileName(fileName);
+            if (StringUtils.isNotBlank(contentType)) {
+                ObjectMetaRequestOptions options = new ObjectMetaRequestOptions();
+                options.setContentType(contentType);
+                create.setOptions(options);
+            }
 
             CreateMultipartUploadOutput createOutput = tosClient.createMultipartUpload(create);
             System.out.println("createMultipartUpload succeed, uploadId is " + createOutput.getUploadID());
@@ -148,9 +160,11 @@ public class ByteDanceTosClient implements ObjectStorageClient {
     public String getSignedUrl(String filePath, String fileName, Date expiration) {
 
         PreSignedURLInput input = new PreSignedURLInput();
+        input.setHttpMethod(HttpMethod.GET);
         input.setBucket(bucket);
         input.setKey(filePath + fileName);
-        input.setExpires(DateUtils.betweenSecond(DateUtils.toLocalDateTime(expiration), LocalDateTime.now()));
+        input.setExpires(DateUtils.betweenSecond(LocalDateTime.now(),DateUtils.toLocalDateTime(expiration)));
+
 
         PreSignedURLOutput output = tosClient.preSignedURL(input);
         return output.getSignedUrl();

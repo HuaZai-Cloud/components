@@ -93,6 +93,11 @@ public class CollectionUtils {
      *
      */
     public static <T> Collection<T> intersection(Collection<T> coll1, Collection<T> coll2) {
+
+        if (CollectionUtils.isEmpty(coll1) || CollectionUtils.isEmpty(coll2)) {
+            return CollectionUtils.emptyCollection();
+        }
+
         List<T> result = new ArrayList<>(coll1);
         result.retainAll(coll2); // 保留两个集合都有的元素
         return result;
@@ -106,9 +111,14 @@ public class CollectionUtils {
      * @return 并集集合
      */
     public static <T> Collection<T> union(Collection<T> coll1, Collection<T> coll2) {
-        Set<T> set = new HashSet<>(coll1);
-        set.addAll(coll2); // 添加所有元素到集合中（自动去重）
-        return new ArrayList<>(set);
+        Set<T> set = new HashSet<>();
+        if (CollectionUtils.isNotEmpty(coll1)) {
+            set.addAll(coll1);
+        }
+        if (CollectionUtils.isNotEmpty(coll2)) {
+            set.addAll(coll2);
+        }
+        return set;
     }
 
 
@@ -119,25 +129,20 @@ public class CollectionUtils {
      * @param <T>
      * @return
      */
-    public static <T> Collection<T> difference(Collection<T> coll1, Collection<T> coll2) {
+    public static <T> Collection<T> subtract(Collection<T> coll1, Collection<T> coll2) {
+
+        if (CollectionUtils.isEmpty(coll1)) {
+            return emptyCollection();
+        }
+
         List<T> result = new ArrayList<>(coll1);
-        result.removeAll(coll2); // 移除 collection1 中存在于 collection2 的元素
+        if (CollectionUtils.isNotEmpty(coll2)) {
+            result.removeAll(coll2);
+        }
         return result;
     }
 
 
-    /**
-     * 补集
-     * @param universalColl 全集
-     * @param coll 子集
-     * @param <T> 对象类型
-     * @return 补集集合
-     */
-    public static <T> Collection<T> complement(Collection<T> universalColl, Collection<T> coll) {
-        List<T> result = new ArrayList<>(universalColl);
-        result.removeAll(coll); // 移除子集中的元素
-        return result;
-    }
 
     /**
      * 对称差集

@@ -1,5 +1,7 @@
 package cloud.huazai.tool.java.util;
 
+import cloud.huazai.tool.java.constant.StringConstant;
+
 import java.text.Collator;
 import java.util.Comparator;
 import java.util.List;
@@ -12,21 +14,21 @@ import java.util.stream.Collectors;
 public class MixedStringSortUtils {
 
     // 对象列表排序工具方法
-    public static <T> List<T> sortListBySortField(List<T> items, Function<T, String> sortField) {
+    public static <T> List<T> sortListBySortField(List<T> list, Function<T, String> sortField) {
         Collator collator = Collator.getInstance(Locale.CHINA);
         collator.setStrength(Collator.PRIMARY);
         Pattern pattern = Pattern.compile("([\\p{L}]*)([\\p{N}]*)");
 
-        return items.stream()
-                .sorted(Comparator.comparing((T item) -> {
-                    String key = sortField.apply(item);
+        return list.stream()
+                .sorted(Comparator.comparing((T t) -> {
+                    String key = sortField.apply(t);
                     Matcher matcher = pattern.matcher(key);
                     if (matcher.find()) {
                         String letters = matcher.group(1);
                         String numbers = matcher.group(2);
                         return new String[]{letters, numbers};
                     }
-                    return new String[]{key, ""};
+                    return new String[]{key, StringConstant.BLANK};
                 }, createStringArrayComparator(collator)))
                 .collect(Collectors.toList());
     }

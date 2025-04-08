@@ -37,13 +37,13 @@ public interface CharConstant {
 
      char ASTERISK = '*';
 
-     char DELIM_START = '{';
+     char LEFT_CURLY_BRACE = '{';
 
-     char DELIM_END = '}';
+     char RIGHT_CURLY_BRACE = '}';
 
-     char BRACKET_START = '[';
+     char LEFT_SQUARE_BRACKET = '[';
 
-     char BRACKET_END = ']';
+     char RIGHT_SQUARE_BRACKET = ']';
 
      char LEFT_PARENTHESIS = '(';
 

@@ -5,11 +5,12 @@ import cloud.huazai.objectstorage.properties.ObjectStoragePlatformProperties;
 import cloud.huazai.objectstorage.util.ObjectStorageUtils;
 import cloud.huazai.tool.java.date.DateUtils;
 import cloud.huazai.tool.java.lang.StringUtils;
-import com.volcengine.tos.*;
+import com.volcengine.tos.TOSV2;
+import com.volcengine.tos.TOSV2ClientBuilder;
+import com.volcengine.tos.TosClientException;
+import com.volcengine.tos.TosServerException;
 import com.volcengine.tos.comm.HttpMethod;
 import com.volcengine.tos.comm.io.TosRepeatableBoundedFileInputStream;
-import com.volcengine.tos.credential.CredentialsProvider;
-import com.volcengine.tos.credential.StaticCredentialsProvider;
 import com.volcengine.tos.model.object.*;
 
 import java.io.FileInputStream;
@@ -28,10 +29,11 @@ public class ByteDanceTosClient implements ObjectStorageClient {
             synchronized (AliOssClient.class) {
                 if (tosClient == null) {
                     // 创建 TOSV2 客户端实例
-                    CredentialsProvider   cred = new StaticCredentialsProvider(properties.getAccessKey(), properties.getSecretKey());
-                    TOSClientConfiguration clientConfiguration = TOSClientConfiguration.builder().region(properties.getRegion()).endpoint(properties.getEndpoint()).credentialsProvider(cred).build();
-                    tosClient =   new TOSV2ClientBuilder().build(clientConfiguration);
-//                    tosClient = new TOSV2ClientBuilder().build(properties.getRegion(), properties.getEndpoint(), properties.getAccessKey(), properties.getSecretKey());
+                    tosClient = new TOSV2ClientBuilder()
+                            .build(properties.getRegion(),
+                                    properties.getEndpoint(),
+                                    properties.getAccessKey(),
+                                    properties.getSecretKey());
                     bucket = properties.getBucket();
                 }
             }

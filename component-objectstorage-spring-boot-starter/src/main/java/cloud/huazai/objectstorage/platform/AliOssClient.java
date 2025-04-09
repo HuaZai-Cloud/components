@@ -4,8 +4,10 @@ import cloud.huazai.objectstorage.core.ObjectStorageClient;
 import cloud.huazai.objectstorage.properties.ObjectStoragePlatformProperties;
 import cloud.huazai.objectstorage.util.ObjectStorageUtils;
 import cloud.huazai.tool.java.lang.StringUtils;
+import com.aliyun.oss.ClientBuilderConfiguration;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.common.auth.DefaultCredentialProvider;
 import com.aliyun.oss.model.*;
 
 import java.io.IOException;
@@ -30,7 +32,12 @@ public class AliOssClient implements ObjectStorageClient {
         if (ossClient == null) {
             synchronized (AliOssClient.class) {
                 if (ossClient == null) {
-                    ossClient = new OSSClientBuilder().build(properties.getEndpoint(), properties.getAccessKey(), properties.getSecretKey());
+                    ossClient = OSSClientBuilder.create()
+                            .clientConfiguration(new ClientBuilderConfiguration())
+                            .credentialsProvider(new DefaultCredentialProvider(properties.getAccessKey(), properties.getSecretKey()))
+                            .endpoint(properties.getEndpoint())
+                            .region(properties.getRegion())
+                            .build();
                     bucket = properties.getBucket();
                 }
             }

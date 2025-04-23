@@ -17,7 +17,7 @@
     <description>Unified platform object storage api</description>
     <packaging>jar</packaging>
 
-    <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>
+    <url>https://github.com/HuaZai-Cloud/huazai-components</url>
 
     <licenses>
         <license>

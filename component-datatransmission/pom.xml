@@ -17,7 +17,7 @@
     <description>Unified data transmission rules</description>
     <packaging>jar</packaging>
 
-    <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>
+    <url>https://github.com/HuaZai-Cloud/huazai-components</url>
 
     <licenses>
         <license>
@@ -48,9 +48,9 @@
 
 
     <scm>
-        <connection>https://github.com/HuaZai-Cloud/huazai-components-parent.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:HuaZai-Cloud/huazai-components-parent.git</developerConnection>
-        <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>
+        <connection>https://github.com/HuaZai-Cloud/huazai-components.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:HuaZai-Cloud/huazai-components.git</developerConnection>
+        <url>https://github.com/HuaZai-Cloud/huazai-components</url>
     </scm>
 
     <properties>

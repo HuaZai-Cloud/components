@@ -3,8 +3,6 @@ package cloud.huazai.tool.java.util;
 import cloud.huazai.tool.java.lang.User;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class BeanUtilsTest {
 
     @Test
@@ -20,5 +18,7 @@ class BeanUtilsTest {
         BeanUtils.copyProperties(user, user1,"age");
 
         System.out.println("user1 = " + user1);
+
+
     }
 }

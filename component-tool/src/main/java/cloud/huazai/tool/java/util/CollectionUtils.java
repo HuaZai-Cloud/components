@@ -84,6 +84,80 @@ public class CollectionUtils {
         return JsonUtils.toJsonString(collection);
     }
 
+    /**
+     * 交集
+     * @param coll1 集合1
+     * @param coll2 集合2
+     * @param <T> 对象类型
+     * @return 交集集合
+     *
+     */
+    public static <T> Collection<T> intersection(Collection<T> coll1, Collection<T> coll2) {
+
+        if (CollectionUtils.isEmpty(coll1) || CollectionUtils.isEmpty(coll2)) {
+            return CollectionUtils.emptyCollection();
+        }
+
+        List<T> result = new ArrayList<>(coll1);
+        result.retainAll(coll2); // 保留两个集合都有的元素
+        return result;
+    }
+
+    /**
+     * 并集
+     * @param coll1 集合1
+     * @param coll2 集合2
+     * @param <T> 对象类型
+     * @return 并集集合
+     */
+    public static <T> Collection<T> union(Collection<T> coll1, Collection<T> coll2) {
+        Set<T> set = new HashSet<>();
+        if (CollectionUtils.isNotEmpty(coll1)) {
+            set.addAll(coll1);
+        }
+        if (CollectionUtils.isNotEmpty(coll2)) {
+            set.addAll(coll2);
+        }
+        return set;
+    }
+
+
+    /**
+     * 差集
+     * @param coll1
+     * @param coll2
+     * @param <T>
+     * @return
+     */
+    public static <T> Collection<T> subtract(Collection<T> coll1, Collection<T> coll2) {
+
+        if (CollectionUtils.isEmpty(coll1)) {
+            return emptyCollection();
+        }
+
+        List<T> result = new ArrayList<>(coll1);
+        if (CollectionUtils.isNotEmpty(coll2)) {
+            result.removeAll(coll2);
+        }
+        return result;
+    }
+
+
+
+    /**
+     * 对称差集
+     * @param collection1
+     * @param collection2
+     * @return
+     * @param <T>
+     */
+    public static <T> Collection<T> symmetricDifference(Collection<T> collection1, Collection<T> collection2) {
+        Collection<T> union = union(collection1, collection2); // 并集
+        Collection<T> intersection = intersection(collection1, collection2); // 交集
+        union.removeAll(intersection); // 移除交集部分
+        return union;
+    }
+
 
 
 }

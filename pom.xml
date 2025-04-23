@@ -5,11 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cloud.huazai.component</groupId>
-    <artifactId>components-parent</artifactId>
+    <artifactId>components</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
 
-    <name>components-parent</name>
+
+    <name>components</name>
     <description>Component parent project</description>
 
     <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>
@@ -54,10 +55,11 @@
         <module>component-operationlog-spring-boot-starter</module>
         <module>component-distributedlock-spring-boot-starter</module>
         <module>component-tool</module>
+        <module>component-objectstorage-spring-boot-starter</module>
     </modules>
 
     <properties>
-        <revision>1.3.9</revision>
+        <revision>2.2.0</revision>
 
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>

@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>cloud.huazai.component</groupId>
-        <artifactId>components-parent</artifactId>
+        <artifactId>components</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

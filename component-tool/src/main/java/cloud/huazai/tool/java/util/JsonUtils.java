@@ -1,5 +1,6 @@
 package cloud.huazai.tool.java.util;
 
+import cloud.huazai.tool.java.constant.CharConstant;
 import cloud.huazai.tool.java.constant.StringConstant;
 import cloud.huazai.tool.java.lang.ArrayUtils;
 import cloud.huazai.tool.java.lang.StringUtils;
@@ -22,7 +23,7 @@ public class JsonUtils {
         return formatValue(t);
     }
 
-    public static <T, E>  String toJsonString(Map<T, E> map) {
+    public static <K, V>  String toJsonString(Map<K, V> map) {
         return formatMap(map);
     }
 
@@ -82,11 +83,19 @@ public class JsonUtils {
         StringBuilder sb = new StringBuilder();
 
         for (char c : json.toCharArray()) {
-            if (c == '{') braceCount++;
-            if (c == '}') braceCount--;
-            if (c == '[') bracketCount++;
-            if (c == ']') bracketCount--;
-            if (c == ',' && braceCount == 0 && bracketCount == 0) {
+            if (c == CharConstant.LEFT_CURLY_BRACE) {
+                braceCount++;
+            }
+            if (c == CharConstant.RIGHT_CURLY_BRACE) {
+                braceCount--;
+            }
+            if (c == CharConstant.LEFT_SQUARE_BRACKET) {
+                bracketCount++;
+            }
+            if (c == CharConstant.RIGHT_SQUARE_BRACKET) {
+                bracketCount--;
+            }
+            if (c == CharConstant.COMMA && braceCount == 0 && bracketCount == 0) {
                 items.add(sb.toString().trim());
                 sb.setLength(0);
             } else {
@@ -106,9 +115,9 @@ public class JsonUtils {
             return null;
         }
         json = json.trim();
-        if (json.startsWith("{") && json.endsWith("}")) {
+        if (json.startsWith(StringConstant.LEFT_CURLY_BRACE) && json.endsWith(StringConstant.RIGHT_CURLY_BRACE)) {
             return parseObject(json, clazz);
-        } else if (json.startsWith("[") && json.endsWith("]")) {
+        } else if (json.startsWith(StringConstant.LEFT_SQUARE_BRACKET) && json.endsWith(StringConstant.RIGHT_SQUARE_BRACKET)) {
             return (T) parseArray(json, clazz);
         } else {
             throw new IllegalArgumentException("Invalid JSON string: " + json);
@@ -116,12 +125,12 @@ public class JsonUtils {
     }
 
     private static Object parseValue(String value, Class<?> clazz, Type genericType) {
-        if (value == null || value.equals("null")) {
+        if (value == null || value.equals(StringConstant.NULL)) {
             return null;
         }
         try {
             if (clazz == String.class) {
-                return value.replaceAll("^\"|\"$", ""); // 去掉首尾双引号
+                return value.replaceAll("^\"|\"$", StringConstant.BLANK); // 去掉首尾双引号
             }
             if (Number.class.isAssignableFrom(clazz) || clazz.isPrimitive()) {
                 return NumberUtils.parseNumber(value, clazz); // 使用工具类解析数字
@@ -149,7 +158,7 @@ public class JsonUtils {
             return StringUtils.NULL;
         }
         if (StringUtils.isString(value)) {
-            return "\"" + escapeJsonString((String) value) + "\"";
+            return StringConstant.DOUBLE_QUOTES + escapeJsonString((String) value) + StringConstant.DOUBLE_QUOTES;
         }
         if (value instanceof Number || value instanceof Boolean) {
             return value.toString();

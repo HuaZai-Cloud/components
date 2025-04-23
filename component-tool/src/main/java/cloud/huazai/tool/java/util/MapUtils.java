@@ -18,19 +18,19 @@ public class MapUtils {
 
     private static final String defaultMessage = "Collection Is Empty";
 
-    public static Map<?,?> immutableEmptyMap() {
+    public static <K,V> Map<K,V> immutableEmptyMap() {
         return Collections.emptyMap();
     }
 
-    public static Map<?,?> emptyMap() {
+    public static <K,V> Map<K,V> emptyMap() {
         return new HashMap<>();
     }
 
-    public static boolean isEmpty(Map<?, ?> map) {
+    public static <K,V> boolean isEmpty(Map<K,V> map) {
         return map == null || map.isEmpty();
     }
 
-    public static boolean isNotEmpty(Map<?, ?> map) {
+    public static <K,V> boolean isNotEmpty(Map<K,V> map) {
         return !isEmpty(map);
     }
 
@@ -38,7 +38,7 @@ public class MapUtils {
         return ObjectUtils.isNotNull(obj) && obj instanceof Map;
     }
 
-    public static void requireNonEmpty(Map<?, ?> map, String message) {
+    public static <K,V> void requireNonEmpty(Map<K,V> map, String message) {
         if (StringUtils.isBlank(message)) {
             message = defaultMessage;
         }

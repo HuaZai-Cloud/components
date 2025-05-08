@@ -13,7 +13,7 @@
     <name>components</name>
     <description>Component parent project</description>
 
-    <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>
+    <url>https://github.com/HuaZai-Cloud/huazai-components</url>
 
     <licenses>
         <license>
@@ -44,9 +44,9 @@
 
 
     <scm>
-        <connection>https://github.com/HuaZai-Cloud/huazai-components-parent.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:HuaZai-Cloud/huazai-components-parent.git</developerConnection>
-        <url>https://github.com/HuaZai-Cloud/huazai-components-parent</url>
+        <connection>https://github.com/HuaZai-Cloud/huazai-components.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:HuaZai-Cloud/huazai-components.git</developerConnection>
+        <url>https://github.com/HuaZai-Cloud/huazai-components</url>
     </scm>
 
     <modules>
@@ -59,7 +59,7 @@
     </modules>
 
     <properties>
-        <revision>2.2.0</revision>
+        <revision>2.3.0</revision>
 
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>

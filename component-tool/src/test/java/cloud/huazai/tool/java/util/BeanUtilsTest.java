@@ -20,5 +20,7 @@ class BeanUtilsTest {
         System.out.println("user1 = " + user1);
 
 
+
+
     }
 }

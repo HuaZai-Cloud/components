@@ -431,6 +431,26 @@ public class DateUtils {
                 || canParse(dateTimeStr, formatter, ZonedDateTime.class);
     }
 
+
+    // -----------------Timestamp--------------------------------------------Timestamp-------------------------------------
+    public static <T extends Temporal> Long toTimestamp(@NonNull T dateTime,boolean isMillisecondPrecision){
+        return toTimestamp(toZonedDateTime(toLocalDateTime(dateTime), ZoneId.systemDefault()),isMillisecondPrecision);
+    }
+
+    public static Long toTimestamp(@NonNull Date date,boolean isMillisecondPrecision) {
+        return toTimestamp(toZonedDateTime(toLocalDateTime(date), ZoneId.systemDefault()),isMillisecondPrecision);
+    }
+
+    public static Long toTimestamp(@NonNull ZonedDateTime zonedDateTime,boolean isMillisecondPrecision) {
+        Instant instant = zonedDateTime.toInstant();
+        if (isMillisecondPrecision) {
+            return instant.toEpochMilli();
+        }else{
+            return instant.getEpochSecond();
+        }
+    }
+
+
     // -----------------private--------------------------------------------private-------------------------------------
 
     private static <T> boolean canParse(String dateTimeStr, DateTimeFormatter formatter, Class<T> targetClass) {

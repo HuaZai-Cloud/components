@@ -1,1 +1,2 @@
 cloud.huazai.operationlog.config.OperationLogAutoConfiguration
+cloud.huazai.operationlog.config.BannerPrinter

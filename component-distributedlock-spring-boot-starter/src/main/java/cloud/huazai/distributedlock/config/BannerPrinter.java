@@ -1,4 +1,4 @@
-package cloud.huazai.objectstorage.config;
+package cloud.huazai.distributedlock.config;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -23,13 +23,13 @@ public class BannerPrinter implements ApplicationRunner {
 
     private void printBanner() {
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("META-INF/maven/cloud.huazai.component/component-objectstorage-spring-boot-starter/pom.properties");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("META-INF/maven/cloud.huazai.component/component-distributedlock-spring-boot-starter/pom.properties");
             if (inputStream != null) {
                 Properties properties = new Properties();
                 properties.load(inputStream);
                 String version = properties.getProperty("version", "1.0.0");
 
-                try (InputStream bannerStream = getClass().getClassLoader().getResourceAsStream("objectstorage-banner.txt")) {
+                try (InputStream bannerStream = getClass().getClassLoader().getResourceAsStream("distributedlock-banner.txt")) {
                     if (bannerStream != null) {
                         String content = new String(bannerStream.readAllBytes());
                         // 替换占位符为实际版本号

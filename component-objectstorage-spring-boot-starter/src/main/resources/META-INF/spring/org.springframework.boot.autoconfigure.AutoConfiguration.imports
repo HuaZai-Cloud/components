@@ -1,1 +1,2 @@
 cloud.huazai.objectstorage.config.ObjectStorageAutoConfiguration
+cloud.huazai.objectstorage.config.BannerPrinter

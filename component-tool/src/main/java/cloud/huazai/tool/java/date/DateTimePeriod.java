@@ -3,8 +3,6 @@ package cloud.huazai.tool.java.date;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Period;
-
 /**
  * TemporalPeriod
  *
@@ -16,7 +14,7 @@ import java.time.Period;
 
 @Setter
 @Getter
-public class TemporalPeriod {
+public class DateTimePeriod {
 
     static final int HOURS_PER_DAY = 24;
 
@@ -32,7 +30,7 @@ public class TemporalPeriod {
 
     static final long MILLIS_PER_SECOND = 1000L;
 
-    private static final TemporalPeriod ZERO = new TemporalPeriod(0, 0, 0,0,0,0,0);
+    private static final DateTimePeriod ZERO = new DateTimePeriod(0, 0, 0,0,0,0,0);
 
     private long year;
 
@@ -48,7 +46,7 @@ public class TemporalPeriod {
 
     private long millis;
 
-    private TemporalPeriod(long year, long month, long day, long hour, long minute, long second, long millis) {
+    private DateTimePeriod(long year, long month, long day, long hour, long minute, long second, long millis) {
         this.year = year;
         this.month = month;
         this.day = day;
@@ -58,7 +56,7 @@ public class TemporalPeriod {
         this.millis = millis;
     }
 
-    public static TemporalPeriod create(long year, long month, long day, long hour, long minute, long second, long millis) {
-        return new TemporalPeriod(year, month, day, hour, minute, second, millis);
+    public static DateTimePeriod create(long year, long month, long day, long hour, long minute, long second, long millis) {
+        return new DateTimePeriod(year, month, day, hour, minute, second, millis);
     }
 }

@@ -24,12 +24,22 @@ public class DateUtils {
 
     // ------------------------------------------------- Date ----------------------------------------------------------
 
+    /**
+     * Get the current date
+     * @return Current date
+     */
     @Deprecated
     public static Date now() {
         return new Date();
     }
 
 
+    /**
+     * Convert to date
+     * @param dateTime Temporal type: LocalDate、LocalTime、LocalDateTime、ZonedDateTime
+     * @return date
+     * @param <T> LocalDate、LocalTime、LocalDateTime、ZonedDateTime
+     */
     @Deprecated
     public static <T extends Temporal> Date toDate(@NonNull T dateTime) {
         if (dateTime instanceof LocalDate) {
@@ -54,11 +64,28 @@ public class DateUtils {
 
     }
 
+    /**
+     * Convert to date
+     * @param year year
+     * @param month month
+     * @param dayOfMonth dayOfMonth
+     * @param hour hour
+     * @param minute minute
+     * @param second second
+     * @return date
+     */
     @Deprecated
     public static Date toDate(int year, int month, int dayOfMonth, int hour, int minute, int second) {
         return toDate(toLocalDateTime(year, month, dayOfMonth, hour, minute, second));
     }
 
+    /**
+     * Convert to date
+     * @param year year
+     * @param month month
+     * @param dayOfMonth dayOfMonth
+     * @return date
+     */
     @Deprecated
     public static Date toDate(int year, int month, int dayOfMonth) {
         return toDate(year, month, dayOfMonth, 0, 0, 0);
@@ -66,6 +93,12 @@ public class DateUtils {
 
     // ---------------------------------------------- LocalDate -------------------------------------------------------
 
+    /**
+     * Convert to LocalDate
+     * @param dateTime  Temporal type: LocalDate、 LocalDateTime、 ZonedDateTime
+     * @return LocalDate
+     * @param <T> LocalDate、 LocalDateTime、 ZonedDateTime
+     */
     public static <T extends Temporal> LocalDate toLocalDate(@NonNull T dateTime) {
         if (dateTime instanceof LocalDate) {
             return (LocalDate) dateTime;
@@ -80,10 +113,22 @@ public class DateUtils {
 
     }
 
+    /**
+     * Convert to LocalDate
+     * @param date date
+     * @return LocalDate
+     */
     public static LocalDate toLocalDate(@NonNull Date date) {
         return toLocalDateTime(date).toLocalDate();
     }
 
+    /**
+     * Convert to LocalDate
+     * @param year year
+     * @param month month
+     * @param dayOfMonth dayOfMonth
+     * @return LocalDate
+     */
     public static LocalDate toLocalDate(int year, int month, int dayOfMonth) {
         return LocalDate.of(year, month, dayOfMonth);
     }
@@ -364,7 +409,7 @@ public class DateUtils {
     }
 
 
-    public static <T extends Temporal> TemporalPeriod toTemporalPeriod(@NonNull T startDateTime, @NonNull T endDateTime) {
+    public static <T extends Temporal> DateTimePeriod toTemporalPeriod(@NonNull T startDateTime, @NonNull T endDateTime) {
 
         LocalDateTime startDateTimeTemp = toLocalDateTime(startDateTime);
         LocalDateTime endDateTimeTemp = toLocalDateTime(endDateTime);
@@ -373,11 +418,11 @@ public class DateUtils {
         Duration timeDuration = calculateTimeDuration(startDateTimeTemp, endDateTimeTemp);
 
         long hours = timeDuration.toHours();
-        long minutes = timeDuration.toMinutes() % TemporalPeriod.MINUTES_PER_HOUR;
-        long seconds = timeDuration.getSeconds() % TemporalPeriod.SECONDS_PER_MINUTE;
-        long millis = timeDuration.toMillis() % TemporalPeriod.MILLIS_PER_SECOND;
+        long minutes = timeDuration.toMinutes() % DateTimePeriod.MINUTES_PER_HOUR;
+        long seconds = timeDuration.getSeconds() % DateTimePeriod.SECONDS_PER_MINUTE;
+        long millis = timeDuration.toMillis() % DateTimePeriod.MILLIS_PER_SECOND;
 
-        return TemporalPeriod.create(period.getYears(), period.getMonths(), period.getDays(), hours, minutes, seconds, millis);
+        return DateTimePeriod.create(period.getYears(), period.getMonths(), period.getDays(), hours, minutes, seconds, millis);
 
     }
 

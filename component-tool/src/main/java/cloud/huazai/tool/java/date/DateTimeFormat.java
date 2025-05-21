@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 
 @Getter
-public class TemporalFormat {
+public class DateTimeFormat {
 
    public static final String YEAR = "yyyy";
 

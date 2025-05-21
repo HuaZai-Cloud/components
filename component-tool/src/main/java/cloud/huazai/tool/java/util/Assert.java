@@ -2,7 +2,7 @@ package cloud.huazai.tool.java.util;
 
 
 import cloud.huazai.exception.BusinessException;
-import cloud.huazai.tool.java.date.DateUtils;
+import cloud.huazai.tool.java.date.DateTimeUtils;
 import cloud.huazai.tool.java.lang.ObjectUtils;
 import cloud.huazai.tool.java.lang.StringUtils;
 
@@ -163,13 +163,13 @@ public class Assert {
     }
 
     public static void isValidDateTime(String dateTimeStr, String format,String errMessage){
-        if (StringUtils.isNotBlank(dateTimeStr) && StringUtils.isNotBlank(format) && !DateUtils.isValidDateTime(dateTimeStr, format)) {
+        if (StringUtils.isNotBlank(dateTimeStr) && StringUtils.isNotBlank(format) && !DateTimeUtils.isValidDateTime(dateTimeStr, format)) {
             throw new BusinessException(errMessage);
         }
     }
 
     public static void isValidDateTime(String dateTimeStr, String format,String errCode,String errMessage){
-        if (StringUtils.isNotBlank(dateTimeStr) && StringUtils.isNotBlank(format) && !DateUtils.isValidDateTime(dateTimeStr, format)) {
+        if (StringUtils.isNotBlank(dateTimeStr) && StringUtils.isNotBlank(format) && !DateTimeUtils.isValidDateTime(dateTimeStr, format)) {
             throw new BusinessException(errCode,errMessage);
         }
     }

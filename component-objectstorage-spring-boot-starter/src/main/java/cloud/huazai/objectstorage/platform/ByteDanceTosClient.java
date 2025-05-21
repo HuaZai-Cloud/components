@@ -3,7 +3,7 @@ package cloud.huazai.objectstorage.platform;
 import cloud.huazai.objectstorage.core.ObjectStorageClient;
 import cloud.huazai.objectstorage.properties.ObjectStoragePlatformProperties;
 import cloud.huazai.objectstorage.util.ObjectStorageUtils;
-import cloud.huazai.tool.java.date.DateUtils;
+import cloud.huazai.tool.java.date.DateTimeUtils;
 import cloud.huazai.tool.java.lang.StringUtils;
 import com.volcengine.tos.TOSV2;
 import com.volcengine.tos.TOSV2ClientBuilder;
@@ -165,7 +165,7 @@ public class ByteDanceTosClient implements ObjectStorageClient {
         input.setHttpMethod(HttpMethod.GET);
         input.setBucket(bucket);
         input.setKey(filePath + fileName);
-        input.setExpires(DateUtils.betweenSecond(LocalDateTime.now(),DateUtils.toLocalDateTime(expiration)));
+        input.setExpires(DateTimeUtils.betweenSecond(LocalDateTime.now(), DateTimeUtils.toLocalDateTime(expiration)));
 
 
         PreSignedURLOutput output = tosClient.preSignedURL(input);

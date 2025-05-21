@@ -5,6 +5,12 @@ import lombok.Getter;
 
 import java.util.Arrays;
 
+/**
+ * NumberChineseFormatter: Numbers to Chinese characters
+ *
+ * @author devon
+ * @since 2025/3/13
+ */
 public class NumberChineseFormatter {
 
     private static final double MAX_SUPPORTED_AMOUNT = 9.999999999999998E13;
@@ -31,32 +37,61 @@ public class NumberChineseFormatter {
             '八', '捌',
             '九', '玖'
     };
+
+
+    private static final ChineseUnit[] DIGITS_VALUE = new ChineseUnit[]{
+            new ChineseUnit('零', 0),
+            new ChineseUnit('一', 1), new ChineseUnit('壹', 1),
+            new ChineseUnit('二', 2), new ChineseUnit('贰', 2),
+            new ChineseUnit('三', 3), new ChineseUnit('叁', 3),
+            new ChineseUnit('四', 4), new ChineseUnit('肆', 4),
+            new ChineseUnit('五', 5), new ChineseUnit('伍', 5),
+            new ChineseUnit('六', 6), new ChineseUnit('陆', 6),
+            new ChineseUnit('七', 7), new ChineseUnit('柒', 7),
+            new ChineseUnit('八', 8), new ChineseUnit('捌', 8),
+            new ChineseUnit('九', 9), new ChineseUnit('玖', 9),
+
+    };
+
     private static final ChineseUnit[] CHINESE_NAME_VALUE = new ChineseUnit[]{
-            new ChineseUnit(' ', 1, false),
-            new ChineseUnit('十', 10, false), new ChineseUnit('拾', 10, false),
-            new ChineseUnit('百', 100, false), new ChineseUnit('佰', 100, false),
-            new ChineseUnit('千', 1000, false), new ChineseUnit('仟', 1000, false),
-            new ChineseUnit('万', 10000, true),
-            new ChineseUnit('亿', 100000000, true)};
+            new ChineseUnit(' ', 1),
+            new ChineseUnit('十', 10), new ChineseUnit('拾', 10),
+            new ChineseUnit('百', 100), new ChineseUnit('佰', 100),
+            new ChineseUnit('千', 1000), new ChineseUnit('仟', 1000),
+            new ChineseUnit('万', 10000),  new ChineseUnit('萬', 10000),
+            new ChineseUnit('亿', 100000000),new ChineseUnit('億', 100000000),
+    };
 
 
-    public static String format(double amount, boolean isUseTraditional) {
-        return format(amount, isUseTraditional, false);
+    /**
+     * Number Formatting Chinese
+     * @param number number
+     * @param isUseTraditional  use traditional Chinese characters.
+     * @return Chinese Number
+     */
+    public static String format(double number, boolean isUseTraditional) {
+        return format(number, isUseTraditional, false);
     }
 
-    public static String format(double amount, boolean isUseTraditional, boolean isMoneyMode) {
+    /**
+     * Number Formatting Chinese
+     * @param number number
+     * @param isUseTraditional use traditional Chinese characters.
+     * @param isMoneyMode is Money Mode
+     * @return Chinese Number
+     */
+    public static String format(double number, boolean isUseTraditional, boolean isMoneyMode) {
 
-        // 检查金额范围
-        if (amount > MAX_SUPPORTED_AMOUNT || amount < MIN_SUPPORTED_AMOUNT) {
+        if (number > MAX_SUPPORTED_AMOUNT || number < MIN_SUPPORTED_AMOUNT) {
             throw new IllegalArgumentException("Number support only: (-99999999999999.99 ～ 99999999999999.99)！");
         }
 
-        boolean negative = amount < 0;
+        boolean negative = number < 0;
         if (negative) {
-            amount = -amount;
+            number = -number;
         }
 
-        long temp = Math.round(amount * 100);
+        long temp = Math.round(number * 100);
         int numFen = (int) (temp % 10);
         temp /= 10;
         int numJiao = (int) (temp % 10);
@@ -88,56 +123,6 @@ public class NumberChineseFormatter {
         }
         return chineseStr.toString();
     }
-
-    public static int chineseToNumber(String chinese) {
-        int result = 0;
-        int section = 0;
-        int number = 0;
-        ChineseUnit unit = null;
-
-        for(int i = 0; i < chinese.length(); ++i) {
-            char c = chinese.charAt(i);
-            int num = chineseToNumber(c);
-            if (num >= 0) {
-                if (num == 0) {
-                    if (number > 0 && null != unit) {
-                        section += number * (unit.value / 10);
-                    }
-                    unit = null;
-                } else if (number > 0) {
-                    throw new IllegalArgumentException(StringUtils.format("Bad number '{}{}' at: {}", new Object[]{chinese.charAt(i - 1), c, i}));
-                }
-
-                number = num;
-            } else {
-                unit = chineseToUnit(c);
-                if (null == unit) {
-                    throw new IllegalArgumentException(StringUtils.format("Unknown unit '{}' at: {}", new Object[]{c, i}));
-                }
-
-                if (unit.secUnit) {
-                    section = (section + number) * unit.value;
-                    result += section;
-                    section = 0;
-                } else {
-                    int unitNumber = number;
-                    if (0 == number && 0 == i) {
-                        unitNumber = 1;
-                    }
-
-                    section += unitNumber * unit.value;
-                }
-
-                number = 0;
-            }
-        }
-
-        if (number > 0 && null != unit) {
-            number *= (int) ((double) unit.value / 10);
-        }
-        return result + section + number;
-    }
-
 
 
     private static String longToChinese(long amount, boolean isUseTraditional) {
@@ -207,33 +192,211 @@ public class NumberChineseFormatter {
         return index == 0 ? StringUtils.BLANK : String.valueOf(CHINESE_NAME_VALUE[index * 2 - (isUseTraditional ? 0 : 1)].name);
     }
 
-    private static int chineseToNumber(char chinese) {
-        if (chinese == LIANG) {
-            chinese = TWO;
-        }
-        int index = Arrays.binarySearch(DIGITS, chinese);
-        return index > 0 ? (index + 1) / 2 : index;
-    }
-
-    private static ChineseUnit chineseToUnit(char chinese) {
-        for (ChineseUnit unit : CHINESE_NAME_VALUE) {
-            if (unit.name == chinese) {
-                return unit;
-            }
-        }
-        return null;
-    }
 
     @Getter
     private static class ChineseUnit {
         private final char name;
         private final int value;
-        private final boolean secUnit;
+        // private final boolean secUnit;
 
-        public ChineseUnit(char name, int value, boolean secUnit) {
+        // public ChineseUnit(char name, int value, boolean secUnit) {
+        public ChineseUnit(char name, int value) {
             this.name = name;
             this.value = value;
-            this.secUnit = secUnit;
+            // this.secUnit = secUnit;
         }
+
     }
+
+    private static boolean isContainByName(ChineseUnit[] units, char name) {
+        return Arrays.stream(units).anyMatch(unit -> unit.name == name);
+    }
+
+    private static Integer getNumberByName(ChineseUnit[] units, char name) {
+        Integer result = null;
+        for (ChineseUnit unit : units) {
+            if (unit.name == name) {
+                result = unit.value;
+            }
+        }
+        return result;
+    }
+
+
+
+    public static double parseChinese(String chinese) {
+
+        // 处理负号
+        boolean negative = false;
+        if (chinese.startsWith(NEGATIVE)) {
+            negative = true;
+            chinese = chinese.substring(1).trim();
+        }
+
+        // 处理货币模式：分割整数和小数部分
+        String integerPart = "";
+        String decimalPart = "";
+        int yuanIndex = chinese.indexOf(YUAN);
+        int dotIndex = chinese.indexOf(DOT);
+            if (yuanIndex != -1) {
+                integerPart = chinese.substring(0, yuanIndex).trim();
+                String afterYuan = chinese.substring(yuanIndex + 1).trim();
+                int jiaoIndex = afterYuan.indexOf(JIAO);
+                int fenIndex = afterYuan.indexOf(FEN);
+                if (jiaoIndex != -1) {
+                    decimalPart += afterYuan.substring(0, jiaoIndex).trim();
+                    if (fenIndex != -1) {
+                        decimalPart += afterYuan.substring(jiaoIndex + 1, fenIndex).trim();
+                    }
+                } else if (fenIndex != -1) {
+                    decimalPart += afterYuan.substring(0, fenIndex).trim();
+                }
+            } else if (dotIndex != -1) {
+                integerPart = chinese.substring(0, dotIndex).trim();
+                decimalPart = chinese.substring(dotIndex + 1).trim();
+            } else {
+                // 没有“元”字，整数部分是整个字符串？
+                integerPart = chinese;
+            }
+
+        // 解析整数部分
+        long integerVal = parseIntegerPart(integerPart);
+
+        // 解析小数部分
+        double decimal = parseDecimalPart(decimalPart);
+
+        // 组合整数和小数部分
+        double result = integerVal + decimal ;
+
+        if (negative) {
+            result = -result;
+        }
+
+        return result;
+    }
+
+    private static double parseDecimalPart(String decimalPart) {
+        long integer = 0;
+        if (StringUtils.isNotBlank(decimalPart)) {
+            for (int i = 0; i < decimalPart.length(); i++) {
+                char c = decimalPart.charAt(i);
+                long val = 0;
+                if (isNumberChar(c)) {
+                    val  = numberCharToValue(c);
+                }
+                integer = integer * 10 + val;
+            }
+        }
+        double decimal = 0;
+        if (integer > 0) {
+            String result = "0." + integer;
+            decimal = Double.parseDouble(result);
+        }
+        return decimal;
+    }
+
+
+    private static long parseIntegerPart(String str) {
+        if (str.isEmpty()) {
+            return 0;
+        }
+
+        // 将中文字符转换为数字和单位
+        // 初始化变量
+        long total = 0;
+        int currentNumber = 0;
+        boolean isFirstUnit = true;
+
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+
+            if (isNumberChar(c)) {
+                currentNumber += numberCharToValue(c);
+                isFirstUnit = true;
+            } else if (isUnitChar(c)) {
+                int unitValue = unitCharToValue(c);
+
+                if (isFirstUnit) {
+                    if (currentNumber == 0) {
+                        total +=  unitValue;
+                    }else {
+                        total += (long) currentNumber * unitValue;
+                    }
+                    isFirstUnit = false;
+                }else{
+                    total = (total + currentNumber) * unitValue;
+                }
+                currentNumber = 0;
+
+                // if (currentNumber == 0) {
+                //     if (isFirstUnit) {
+                //         total +=  unitValue;
+                //         isFirstUnit = false;
+                //     }
+                // } else {
+                //     total += (long) currentNumber * unitValue;
+                //     currentNumber = 0;
+                // }
+            } else if (c == ZERO) {
+                currentNumber += 0;
+            } else {
+                // 未知字符，可能抛出异常？
+                throw new IllegalArgumentException("Invalid character: " + c);
+            }
+        }
+
+        // 处理最后的currentNumber
+        total += currentNumber;
+
+        return total;
+    }
+
+    // 辅助方法：判断字符是否是数字字符
+    private static boolean isNumberChar(char c) {
+        return isContainByName(DIGITS_VALUE, c);
+    }
+
+    // 将数字字符转换为对应的数值
+    private static int numberCharToValue(char c) {
+        // int index;
+
+        Integer number = getNumberByName(DIGITS_VALUE, c);
+        if (number == null) {
+            throw new IllegalArgumentException("Invalid number character: " + c);
+        }
+
+        return number;
+
+    }
+
+    // 判断字符是否是单位字符
+    private static boolean isUnitChar(char c) {
+        return isContainByName(CHINESE_NAME_VALUE, c);
+    }
+
+    // 将单位字符转换为对应的数值
+    private static int unitCharToValue(char c) {
+
+        Integer number = getNumberByName(CHINESE_NAME_VALUE, c);
+
+        if (number == null) {
+            throw new IllegalArgumentException("Invalid unit character: " + c);
+        }
+
+        return number;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

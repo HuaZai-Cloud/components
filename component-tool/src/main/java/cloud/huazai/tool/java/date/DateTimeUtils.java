@@ -20,7 +20,7 @@ import java.util.TimeZone;
  * @since 2024/12/26
  */
 
-public class DateUtils {
+public class DateTimeUtils {
 
     // ------------------------------------------------- Date ----------------------------------------------------------
 

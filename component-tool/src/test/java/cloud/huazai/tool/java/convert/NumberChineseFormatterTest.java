@@ -10,17 +10,16 @@ class NumberChineseFormatterTest {
     void format() {
 
         double number = 123456789.12;
-        String format = NumberChineseFormatter.format(number, false);
+        String format = NumberChineseFormatter.format(number, true);
         System.out.println("format = " + format);
-        double number1 = 12345678.12;
-        String format1 = NumberChineseFormatter.format(number1, false);
+
+        String format1 = NumberChineseFormatter.format(number, false);
         System.out.println("format1 = " + format1);
-        // String format1 = NumberChineseFormatter.format(number, false);
-        // System.out.println("format1 = " + format1);
-        // String format2 = NumberChineseFormatter.format(number, true, true);
-        // System.out.println("format2 = " + format2);
-        // String format3 = NumberChineseFormatter.format(number, true, false);
-        // System.out.println("format3 = " + format3);
+
+        String format2 = NumberChineseFormatter.format(number, true, true);
+        System.out.println("format2 = " + format2);
+        String format3 = NumberChineseFormatter.format(number, true, false);
+        System.out.println("format3 = " + format3);
 
 
 
@@ -47,7 +46,7 @@ class NumberChineseFormatterTest {
         // System.out.println("parse = " + parse);
 
 
-        System.out.println("format = " + NumberChineseFormatter.parseChinese("一千二百三十四万五千六百七十八点一二"));
+        System.out.println("format = " + NumberChineseFormatter.parseChinese("一亿二千三百四十五万六千七百八十九点一二"));
         // System.out.println("format1 = " + NumberChineseFormatter.parseChinese("一仟二仟三佰四拾五佰六仟七佰八拾九点一二"));
         // System.out.println("format2 = " + NumberChineseFormatter.parseChinese("壹千贰万叁千肆百伍百陆万柒千捌百玖元壹角贰分"));
         // System.out.println("format3 = " + NumberChineseFormatter.parseChinese("壹千贰万叁千肆百伍百陆万柒千捌百玖点壹贰"));

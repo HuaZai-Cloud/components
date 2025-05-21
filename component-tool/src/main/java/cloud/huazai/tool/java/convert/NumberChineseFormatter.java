@@ -54,19 +54,20 @@ public class NumberChineseFormatter {
     };
 
     private static final ChineseUnit[] CHINESE_NAME_VALUE = new ChineseUnit[]{
-            new ChineseUnit(' ', 1),
+            // new ChineseUnit(' ', 1),
             new ChineseUnit('十', 10), new ChineseUnit('拾', 10),
             new ChineseUnit('百', 100), new ChineseUnit('佰', 100),
             new ChineseUnit('千', 1000), new ChineseUnit('仟', 1000),
-            new ChineseUnit('万', 10000),  new ChineseUnit('萬', 10000),
-            new ChineseUnit('亿', 100000000),new ChineseUnit('億', 100000000),
+            new ChineseUnit('万', 10000), new ChineseUnit('萬', 10000),
+            new ChineseUnit('亿', 100000000), new ChineseUnit('億', 100000000),
     };
 
 
     /**
      * Number Formatting Chinese
-     * @param number number
-     * @param isUseTraditional  use traditional Chinese characters.
+     *
+     * @param number           number
+     * @param isUseTraditional use traditional Chinese characters.
      * @return Chinese Number
      */
     public static String format(double number, boolean isUseTraditional) {
@@ -75,9 +76,10 @@ public class NumberChineseFormatter {
 
     /**
      * Number Formatting Chinese
-     * @param number number
+     *
+     * @param number           number
      * @param isUseTraditional use traditional Chinese characters.
-     * @param isMoneyMode is Money Mode
+     * @param isMoneyMode      is Money Mode
      * @return Chinese Number
      */
     public static String format(double number, boolean isUseTraditional, boolean isMoneyMode) {
@@ -104,14 +106,14 @@ public class NumberChineseFormatter {
 
         if (numFen == 0 && numJiao == 0) {
             if (isMoneyMode) {
-                chineseStr.append(YUAN+ZHENG);
+                chineseStr.append(YUAN + ZHENG);
             }
         } else if (numFen == 0) {
             chineseStr.append(isMoneyMode ? YUAN : DOT)
                     .append(numberToChinese(numJiao, isUseTraditional))
                     .append(isMoneyMode ? JIAO : StringUtils.BLANK);
         } else if (numJiao == 0) {
-            chineseStr.append(isMoneyMode ? YUAN+ZERO : DOT+ZERO)
+            chineseStr.append(isMoneyMode ? YUAN + ZERO : DOT + ZERO)
                     .append(numberToChinese(numFen, isUseTraditional))
                     .append(isMoneyMode ? FEN : StringUtils.BLANK);
         } else {
@@ -129,21 +131,21 @@ public class NumberChineseFormatter {
         if (0L == amount) {
             return String.valueOf(ZERO);
         }
-            int[] parts = new int[4];
+        int[] parts = new int[4];
 
-            for(int i = 0; amount != 0L; ++i) {
-                parts[i] = (int)(amount % 10000L);
-                amount /= 10000L;
-            }
+        for (int i = 0; amount != 0L; ++i) {
+            parts[i] = (int) (amount % 10000L);
+            amount /= 10000L;
+        }
 
-            StringBuilder chineseStr = new StringBuilder();
+        StringBuilder chineseStr = new StringBuilder();
 
         for (int i = 3; i >= 0; i--) {
             int partValue = parts[i];
             if (partValue > 0) {
                 String partChinese = thousandToChinese(partValue, isUseTraditional);
                 if (i > 0) {
-                    partChinese += CHINESE_NAME_VALUE[i * 2 + (isUseTraditional ? 0 : 1)].name;
+                    partChinese += CHINESE_NAME_VALUE[i * 2 + 4 + (isUseTraditional ? 1 : 0)].name;
                 }
                 if (chineseStr.length() > 0 && partValue < 1000) {
                     addPreZero(chineseStr);
@@ -152,7 +154,6 @@ public class NumberChineseFormatter {
             } else if (chineseStr.length() > 0) {
                 addPreZero(chineseStr);
             }
-
         }
 
         return chineseStr.length() > 0 && chineseStr.charAt(0) == ZERO ? chineseStr.substring(1) : chineseStr.toString();
@@ -189,7 +190,7 @@ public class NumberChineseFormatter {
     }
 
     private static String getUnitName(int index, boolean isUseTraditional) {
-        return index == 0 ? StringUtils.BLANK : String.valueOf(CHINESE_NAME_VALUE[index * 2 - (isUseTraditional ? 0 : 1)].name);
+        return index == 0 ? StringUtils.BLANK : String.valueOf(CHINESE_NAME_VALUE[index * 2 - (isUseTraditional ? 1 : 2)].name);
     }
 
 
@@ -223,7 +224,6 @@ public class NumberChineseFormatter {
     }
 
 
-
     public static double parseChinese(String chinese) {
 
         // 处理负号
@@ -238,26 +238,26 @@ public class NumberChineseFormatter {
         String decimalPart = "";
         int yuanIndex = chinese.indexOf(YUAN);
         int dotIndex = chinese.indexOf(DOT);
-            if (yuanIndex != -1) {
-                integerPart = chinese.substring(0, yuanIndex).trim();
-                String afterYuan = chinese.substring(yuanIndex + 1).trim();
-                int jiaoIndex = afterYuan.indexOf(JIAO);
-                int fenIndex = afterYuan.indexOf(FEN);
-                if (jiaoIndex != -1) {
-                    decimalPart += afterYuan.substring(0, jiaoIndex).trim();
-                    if (fenIndex != -1) {
-                        decimalPart += afterYuan.substring(jiaoIndex + 1, fenIndex).trim();
-                    }
-                } else if (fenIndex != -1) {
-                    decimalPart += afterYuan.substring(0, fenIndex).trim();
+        if (yuanIndex != -1) {
+            integerPart = chinese.substring(0, yuanIndex).trim();
+            String afterYuan = chinese.substring(yuanIndex + 1).trim();
+            int jiaoIndex = afterYuan.indexOf(JIAO);
+            int fenIndex = afterYuan.indexOf(FEN);
+            if (jiaoIndex != -1) {
+                decimalPart += afterYuan.substring(0, jiaoIndex).trim();
+                if (fenIndex != -1) {
+                    decimalPart += afterYuan.substring(jiaoIndex + 1, fenIndex).trim();
                 }
-            } else if (dotIndex != -1) {
-                integerPart = chinese.substring(0, dotIndex).trim();
-                decimalPart = chinese.substring(dotIndex + 1).trim();
-            } else {
-                // 没有“元”字，整数部分是整个字符串？
-                integerPart = chinese;
+            } else if (fenIndex != -1) {
+                decimalPart += afterYuan.substring(0, fenIndex).trim();
             }
+        } else if (dotIndex != -1) {
+            integerPart = chinese.substring(0, dotIndex).trim();
+            decimalPart = chinese.substring(dotIndex + 1).trim();
+        } else {
+            // 没有“元”字，整数部分是整个字符串？
+            integerPart = chinese;
+        }
 
         // 解析整数部分
         long integerVal = parseIntegerPart(integerPart);
@@ -266,7 +266,7 @@ public class NumberChineseFormatter {
         double decimal = parseDecimalPart(decimalPart);
 
         // 组合整数和小数部分
-        double result = integerVal + decimal ;
+        double result = integerVal + decimal;
 
         if (negative) {
             result = -result;
@@ -282,7 +282,7 @@ public class NumberChineseFormatter {
                 char c = decimalPart.charAt(i);
                 long val = 0;
                 if (isNumberChar(c)) {
-                    val  = numberCharToValue(c);
+                    val = numberCharToValue(c);
                 }
                 integer = integer * 10 + val;
             }
@@ -301,6 +301,8 @@ public class NumberChineseFormatter {
             return 0;
         }
 
+        // 按照 亿 万 分组
+
         // 将中文字符转换为数字和单位
         // 初始化变量
         long total = 0;
@@ -318,12 +320,12 @@ public class NumberChineseFormatter {
 
                 if (isFirstUnit) {
                     if (currentNumber == 0) {
-                        total +=  unitValue;
-                    }else {
+                        total += unitValue;
+                    } else {
                         total += (long) currentNumber * unitValue;
                     }
                     isFirstUnit = false;
-                }else{
+                } else {
                     total = (total + currentNumber) * unitValue;
                 }
                 currentNumber = 0;
@@ -385,18 +387,6 @@ public class NumberChineseFormatter {
 
         return number;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

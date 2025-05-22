@@ -241,7 +241,7 @@ public class NumberChineseFormatter {
                 }
                 lastIsZero = true;
             } else {
-                chineseStr.insert(0, numberToChinese(digit, isUseTraditional) + getUnitName(i, isUseTraditional));
+                chineseStr.insert(0, ChineseDigit.getChineseDigitByDigitAndIsUseTraditional(digit, isUseTraditional) + getUnitName(i, isUseTraditional));
                 lastIsZero = false;
             }
             temp /= 10;

@@ -28,7 +28,7 @@ public enum ChineseDigitUnit {
         this.isUseTraditional = isUseTraditional;
     }
 
-    private static boolean isChineseDigitUnitByName(char name) {
+    public static boolean isChineseDigitUnitByName(char name) {
         for (ChineseDigitUnit chineseDigit : values()) {
             if (chineseDigit.name == name) {
                 return true;
@@ -37,7 +37,7 @@ public enum ChineseDigitUnit {
         return false;
     }
 
-    private static Integer getDigitByName(char name) {
+    public static Integer getDigitByName(char name) {
         Integer result = null;
         for (ChineseDigitUnit chineseDigit : values()) {
             if (chineseDigit.name == name) {
@@ -47,7 +47,7 @@ public enum ChineseDigitUnit {
         return result;
     }
 
-    private static String getChineseDigitUnitByDigitAndIsUseTraditional(int digit,boolean isUseTraditional) {
+    public static String getChineseDigitUnitByDigitAndIsUseTraditional(int digit,boolean isUseTraditional) {
         String result = "";
         for (ChineseDigitUnit chineseDigit : values()) {
             if (chineseDigit.isUseTraditional == isUseTraditional && chineseDigit.value == digit) {

@@ -2,12 +2,10 @@ package cloud.huazai.tool.java.convert;
 
 import cloud.huazai.tool.java.lang.StringUtils;
 import cloud.huazai.tool.java.util.CollectionUtils;
-import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,44 +28,6 @@ public class NumberChineseFormatter {
     private static final String ZHENG = "整";
     private static final char LIANG = '两';
     private static final char TWO = '二';
-
-    private static final char[] DIGITS = new char[]{
-            '零',
-            '一', '壹',
-            '二', '贰',
-            '三', '叁',
-            '四', '肆',
-            '五', '伍',
-            '六', '陆',
-            '七', '柒',
-            '八', '捌',
-            '九', '玖'
-    };
-
-
-    private static final ChineseUnit[] DIGITS_VALUE = new ChineseUnit[]{
-            new ChineseUnit('零', 0),
-            new ChineseUnit('一', 1), new ChineseUnit('壹', 1),
-            new ChineseUnit('二', 2), new ChineseUnit('贰', 2),
-            new ChineseUnit('三', 3), new ChineseUnit('叁', 3),
-            new ChineseUnit('四', 4), new ChineseUnit('肆', 4),
-            new ChineseUnit('五', 5), new ChineseUnit('伍', 5),
-            new ChineseUnit('六', 6), new ChineseUnit('陆', 6),
-            new ChineseUnit('七', 7), new ChineseUnit('柒', 7),
-            new ChineseUnit('八', 8), new ChineseUnit('捌', 8),
-            new ChineseUnit('九', 9), new ChineseUnit('玖', 9),
-
-    };
-
-    private static final ChineseUnit[] CHINESE_NAME_VALUE = new ChineseUnit[]{
-            // new ChineseUnit(' ', 1),
-            new ChineseUnit('十', 10), new ChineseUnit('拾', 10),
-            new ChineseUnit('百', 100), new ChineseUnit('佰', 100),
-            new ChineseUnit('千', 1000), new ChineseUnit('仟', 1000),
-            new ChineseUnit('万', 10000), new ChineseUnit('萬', 10000),
-            new ChineseUnit('亿', 100000000), new ChineseUnit('億', 100000000),
-    };
-
 
     /**
      * Number Formatting Chinese
@@ -127,12 +87,12 @@ public class NumberChineseFormatter {
             if (numFen == 0 && numJiao == 0) {
                 chineseStr.append(YUAN + ZHENG);
             } else if (numFen == 0) {
-                chineseStr.append(YUAN).append(numberToChinese(numJiao, isUseTraditional)).append(JIAO);
+                chineseStr.append(YUAN).append(ChineseDigit.getChineseDigitByDigitAndIsUseTraditional(numJiao, isUseTraditional)).append(JIAO);
             } else if (numJiao == 0) {
-                chineseStr.append(YUAN + ZERO).append(numberToChinese(numFen, isUseTraditional)).append(FEN);
+                chineseStr.append(YUAN + ZERO).append(ChineseDigit.getChineseDigitByDigitAndIsUseTraditional(numFen, isUseTraditional)).append(FEN);
             } else {
-                chineseStr.append(YUAN).append(numberToChinese(numJiao, isUseTraditional)).append(JIAO)
-                        .append(numberToChinese(numFen, isUseTraditional)).append(FEN);
+                chineseStr.append(YUAN).append(ChineseDigit.getChineseDigitByDigitAndIsUseTraditional(numJiao, isUseTraditional)).append(JIAO)
+                        .append(ChineseDigit.getChineseDigitByDigitAndIsUseTraditional(numFen, isUseTraditional)).append(FEN);
             }
         }else{
             if (decimal != 0) {
@@ -145,7 +105,7 @@ public class NumberChineseFormatter {
                 if (CollectionUtils.isNotEmpty(digits)) {
                     Collections.reverse(digits);
                     for (Integer digit : digits) {
-                        chineseStr.append(numberToChinese(digit, isUseTraditional));
+                        chineseStr.append(ChineseDigit.getChineseDigitByDigitAndIsUseTraditional(digit, isUseTraditional));
                     }
                 }
             }
@@ -209,7 +169,7 @@ public class NumberChineseFormatter {
             if (partValue > 0) {
                 String partChinese = thousandToChinese(partValue, isUseTraditional);
                 if (i > 0) {
-                    partChinese += CHINESE_NAME_VALUE[i * 2 + 4 + (isUseTraditional ? 1 : 0)].name;
+                    partChinese += ChineseDigitUnit.values()[i * 2 + 4 + (isUseTraditional ? 0 : 1)].getName();
                 }
                 if (chineseStr.length() > 0 && partValue < 1000) {
                     addPreZero(chineseStr);
@@ -221,9 +181,7 @@ public class NumberChineseFormatter {
         }
         return chineseStr.length() > 0 && chineseStr.charAt(0) == ZERO ? chineseStr.substring(1) : chineseStr.toString();
     }
-    private static char numberToChinese(int number, boolean isUseTraditional) {
-        return 0 == number ? DIGITS[0] : DIGITS[number * 2 - (isUseTraditional ? 0 : 1)];
-    }
+
     private static void addPreZero(StringBuilder chineseStr) {
         if (chineseStr.length() > 0 && chineseStr.charAt(0) != ZERO) {
             chineseStr.insert(0, ZERO);
@@ -249,37 +207,19 @@ public class NumberChineseFormatter {
         return chineseStr.toString();
     }
     private static String getUnitName(int index, boolean isUseTraditional) {
-        return index == 0 ? StringUtils.BLANK : String.valueOf(CHINESE_NAME_VALUE[index * 2 - (isUseTraditional ? 1 : 2)].name);
+        return index == 0 ? StringUtils.BLANK : String.valueOf(ChineseDigitUnit.values()[index * 2 - (isUseTraditional ? 2 : 1)].getName());
     }
-    @Getter
-    private static class ChineseUnit {
-        private final char name;
-        private final int value;
-        public ChineseUnit(char name, int value) {
-            this.name = name;
-            this.value = value;
-        }
-    }
-    private static boolean isContainByName(ChineseUnit[] units, char name) {
-        return Arrays.stream(units).anyMatch(unit -> unit.name == name);
-    }
-    private static Integer getNumberByName(ChineseUnit[] units, char name) {
-        Integer result = null;
-        for (ChineseUnit unit : units) {
-            if (unit.name == name) {
-                result = unit.value;
-            }
-        }
-        return result;
-    }
+
     private static double parseDecimalPart(String decimalPart) {
         long integer = 0;
         if (StringUtils.isNotBlank(decimalPart)) {
             for (int i = 0; i < decimalPart.length(); i++) {
                 char c = decimalPart.charAt(i);
                 long val = 0;
-                if (isNumberChar(c)) {
-                    val = numberCharToValue(c);
+                if (ChineseDigit.isChineseDigitByName(c)) {
+                    val = ChineseDigit.getDigitByName(c);
+                }else{
+                    throw new IllegalArgumentException("Invalid number character: " + c);
                 }
                 integer = integer * 10 + val;
             }
@@ -293,12 +233,14 @@ public class NumberChineseFormatter {
     }
 
     private static long parseIntegerPart(String str) {
-        if (str.isEmpty()) return 0;
+        if (str.isEmpty()) {
+            return 0;
+        }
 
         List<String> groups = splitChineseNumber(str);
-        long total = 0;
-        long yiValue = 0, wanValue = 0, geValue = 0;
-
+        long yiValue = 0;
+        long wanValue = 0;
+        long geValue = 0;
         for (String group : groups) {
             if (group.endsWith("亿") || group.endsWith("億")) {
                 yiValue = parseSimpleGroup(group.substring(0, group.length() - 1)) * 100000000L;
@@ -319,51 +261,20 @@ public class NumberChineseFormatter {
 
         for (int i = 0; i < group.length(); i++) {
             char c = group.charAt(i);
-            if (isNumberChar(c)) {
-                current = current * 10 + numberCharToValue(c);
-            } else if (isUnitChar(c)) {
-                int unit = unitCharToValue(c);
+            if (ChineseDigit.isChineseDigitByName(c)) {
+                current = current * 10 + ChineseDigit.getDigitByName(c);
+            } else if (ChineseDigitUnit.isChineseDigitUnitByName(c)) {
+                int unit = ChineseDigitUnit.getDigitByName(c);
                 result += current * unit;
                 current = 0;
+            }else{
+                throw new IllegalArgumentException("Invalid number character: " + c);
             }
         }
 
         result += current;
         return result;
     }
-
-    // private static long parseIntegerPart(String str) {
-    //     if (str.isEmpty()) {
-    //         return 0;
-    //     }
-    //     long total = 0;
-    //     List<String> chineseNumberList = splitChineseNumber(str);
-    //     for (int i = 0; i < chineseNumberList.size(); i++) {
-    //         long currentNumber = 0;
-    //         int number = 0;
-    //         String chineseNumber = chineseNumberList.get(i);
-    //         for (int j = 0; j < chineseNumber.length(); j++) {
-    //             char c = chineseNumber.charAt(j);
-    //             if (isNumberChar(c)) {
-    //                 number += numberCharToValue(c);
-    //             } else if (isUnitChar(c)) {
-    //                 int unitValue = unitCharToValue(c);
-    //                 if (j==chineseNumber.length()-1 && i != chineseNumberList.size()-1) {
-    //                     currentNumber = (currentNumber + number) * unitValue;
-    //                 } else {
-    //                     currentNumber += (long) number * unitValue;
-    //                 }
-    //                 number = 0;
-    //             } else {
-    //                 // 未知字符，可能抛出异常？
-    //                 throw new IllegalArgumentException("Invalid character: " + c);
-    //             }
-    //         }
-    //         currentNumber += number;
-    //         total += currentNumber;
-    //     }
-    //     return total;
-    // }
 
     private static List<String> splitChineseNumber(String str) {
         List<String> parts = new ArrayList<>();
@@ -402,28 +313,6 @@ public class NumberChineseFormatter {
         }
         return parts;
     }
-    // 辅助方法：判断字符是否是数字字符
-    private static boolean isNumberChar(char c) {
-        return isContainByName(DIGITS_VALUE, c);
-    }
-    // 将数字字符转换为对应的数值
-    private static int numberCharToValue(char c) {
-        Integer number = getNumberByName(DIGITS_VALUE, c);
-        if (number == null) {
-            throw new IllegalArgumentException("Invalid number character: " + c);
-        }
-        return number;
-    }
-    // 判断字符是否是单位字符
-    private static boolean isUnitChar(char c) {
-        return isContainByName(CHINESE_NAME_VALUE, c);
-    }
-    // 将单位字符转换为对应的数值
-    private static int unitCharToValue(char c) {
-        Integer number = getNumberByName(CHINESE_NAME_VALUE, c);
-        if (number == null) {
-            throw new IllegalArgumentException("Invalid unit character: " + c);
-        }
-        return number;
-    }
+
+
 }

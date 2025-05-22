@@ -9,7 +9,7 @@ class NumberChineseFormatterTest {
     @Test
     void format() {
 
-        double number = 123456789.12;
+        double number = 1999999999999.99D;
         String format = NumberChineseFormatter.format(number, false);
         System.out.println("format = " + format);
 
@@ -39,7 +39,7 @@ class NumberChineseFormatterTest {
         // format3 = 壹億贰仟叁佰肆拾伍萬陆仟柒佰捌拾玖点壹贰
 
 
-        System.out.println("format = " + NumberChineseFormatter.parseChinese("一亿二千三百四十五万六千七百八十九点一二"));
+        System.out.println("format = " + NumberChineseFormatter.parseChinese("九千九百九十九亿九千九百九十九万九千九百九十九点九八"));
         System.out.println("format1 = " + NumberChineseFormatter.parseChinese("一亿二千三百四十五万六千七百八十"));
         System.out.println("format2 = " + NumberChineseFormatter.parseChinese("壹億贰仟叁佰肆拾伍萬陆仟柒佰捌拾玖元壹角贰分"));
         System.out.println("format3 = " + NumberChineseFormatter.parseChinese("壹億贰仟叁佰肆拾伍萬陆仟柒佰捌拾元壹角贰分"));

@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class NumberChineseFormatter {
 
-    private static final double MAX_SUPPORTED_AMOUNT = 9.999999999999998E13;
-    private static final double MIN_SUPPORTED_AMOUNT = -9.999999999999998E13;
+    private static final double MAX_SUPPORTED_AMOUNT = 9.999999999999998E11;
+    private static final double MIN_SUPPORTED_AMOUNT = -9.999999999999998E11;
     private static final char ZERO = '零';
     private static final String NEGATIVE = "负";
     private static final String YUAN = "元";

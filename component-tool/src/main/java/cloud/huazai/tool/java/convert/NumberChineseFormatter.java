@@ -28,6 +28,14 @@ public class NumberChineseFormatter {
     private static final String ZHENG = "整";
     private static final char LIANG = '两';
     private static final char TWO = '二';
+    private static final String SIMPLIFIED_HUNDRED_MILLION = "亿";
+    private static final String TRADITIONAL_HUNDRED_MILLION = "億";
+    private static final String TRADITIONAL_TEN_THOUSAND = "萬";
+    private static final String SIMPLIFIED_TEN_THOUSAND = "万";
+    private static final char SIMPLIFIED_HUNDRED_MILLION_CHAR = '亿';
+    private static final char TRADITIONAL_HUNDRED_MILLION_CHAR = '億';
+    private static final char TRADITIONAL_TEN_THOUSAND_CHAR = '萬';
+    private static final char SIMPLIFIED_TEN_THOUSAND_CHAR = '万';
 
     /**
      * Number Formatting Chinese
@@ -242,9 +250,9 @@ public class NumberChineseFormatter {
         long wanValue = 0;
         long geValue = 0;
         for (String group : groups) {
-            if (group.endsWith("亿") || group.endsWith("億")) {
+            if (group.endsWith(SIMPLIFIED_HUNDRED_MILLION) || group.endsWith(TRADITIONAL_HUNDRED_MILLION)) {
                 yiValue = parseSimpleGroup(group.substring(0, group.length() - 1)) * 100000000L;
-            } else if (group.endsWith("万") || group.endsWith("萬")) {
+            } else if (group.endsWith(SIMPLIFIED_TEN_THOUSAND) || group.endsWith(TRADITIONAL_TEN_THOUSAND)) {
                 wanValue = parseSimpleGroup(group.substring(0, group.length() - 1)) * 10000L;
             } else {
                 geValue = parseSimpleGroup(group);
@@ -285,11 +293,11 @@ public class NumberChineseFormatter {
         boolean inWan = false;
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
-            if (c == '亿' || c == '億') {
+            if (c == SIMPLIFIED_HUNDRED_MILLION_CHAR || c == TRADITIONAL_HUNDRED_MILLION_CHAR) {
                 yiBuilder.append(c);
                 inYi = true;
                 continue;
-            } else if (c == '万' || c == '萬') {
+            } else if (c == SIMPLIFIED_TEN_THOUSAND_CHAR || c == TRADITIONAL_TEN_THOUSAND_CHAR) {
                 wanBuilder.append(c);
                 inWan = true;
                 continue;

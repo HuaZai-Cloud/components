@@ -5,16 +5,16 @@ import lombok.Getter;
 @Getter
 public enum ChineseDigitUnit {
 
-    TRADITIONAL_ZERO('拾', 10,true),
-    SIMPLIFIED_ZERO('十', 10,false),
-    TRADITIONAL_ONE('佰', 100,true),
-    SIMPLIFIED_ONE('百', 100,false),
-    TRADITIONAL_TWO('仟', 1000,true),
-    SIMPLIFIED_TWO('千', 1000,false),
-    TRADITIONAL_THREE('萬',  10000,true),
-    SIMPLIFIED_THREE('万',10000,false),
-    TRADITIONAL_FOUR('億', 100000000,true),
-    SIMPLIFIED_FOUR( '亿',100000000,false),
+    TRADITIONAL_TEN('拾', 10,true),
+    SIMPLIFIED_TEN('十', 10,false),
+    TRADITIONAL_HUNDRED('佰', 100,true),
+    SIMPLIFIED_HUNDRED('百', 100,false),
+    TRADITIONAL_THOUSAND('仟', 1000,true),
+    SIMPLIFIED_THOUSAND('千', 1000,false),
+    TRADITIONAL_TEN_THOUSAND('萬',  10000,true),
+    SIMPLIFIED_TEN_THOUSAND('万',10000,false),
+    TRADITIONAL_HUNDRED_MILLION('億', 100000000,true),
+    SIMPLIFIED_HUNDRED_MILLION( '亿',100000000,false),
 
     ;
 

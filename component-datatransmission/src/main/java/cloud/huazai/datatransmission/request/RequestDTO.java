@@ -1,5 +1,7 @@
 package cloud.huazai.datatransmission.request;
 
+import cloud.huazai.datatransmission.DTO;
+
 /**
  * RequestDTO
  *
@@ -7,6 +9,6 @@ package cloud.huazai.datatransmission.request;
  * @since 2024/12/12
  */
 
-public abstract class RequestDTO extends Request {
+public abstract class RequestDTO extends DTO {
 
 }

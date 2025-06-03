@@ -1,6 +1,6 @@
 package cloud.huazai.datatransmission.response;
 
-import cloud.huazai.datatransmission.Transmission;
+import cloud.huazai.datatransmission.DTO;
 
 /**
  * Response
@@ -9,7 +9,7 @@ import cloud.huazai.datatransmission.Transmission;
  * @since 2024/12/12
  */
 
-public abstract class Response extends Transmission {
+public abstract class Response extends DTO {
 
 
 

@@ -95,7 +95,7 @@ public class DistributedLockAspect {
             suffixBuilder.setLength(suffixBuilder.length() - 1);
         }
 
-        return baseKey + StringConstant.COLON + suffixBuilder.toString();
+        return baseKey + StringConstant.COLON + suffixBuilder;
     }
 
     private String getPackageNameAndMethodName(JoinPoint joinPoint) {

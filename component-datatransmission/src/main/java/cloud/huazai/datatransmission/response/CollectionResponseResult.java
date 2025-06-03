@@ -4,7 +4,6 @@ import cloud.huazai.tool.java.util.CollectionUtils;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -16,11 +15,11 @@ import java.util.Collection;
 
 @Getter
 @ToString
-public class MultiResponseResult<T> extends ResponseResult {
+public class CollectionResponseResult<T> extends ResponseResult {
 
     private Collection<T> data;
 
     public void setData(Collection<T> collData) {
-        this.data = CollectionUtils.isEmpty(collData) ? new ArrayList<>() : collData;
+        this.data = CollectionUtils.isEmpty(collData) ? CollectionUtils.immutableEmptyList() : collData;
     }
 }

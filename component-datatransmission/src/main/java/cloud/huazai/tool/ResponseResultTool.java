@@ -1,6 +1,6 @@
 package cloud.huazai.tool;
 
-import cloud.huazai.datatransmission.response.MultiResponseResult;
+import cloud.huazai.datatransmission.response.CollectionResponseResult;
 import cloud.huazai.datatransmission.response.PageResponseResult;
 import cloud.huazai.datatransmission.response.ResponseResult;
 import cloud.huazai.datatransmission.response.SingleResponseResult;
@@ -43,8 +43,8 @@ public class ResponseResultTool {
     }
 
 
-    public static <T> MultiResponseResult<T> buildSuccess(Collection<T> collData) {
-        MultiResponseResult<T> response = new MultiResponseResult<>();
+    public static <T> CollectionResponseResult<T> buildSuccess(Collection<T> collData) {
+        CollectionResponseResult<T> response = new CollectionResponseResult<>();
         response.setSuccess(true);
         response.setCode(SUCCESS_CODE);
         response.setData(collData);

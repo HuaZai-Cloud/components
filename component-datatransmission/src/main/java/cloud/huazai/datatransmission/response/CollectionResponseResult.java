@@ -15,7 +15,7 @@ import java.util.Collection;
 
 @Getter
 @ToString
-public class CollectionResponseResult<T> extends ResponseResult {
+public class CollectionResponseResult<T> extends ResponseResult<T> {
 
     private Collection<T> data;
 

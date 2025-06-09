@@ -19,15 +19,15 @@ public class ResponseResultTool {
 
     private static final String SUCCESS_CODE ="200";
 
-    public static ResponseResult buildSuccess() {
-        ResponseResult response = new ResponseResult();
+    public static <T> ResponseResult<T> buildSuccess() {
+        ResponseResult<T> response = new ResponseResult<T>();
         response.setSuccess(true);
         response.setCode(SUCCESS_CODE);
         return response;
     }
 
-    public static ResponseResult buildFailure(String errCode, String errMessage) {
-        ResponseResult response = new ResponseResult();
+    public static <T> ResponseResult<T> buildFailure(String errCode, String errMessage) {
+        ResponseResult<T> response = new ResponseResult<T>();
         response.setSuccess(false);
         response.setCode(errCode);
         response.setErrMessage(errMessage);
@@ -62,12 +62,12 @@ public class ResponseResultTool {
         return response;
     }
 
-    public static <T> PageResponseResult<T> buildSuccess(int pageSize, int pageIndex) {
+    public static <T> PageResponseResult<T> buildSuccess(int totalCount,int pageSize, int pageIndex) {
         PageResponseResult<T> response = new PageResponseResult<>();
         response.setSuccess(true);
         response.setCode(SUCCESS_CODE);
         response.setData(new ArrayList<>());
-        response.setTotalCount(0);
+        response.setTotalCount(totalCount);
         response.setPageSize(pageSize);
         response.setPageIndex(pageIndex);
         return response;

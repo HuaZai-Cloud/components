@@ -21,6 +21,4 @@ public @interface DistributedLock {
     String errorMessage() default "Unable to acquire lock"; // 未获取锁时的异常信息
 
 
-
-
 }

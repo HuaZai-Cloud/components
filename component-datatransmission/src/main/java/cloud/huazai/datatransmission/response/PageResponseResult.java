@@ -16,7 +16,7 @@ import java.util.Collection;
 
 @Getter
 @ToString
-public class PageResponseResult<T> extends ResponseResult {
+public class PageResponseResult<T> extends ResponseResult<T> {
 
     private int totalCount = 0;
 

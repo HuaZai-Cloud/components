@@ -48,7 +48,7 @@ public class JsonUtils {
     }
 
 
-    public static <T> List<T> parseArray(String json, Class<T> clazz) {
+    public static <T> List<T> parseList(String json, Class<T> clazz) {
         List<T> list = new ArrayList<>();
         String[] items = splitJsonArray(json);
 
@@ -118,7 +118,7 @@ public class JsonUtils {
         if (json.startsWith(StringConstant.LEFT_CURLY_BRACE) && json.endsWith(StringConstant.RIGHT_CURLY_BRACE)) {
             return parseObject(json, clazz);
         } else if (json.startsWith(StringConstant.LEFT_SQUARE_BRACKET) && json.endsWith(StringConstant.RIGHT_SQUARE_BRACKET)) {
-            return (T) parseArray(json, clazz);
+            return (T) parseList(json, clazz);
         } else {
             throw new IllegalArgumentException("Invalid JSON string: " + json);
         }
@@ -140,7 +140,7 @@ public class JsonUtils {
             }
             if (clazz == List.class || clazz == Collection.class) {
                 Class<?> itemType = (Class<?>) ((ParameterizedType) genericType).getActualTypeArguments()[0];
-                return parseArray(value, itemType);
+                return parseList(value, itemType);
             }
             if (clazz == Map.class) {
                 return parseMap(value);

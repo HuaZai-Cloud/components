@@ -18,7 +18,7 @@
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
@@ -64,7 +64,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-boot-version>3.3.5</spring-boot-version>
+        <spring-boot-version>3.5.0</spring-boot-version>
         <spring-cloud-version>2023.0.3</spring-cloud-version>
         <fastjson2-version>2.0.53</fastjson2-version>
     </properties>

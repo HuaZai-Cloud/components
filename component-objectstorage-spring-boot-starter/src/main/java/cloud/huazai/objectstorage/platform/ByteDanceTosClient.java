@@ -24,7 +24,9 @@ public class ByteDanceTosClient implements ObjectStorageClient {
     private static volatile TOSV2 tosClient;
     private static String bucket;
 
-    public ByteDanceTosClient(ObjectStoragePlatformProperties properties) {
+    private ByteDanceTosClient() {}
+
+    ByteDanceTosClient(ObjectStoragePlatformProperties properties) {
         if (tosClient == null) {
             synchronized (AliOssClient.class) {
                 if (tosClient == null) {

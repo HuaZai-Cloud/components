@@ -15,12 +15,21 @@ import java.util.List;
  */
 public class EnumUtils {
 
+
     public static boolean isEnum(@NonNull Class<?> clazz) {
         return clazz.isEnum();
     }
 
     public static boolean isEnum(@NonNull Object obj) {
         return obj.getClass().isEnum();
+    }
+
+    public static boolean isNotEnum(@NonNull Class<?> clazz) {
+        return !isEnum(clazz);
+    }
+
+    public static boolean isNotEnum(@NonNull Object obj) {
+        return !isEnum(obj);
     }
 
     public static <E extends Enum<E>> List<E> getEnumList(Class<E> enumClass) {

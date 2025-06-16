@@ -5,6 +5,7 @@ import cloud.huazai.exception.BusinessException;
 import cloud.huazai.tool.java.date.DateTimeUtils;
 import cloud.huazai.tool.java.lang.ObjectUtils;
 import cloud.huazai.tool.java.lang.StringUtils;
+import lombok.NonNull;
 
 import java.util.Collection;
 
@@ -121,7 +122,7 @@ public class Assert {
         }
     }
 
-
+    // ------ Collection ----------------
     public static void isEmpty(Collection<?> coll) {
         isEmpty(coll, "Must be empty");
     }
@@ -158,6 +159,7 @@ public class Assert {
         }
     }
 
+    // ------ DateTime ----------------
     public static void isValidDateTime(String dateTimeStr, String format){
         isValidDateTime(dateTimeStr, format, "Must be dateTime");
     }
@@ -171,6 +173,17 @@ public class Assert {
     public static void isValidDateTime(String dateTimeStr, String format,String errCode,String errMessage){
         if (StringUtils.isNotBlank(dateTimeStr) && StringUtils.isNotBlank(format) && !DateTimeUtils.isValidDateTime(dateTimeStr, format)) {
             throw new BusinessException(errCode,errMessage);
+        }
+    }
+
+    // ------ Enum ----------------
+    public static void isEnum(@NonNull Object obj) {
+        isEnum(obj, "Must be enum");
+    }
+
+    public static void isEnum(@NonNull Object obj,String errMessage) {
+        if (EnumUtils.isNotEnum(obj.getClass())) {
+            throw new BusinessException(errMessage);
         }
     }
 

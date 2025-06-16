@@ -33,7 +33,7 @@ class JsonUtilsTest {
         System.out.println("json = " + json);
 
 
-        List<User> userList = JsonUtils.parseArray(json, User.class);
+        List<User> userList = JsonUtils.parseList(json, User.class);
 
         userList.forEach(System.out::println);
 

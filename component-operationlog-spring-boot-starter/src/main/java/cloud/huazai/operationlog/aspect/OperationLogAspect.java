@@ -4,8 +4,8 @@ package cloud.huazai.operationlog.aspect;
 import cloud.huazai.tool.java.constant.StringConstant;
 import cloud.huazai.tool.java.lang.StringUtils;
 import cloud.huazai.tool.java.util.CollectionUtils;
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONWriter;
+
+import cloud.huazai.tool.java.util.JsonUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -92,7 +92,7 @@ public class OperationLogAspect {
 
         List<String> paramList = new ArrayList<>();
         for (Object arg : args) {
-            paramList.add(JSON.toJSONString(arg, JSONWriter.Feature.IgnoreErrorGetter));
+            paramList.add(JsonUtils.toJsonString(arg));
         }
         if (CollectionUtils.isEmpty(paramList)) {
             return null;
@@ -105,6 +105,6 @@ public class OperationLogAspect {
             return null;
         }
 
-        return JSON.toJSONString(response);
+        return JsonUtils.toJsonString(response);
     }
 }

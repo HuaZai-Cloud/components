@@ -1,5 +1,6 @@
 package cloud.huazai.objectstorage.constant;
 
+import cloud.huazai.tool.java.lang.StringUtils;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -28,8 +29,7 @@ public enum ObjectStoragePlatform {
         String collect = Arrays.stream(ObjectStoragePlatform.values())
                 .map(f -> f.name().toLowerCase())
                 .collect(Collectors.joining("、"));
-        throw new IllegalArgumentException("Unsupported Platform type: " + platformName
-                + ". Supported types are " + collect);
+        throw new IllegalArgumentException(StringUtils.format("Unsupported Platform type: {}. Supported types are {}", platformName, collect));
     }
 
 }

@@ -18,5 +18,10 @@ public class SingleResponseResult<T> extends ResponseResult<T> {
 
     private T data;
 
+    private SingleResponseResult() {}
+
+    public static <T> SingleResponseResult<T> createResponseResult(){
+        return new SingleResponseResult<>();
+    }
 
 }

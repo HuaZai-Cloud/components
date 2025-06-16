@@ -13,9 +13,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ResponseResult<T> extends Response {
+public class ResponseResult<T> extends Response{
 
+    protected ResponseResult() {}
 
-
-
+    public static <T> ResponseResult<T> createResponseResult(){
+        return new ResponseResult<>();
+    }
 }

@@ -41,4 +41,10 @@ public class PageResponseResult<T> extends ResponseResult<T> {
     public void setData(Collection<T> collData) {
         this.data = CollectionUtils.isEmpty(collData) ? new ArrayList<>():collData;
     }
+
+    private PageResponseResult() {}
+
+    public static <T> PageResponseResult<T> createResponseResult(){
+        return new PageResponseResult<>();
+    }
 }

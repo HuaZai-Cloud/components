@@ -22,4 +22,11 @@ public class CollectionResponseResult<T> extends ResponseResult<T> {
     public void setData(Collection<T> collData) {
         this.data = CollectionUtils.isEmpty(collData) ? CollectionUtils.immutableEmptyList() : collData;
     }
+
+    private CollectionResponseResult() {}
+
+    public static <T> CollectionResponseResult<T> createResponseResult(){
+      return new CollectionResponseResult<>();
+    }
+
 }

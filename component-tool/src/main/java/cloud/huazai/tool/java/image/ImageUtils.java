@@ -7,8 +7,12 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Iterator;
 
 /**
@@ -100,6 +104,24 @@ public class ImageUtils {
         } finally {
             IOUtils.safeDispose(writer);
         }
+    }
+
+
+    public static BufferedImage rotateImage(BufferedImage image, double angle) {
+        double radians = Math.toRadians(angle);
+        double sin = Math.abs(Math.sin(radians));
+        double cos = Math.abs(Math.cos(radians));
+        int newWidth = (int) Math.round(image.getWidth() * cos + image.getHeight() * sin);
+        int newHeight = (int) Math.round(image.getWidth() * sin + image.getHeight() * cos);
+
+        BufferedImage rotatedImage = new BufferedImage(newWidth, newHeight, image.getType());
+        Graphics2D g2d = rotatedImage.createGraphics();
+        g2d.translate((newWidth - image.getWidth()) / 2, (newHeight - image.getHeight()) / 2);
+        g2d.rotate(radians, (double) image.getWidth() / 2, (double) image.getHeight() / 2);
+        g2d.drawImage(image, 0, 0, null);
+        g2d.dispose();
+
+        return rotatedImage;
     }
 
 }

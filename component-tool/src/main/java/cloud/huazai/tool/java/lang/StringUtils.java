@@ -139,6 +139,48 @@ public class StringUtils {
         return true;
     }
 
+    public static String substring(CharSequence str, int start) {
+        if (isEmpty(str)) {
+            return null;
+        }
+        if (start < 0) {
+            start = str.length() + start;
+        }
+        if (start < 0) {
+            start = 0;
+        }
+        if (start > str.length()) {
+            return StringConstant.BLANK;
+        }
+        return str.toString().substring(start);
+    }
+
+    public static String substring(CharSequence str, int start, int end) {
+        if (isEmpty(str)) {
+            return null;
+        }
+        if (start < 0) {
+            start = str.length() + start;
+        }
+        if (end < 0) {
+            end = str.length() + end;
+        }
+        if (end > str.length()) {
+            end = str.length();
+        }
+        if (start > end) {
+            return StringConstant.BLANK;
+        }
+        if (start < 0) {
+            start = 0;
+        }
+        if (end < 0) {
+            end = 0;
+        }
+
+        return str.toString().substring(start, end);
+    }
+
 
 
 }

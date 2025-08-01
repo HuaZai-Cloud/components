@@ -3,8 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-
     <parent>
         <groupId>cloud.huazai.component</groupId>
         <artifactId>components</artifactId>
@@ -12,9 +10,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>component-datatransmission</artifactId>
-    <name>component-datatransmission</name>
-    <description>Unified data transmission rules</description>
+    <artifactId>component-dataaccesslayer-spring-boot-starter</artifactId>
+    <name>operationlog-starte</name>
+    <description>Use AOP to record the operation log,Ready to use out of the box</description>
     <packaging>jar</packaging>
 
     <url>https://github.com/HuaZai-Cloud/huazai-components</url>
@@ -22,7 +20,7 @@
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
@@ -61,10 +59,47 @@
 
     <dependencies>
 
+
         <dependency>
-            <groupId>cloud.huazai.component</groupId>
-            <artifactId>component-tool</artifactId>
-            <scope>provided</scope>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.github.yulichang</groupId>
+            <artifactId>mybatis-plus-join-boot-starter</artifactId> <!-- MyBatis 联表查询 -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+
+
+
+
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <scope>provided</scope> <!-- 设置为 provided，只有工具类需要使用到 -->
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <scope>provided</scope> <!-- 设置为 provided，只有工具类需要使用到 -->
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <scope>provided</scope> <!-- 设置为 provided，只有工具类需要使用到 -->
         </dependency>
 
         <!--lombok-->
@@ -74,13 +109,24 @@
             <scope>provided</scope>
         </dependency>
 
+
         <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-core</artifactId>
+            <groupId>cloud.huazai.component</groupId>
+            <artifactId>component-tool</artifactId>
             <scope>provided</scope>
         </dependency>
 
-    </dependencies>
+        <dependency>
+            <groupId>cloud.huazai.component</groupId>
+            <artifactId>component-datatransmission</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
 
+    </dependencies>
 
 </project>

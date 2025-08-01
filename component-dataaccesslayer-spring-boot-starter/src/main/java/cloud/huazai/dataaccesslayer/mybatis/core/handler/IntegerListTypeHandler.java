@@ -1,0 +1,55 @@
+package cloud.huazai.dataaccesslayer.mybatis.core.handler;
+
+import cloud.huazai.tool.java.constant.StringConstant;
+import cloud.huazai.tool.java.lang.StringUtils;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedJdbcTypes;
+import org.apache.ibatis.type.MappedTypes;
+import org.apache.ibatis.type.TypeHandler;
+
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * List<Integer> 的类型转换器实现类，对应数据库的 varchar 类型
+ *
+ */
+@MappedJdbcTypes(JdbcType.VARCHAR)
+@MappedTypes(List.class)
+public class IntegerListTypeHandler implements TypeHandler<List<Integer>> {
+
+
+    @Override
+    public void setParameter(PreparedStatement ps, int i, List<Integer> strings, JdbcType jdbcType) throws SQLException {
+        ps.setString(i, StringUtils.join(strings, StringConstant.COMMA));
+    }
+
+    @Override
+    public List<Integer> getResult(ResultSet rs, String columnName) throws SQLException {
+        String value = rs.getString(columnName);
+        return getResult(value);
+    }
+
+    @Override
+    public List<Integer> getResult(ResultSet rs, int columnIndex) throws SQLException {
+        String value = rs.getString(columnIndex);
+        return getResult(value);
+    }
+
+    @Override
+    public List<Integer> getResult(CallableStatement cs, int columnIndex) throws SQLException {
+        String value = cs.getString(columnIndex);
+        return getResult(value);
+    }
+
+    private List<Integer> getResult(String value) {
+        if (value == null) {
+            return null;
+        }
+        return StringUtils.split(value, StringConstant.COMMA).stream().map(Integer::valueOf).collect(Collectors.toList());
+    }
+}

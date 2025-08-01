@@ -1,36 +1,31 @@
 package cloud.huazai.datatransmission.request;
 
-import cloud.huazai.datatransmission.request.Query;
-import cloud.huazai.tool.java.lang.StringUtils;
-import lombok.Getter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-/**
- * PageQuery
- *
- * @author devon
- * @since 2024/12/12
- */
-@Getter
-public class PageQuery extends Query {
+import java.io.Serializable;
 
-    private static final int DEFAULT_PAGE_SIZE = 10;
+@Data
+@Schema(description="分页参数")
+@EqualsAndHashCode(callSuper = true)
+public class PageQuery extends Query implements Serializable {
 
-    private int pageSize = DEFAULT_PAGE_SIZE;
+    private static final Integer PAGE_NO = 1;
+    private static final Integer PAGE_SIZE = 10;
 
-    private int pageIndex = 1;
+    @Schema(description = "页码，从 1 开始", requiredMode = Schema.RequiredMode.REQUIRED,example = "1")
+    @NotNull(message = "页码不能为空")
+    @Min(value = 1, message = "页码最小值为 1")
+    private Integer pageNo = PAGE_NO;
 
-    public void setPageSize(int pageSize) {
-        if (pageSize < 1) {
-            this.pageSize = DEFAULT_PAGE_SIZE;
-        }else{
-            this.pageSize = pageSize;
-        }
-    }
-
-    public void setPageIndex(int pageIndex) {
-        this.pageIndex = Math.max(pageIndex, 1);
-    }
-
-
+    @Schema(description = "每页条数，最大值为 100", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
+    @NotNull(message = "每页条数不能为空")
+    @Min(value = 1, message = "每页条数最小值为 1")
+    @Max(value = Integer.MAX_VALUE, message = "每页条数最大值为 100")
+    private Integer pageSize = PAGE_SIZE;
 
 }

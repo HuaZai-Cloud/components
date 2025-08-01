@@ -1,6 +1,5 @@
 package cloud.huazai.datatransmission.response;
 
-import cloud.huazai.datatransmission.DTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public abstract class Response extends DTO {
+public abstract class Response extends VO {
 
     private boolean success;
 

@@ -1,5 +1,6 @@
 package cloud.huazai.tool.java.lang;
 
+import cloud.huazai.tool.java.constant.CharConstant;
 import cloud.huazai.tool.java.constant.StringConstant;
 import lombok.NonNull;
 
@@ -182,5 +183,24 @@ public class StringUtils {
     }
 
 
+    public static String toUnderlineCase(String camelCase) {
+        if (camelCase == null || camelCase.isEmpty()) {
+            return camelCase;
+        }
+
+        StringBuilder result = new StringBuilder();
+        result.append(Character.toLowerCase(camelCase.charAt(0))); // 第一个字符小写
+
+        for (int i = 1; i < camelCase.length(); i++) {
+            char ch = camelCase.charAt(i);
+            if (Character.isUpperCase(ch)) {
+                result.append(CharConstant.UNDERLINE).append(Character.toLowerCase(ch));
+            } else {
+                result.append(ch);
+            }
+        }
+
+        return result.toString();
+    }
 
 }

@@ -34,7 +34,7 @@ public class ResponseResultTool {
         return response;
     }
 
-    public static <T> SingleResponseResult<T> buildSuccess(T data) {
+    public static <T> ResponseResult<T> buildSuccess(T data) {
         SingleResponseResult<T> response =  SingleResponseResult.createResponseResult();
         response.setSuccess(true);
         response.setCode(SUCCESS_CODE);
@@ -43,7 +43,7 @@ public class ResponseResultTool {
     }
 
 
-    public static <T> CollectionResponseResult<T> buildSuccess(Collection<T> collData) {
+    public static <T> ResponseResult<T> buildSuccess(Collection<T> collData) {
         CollectionResponseResult<T> response = CollectionResponseResult.createResponseResult();
         response.setSuccess(true);
         response.setCode(SUCCESS_CODE);
@@ -51,7 +51,7 @@ public class ResponseResultTool {
         return response;
     }
 
-    public static <T> PageResponseResult<T> buildSuccess(Collection<T> collData, int totalCount, int pageSize, int pageIndex) {
+    public static <T> ResponseResult<T> buildSuccess(Collection<T> collData, long totalCount, long pageSize, long pageIndex) {
         PageResponseResult<T> response =  PageResponseResult.createResponseResult();
         response.setSuccess(true);
         response.setCode(SUCCESS_CODE);
@@ -62,7 +62,7 @@ public class ResponseResultTool {
         return response;
     }
 
-    public static <T> PageResponseResult<T> buildSuccess(int totalCount,int pageSize, int pageIndex) {
+    public static <T> ResponseResult<T> buildSuccess(long totalCount,long pageSize, long pageIndex) {
         PageResponseResult<T> response = PageResponseResult.createResponseResult();
         response.setSuccess(true);
         response.setCode(SUCCESS_CODE);

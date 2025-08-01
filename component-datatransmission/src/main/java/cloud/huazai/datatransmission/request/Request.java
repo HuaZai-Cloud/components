@@ -1,7 +1,5 @@
 package cloud.huazai.datatransmission.request;
 
-import cloud.huazai.datatransmission.DTO;
-
 /**
  * Request
  *

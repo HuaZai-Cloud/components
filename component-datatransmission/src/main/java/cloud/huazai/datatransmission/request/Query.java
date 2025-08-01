@@ -1,7 +1,9 @@
 package cloud.huazai.datatransmission.request;
 
-import cloud.huazai.tool.java.lang.StringUtils;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+
+import java.util.List;
 
 /**
  * Query
@@ -12,24 +14,7 @@ import lombok.Getter;
 @Getter
 public  class Query extends Request {
 
-    public static final String ASC = "ASC";
-
-    public static final String DESC = "DESC";
-
-    private String orderBy;
-
-    private String orderDirection = DESC;
-
-    public void setOrderDirection(String orderDirection) {
-        if (ASC.equalsIgnoreCase(orderDirection) || DESC.equalsIgnoreCase(orderDirection)) {
-            this.orderDirection = orderDirection;
-        }
-    }
-
-    public void setOrderBy(String orderBy) {
-        if (StringUtils.isNotBlank(orderBy)) {
-            this.orderBy = orderBy;
-        }
-    }
+    @Schema(description = "排序字段")
+    private List<SortField> sortFieldList;
 
 }

@@ -7,6 +7,6 @@ package cloud.huazai.datatransmission.response;
  * @since 2024/12/12
  */
 
-public class ResponseDTO extends Response {
+public class ResponseVO extends Response {
 
 }

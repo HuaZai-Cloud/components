@@ -5,7 +5,9 @@ import cloud.huazai.tool.java.util.JsonUtils;
 import cloud.huazai.tool.java.util.MapUtils;
 import lombok.NonNull;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -50,5 +52,39 @@ public class ObjectUtils {
     }
     public static boolean isNotNull(Object obj) {
         return !isNull(obj);
+    }
+
+    public static boolean isNotEmpty(Object obj) {
+        return !isEmpty(obj);
+    }
+
+    /**
+     * 对象空判断
+     */
+    public static boolean isEmpty(Object obj) {
+        if (obj == null) {
+            return true;
+        }
+
+        if (obj.getClass().isArray()) {
+            return Array.getLength(obj) == 0;
+        }
+        if (obj instanceof CharSequence) {
+            return ((CharSequence) obj).length() == 0;
+        }
+        if (obj instanceof Collection) {
+            return ((Collection<?>) obj).isEmpty();
+        }
+        if (obj instanceof Map) {
+            return ((Map<?, ?>) obj).isEmpty();
+        }
+        if (obj instanceof Iterable) {
+            return !((Iterable<?>) obj).iterator().hasNext();
+        }
+        if (obj instanceof Iterator) {
+            return !((Iterator<?>) obj).hasNext();
+        }
+        // else
+        return false;
     }
 }

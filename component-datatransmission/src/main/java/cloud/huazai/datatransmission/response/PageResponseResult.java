@@ -18,23 +18,23 @@ import java.util.Collection;
 @ToString
 public class PageResponseResult<T> extends ResponseResult<T> {
 
-    private int totalCount = 0;
+    private long totalCount = 0;
 
-    private int pageSize = 1;
+    private long pageSize = 1;
 
-    private int pageIndex = 1;
+    private long pageIndex = 1;
 
     private Collection<T> data;
 
-    public void setTotalCount(int totalCount) {
+    public void setTotalCount(long totalCount) {
         this.totalCount = Math.max(totalCount, 0);
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(long pageSize) {
         this.pageSize = Math.max(pageSize, 1);
     }
 
-    public void setPageIndex(int pageIndex) {
+    public void setPageIndex(long pageIndex) {
         this.pageIndex = Math.max(pageIndex, 1);
     }
 

@@ -20,23 +20,6 @@ public class MyBatisUtils {
 
     private static final String MYSQL_ESCAPE_CHARACTER = "`";
 
-    // public static <T> Page<T> buildPage(PageParam pageParam) {
-    //     return buildPage(pageParam, null);
-    // }
-    //
-    // public static <T> Page<T> buildPage(PageParam pageParam, Collection<SortingField> sortingFields) {
-    //     // 页码 + 数量
-    //     Page<T> page = new Page<>(pageParam.getPageNo(), pageParam.getPageSize());
-    //     // 排序字段
-    //     if (!CollectionUtil.isEmpty(sortingFields)) {
-    //         page.addOrder(sortingFields.stream().map(sortingField -> SortingField.ORDER_ASC.equals(sortingField.getOrder())
-    //                         ? OrderItem.asc(StrUtil.toUnderlineCase(sortingField.getField()))
-    //                         : OrderItem.desc(StrUtil.toUnderlineCase(sortingField.getField())))
-    //                 .collect(Collectors.toList()));
-    //     }
-    //     return page;
-    // }
-
     /**
      * 将拦截器添加到链中
      * 由于 MybatisPlusInterceptor 不支持添加拦截器，所以只能全量设置
@@ -94,6 +77,64 @@ public class MyBatisUtils {
         return DbTypeEnum.getFindInSetTemplate(dbType)
                 .replace("#{column}", column)
                 .replace("#{value}", StringUtils.toString(value));
+    }
+
+    /**
+     * 生成适用于不同数据库的 LIMIT 语句
+     *
+     * @param dbType 数据库类型
+     * @param offset 偏移量
+     * @param limit  限制数量
+     * @return 生成的 SQL 片段
+     */
+    public static String buildLimitSql(DbType dbType, long offset, long limit) {
+        switch (dbType) {
+            case ORACLE:
+            case ORACLE_12C:
+                // Oracle 使用 ROWNUM 或者 FETCH NEXT
+                return String.format("OFFSET %d ROWS FETCH NEXT %d ROWS ONLY", offset, limit);
+            case SQL_SERVER:
+            case SQL_SERVER2005:
+                // SQL Server 使用 OFFSET FETCH 或者 TOP
+                return String.format("OFFSET %d ROWS FETCH NEXT %d ROWS ONLY", offset, limit);
+            case POSTGRE_SQL:
+            case MYSQL:
+            case H2:
+            case KINGBASE_ES:
+            case DM:
+            default:
+                // MySQL、PostgreSQL、H2 等使用 LIMIT
+                return String.format("LIMIT %d OFFSET %d", limit, offset);
+        }
+    }
+
+    /**
+     * 生成适用于不同数据库的获取当前时间的函数
+     *
+     * @param dbType 数据库类型
+     * @return 当前时间函数
+     */
+    public static String getCurrentTimeFunction(DbType dbType) {
+        switch (dbType) {
+            case ORACLE:
+            case ORACLE_12C:
+                return "SYSDATE";
+            case SQL_SERVER:
+            case SQL_SERVER2005:
+                return "GETDATE()";
+            case POSTGRE_SQL:
+                return "NOW()";
+            case MYSQL:
+                return "NOW()";
+            case H2:
+                return "NOW()";
+            case KINGBASE_ES:
+                return "NOW()";
+            case DM:
+                return "SYSDATE";
+            default:
+                return "NOW()";
+        }
     }
 
 }

@@ -3,6 +3,7 @@ package cloud.huazai.dataaccesslayer.mybatis.core.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -21,6 +22,7 @@ import java.util.Collection;
 
 public class JsonCollectionTypeHandler<T extends Collection<?>> extends BaseTypeHandler<T> {
 
+    @Getter
     private final Class<?> elementClass;
     private final ObjectMapper objectMapper;
     private final TypeReference<T> typeReference;
@@ -66,4 +68,5 @@ public class JsonCollectionTypeHandler<T extends Collection<?>> extends BaseType
             throw new RuntimeException("Error deserializing JSON to collection", e);
         }
     }
+
 }

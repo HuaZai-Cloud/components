@@ -1,2 +1,4 @@
-cloud.huazai.dataaccesslayer.mybatis.config.EncryptAutoConfiguration
-cloud.huazai.dataaccesslayer.mybatis.config.MyBatisJsonCollectionAutoConfiguration
+cloud.huazai.dataaccesslayer.mybatis.config.EncryptFieldAutoConfiguration
+cloud.huazai.dataaccesslayer.mybatis.config.JsonFieldAutoConfiguration
+cloud.huazai.dataaccesslayer.mybatis.config.MyBatisEncryptAutoConfiguration
+cloud.huazai.dataaccesslayer.mybatis.config.MyBatisJsonFieldAutoConfiguration

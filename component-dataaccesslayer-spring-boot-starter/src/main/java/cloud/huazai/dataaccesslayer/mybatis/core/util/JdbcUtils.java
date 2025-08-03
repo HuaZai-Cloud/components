@@ -53,10 +53,15 @@ public class JdbcUtils {
         // } catch (NoSuchBeanDefinitionException e) {
         //     dataSource = SpringUtils.getBean(DataSource.class);
         // }
+
+        if (dataSource == null) {
+            throw new IllegalStateException("无法获取数据源");
+        }
+
         try (Connection conn = dataSource.getConnection()) {
             return DbTypeEnum.find(conn.getMetaData().getDatabaseProductName());
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("获取数据库类型失败: " + e.getMessage(), e);
         }
     }
 
@@ -78,8 +83,37 @@ public class JdbcUtils {
      * @return 是否为 SQLServer 数据库
      */
     public static boolean isSQLServer(DbType dbType) {
-        // return ObjectUtils.equalsAny(dbType, DbType.SQL_SERVER, DbType.SQL_SERVER2005);
-        return false;
+        return dbType == DbType.SQL_SERVER || dbType == DbType.SQL_SERVER2005;
+    }
+
+    /**
+     * 判断是否为 Oracle 数据库
+     *
+     * @param dbType DB 类型
+     * @return 是否为 Oracle 数据库
+     */
+    public static boolean isOracle(DbType dbType) {
+        return dbType == DbType.ORACLE || dbType == DbType.ORACLE_12C;
+    }
+
+    /**
+     * 判断是否为 MySQL 数据库
+     *
+     * @param dbType DB 类型
+     * @return 是否为 MySQL 数据库
+     */
+    public static boolean isMySQL(DbType dbType) {
+        return dbType == DbType.MYSQL;
+    }
+
+    /**
+     * 判断是否为 PostgreSQL 数据库
+     *
+     * @param dbType DB 类型
+     * @return 是否为 PostgreSQL 数据库
+     */
+    public static boolean isPostgreSQL(DbType dbType) {
+        return dbType == DbType.POSTGRE_SQL;
     }
 
 }

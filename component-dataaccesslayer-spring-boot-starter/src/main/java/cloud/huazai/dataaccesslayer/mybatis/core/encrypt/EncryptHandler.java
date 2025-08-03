@@ -1,4 +1,4 @@
-package cloud.huazai.dataaccesslayer.mybatis.core.crypto;
+package cloud.huazai.dataaccesslayer.mybatis.core.encrypt;
 
 /**
  * CustomCryptoHandler
@@ -7,7 +7,7 @@ package cloud.huazai.dataaccesslayer.mybatis.core.crypto;
  * @since 2025/8/1 13:14
  */
 
-public interface CryptoHandler {
+public interface EncryptHandler {
 
     String encrypt(String plaintext) throws Exception;
     String decrypt(String ciphertext) throws Exception;

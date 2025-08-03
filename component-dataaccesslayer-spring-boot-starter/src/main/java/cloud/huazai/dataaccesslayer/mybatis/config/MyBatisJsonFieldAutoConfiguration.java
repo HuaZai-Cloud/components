@@ -1,20 +1,13 @@
 package cloud.huazai.dataaccesslayer.mybatis.config;
 
 import cloud.huazai.dataaccesslayer.mybatis.core.interceptor.JsonFieldInterceptor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -26,8 +19,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @AutoConfiguration
 @RequiredArgsConstructor
-@ConditionalOnClass(SqlSessionFactory.class)
-@AutoConfigureAfter(com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration.class)
+@ConditionalOnClass({SqlSessionFactory.class, JsonFieldInterceptor.class})
 public class MyBatisJsonFieldAutoConfiguration  {
 
     private static final Logger logger = LoggerFactory.getLogger(MyBatisJsonFieldAutoConfiguration.class);

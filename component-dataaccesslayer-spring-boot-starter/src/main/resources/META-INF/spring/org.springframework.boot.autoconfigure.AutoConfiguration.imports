@@ -2,3 +2,4 @@ cloud.huazai.dataaccesslayer.mybatis.config.EncryptFieldAutoConfiguration
 cloud.huazai.dataaccesslayer.mybatis.config.JsonFieldAutoConfiguration
 cloud.huazai.dataaccesslayer.mybatis.config.MyBatisEncryptAutoConfiguration
 cloud.huazai.dataaccesslayer.mybatis.config.MyBatisJsonFieldAutoConfiguration
+cloud.huazai.dataaccesslayer.sharding.core.algorith.ModuloShardingAlgorithm

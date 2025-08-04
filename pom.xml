@@ -72,6 +72,8 @@
         <mybatis-plus-version>3.5.12</mybatis-plus-version>
         <mybatis-plus-join-version>1.5.4</mybatis-plus-join-version>
         <swagger-core-version>2.2.34</swagger-core-version>
+        <shardingsphere-version>5.5.2</shardingsphere-version>
+        <flyway-version>11.10.5</flyway-version>
     </properties>
 
 
@@ -112,21 +114,17 @@
                 <version>${fastjson2-version}</version>
             </dependency>
 
-            <!-- <dependency> -->
-            <!--     <groupId>com.fasterxml.jackson.core</groupId> -->
-            <!--     <artifactId>jackson-databind</artifactId> -->
-            <!--     <version>${jackson-version}</version> -->
-            <!-- </dependency> -->
-            <!-- <dependency> -->
-            <!--     <groupId>com.fasterxml.jackson.core</groupId> -->
-            <!--     <artifactId>jackson-core</artifactId> -->
-            <!--     <version>${jackson-version}</version> -->
-            <!-- </dependency> -->
-            <!-- <dependency> -->
-            <!--     <groupId>com.fasterxml.jackson.datatype</groupId> -->
-            <!--     <artifactId>jackson-datatype-jsr310</artifactId> -->
-            <!--     <version>${jackson-version}</version> -->
-            <!-- </dependency> -->
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc</artifactId>
+                <version>${shardingsphere-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${flyway-version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.swagger.core.v3</groupId>

@@ -1,14 +1,13 @@
 package cloud.huazai.dataaccesslayer.migration.config;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.MigrationInfo;
 import org.flywaydb.core.api.MigrationInfoService;
 import org.flywaydb.core.api.output.MigrateResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import java.util.Arrays;
 
 /**
@@ -19,11 +18,11 @@ import java.util.Arrays;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class DataMigrationHelper {
 
 
-    @Autowired
-    private DataSource dataSource;
+    // private final DataSource dataSource;
 
     /**
      * 执行数据迁移

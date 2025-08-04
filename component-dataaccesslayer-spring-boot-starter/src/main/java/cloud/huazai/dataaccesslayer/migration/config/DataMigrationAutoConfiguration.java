@@ -1,14 +1,15 @@
 package cloud.huazai.dataaccesslayer.migration.config;
 
-import groovy.util.logging.Slf4j;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.DependsOn;
 
 import javax.sql.DataSource;
 
@@ -34,7 +35,7 @@ public class DataMigrationAutoConfiguration {
      * @return Flyway实例
      */
     @Bean
-    @DependsOn("dataSource")
+    @ConditionalOnBean(DataSource.class)
     public Flyway flyway(DataSource dataSource) {
         // log.info("Initializing Flyway for data migration...");
 

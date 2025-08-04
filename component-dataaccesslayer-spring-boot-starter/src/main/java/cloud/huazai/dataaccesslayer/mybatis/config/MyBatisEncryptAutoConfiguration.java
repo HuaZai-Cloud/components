@@ -1,6 +1,7 @@
 package cloud.huazai.dataaccesslayer.mybatis.config;
 
 import cloud.huazai.dataaccesslayer.mybatis.core.interceptor.EncryptFieldInterceptor;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
@@ -8,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
 
 /**
  * MyBatisEncryptAutoConfiguration

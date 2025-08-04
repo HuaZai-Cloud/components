@@ -11,8 +11,8 @@
     </parent>
 
     <artifactId>component-dataaccesslayer-spring-boot-starter</artifactId>
-    <name>operationlog-starte</name>
-    <description>Use AOP to record the operation log,Ready to use out of the box</description>
+    <name>dataaccesslayer-starte</name>
+    <description>Use database operation enhancement, ready to use out of the box</description>
     <packaging>jar</packaging>
 
     <url>https://github.com/HuaZai-Cloud/huazai-components</url>

@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>component-dataaccesslayer-spring-boot-starter</artifactId>
-    <name>dataaccesslayer-starte</name>
+    <name>component-dataaccesslayer-spring-boot-starter</name>
     <description>Use database operation enhancement, ready to use out of the box</description>
     <packaging>jar</packaging>
 
@@ -55,6 +55,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
     </properties>
 
     <dependencies>

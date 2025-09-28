@@ -2,6 +2,9 @@ package cloud.huazai.tool.java.lang;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 public class ArrayUtils {
 
@@ -49,6 +52,15 @@ public class ArrayUtils {
         }
 
         return -1;
+    }
+
+    public static <T> Optional<T> firstMatch(List<T> list, Predicate<T> predicate) {
+        for (T item : list) {
+            if (predicate.test(item)) {
+                return Optional.of(item);
+            }
+        }
+        return Optional.empty();
     }
 
 }

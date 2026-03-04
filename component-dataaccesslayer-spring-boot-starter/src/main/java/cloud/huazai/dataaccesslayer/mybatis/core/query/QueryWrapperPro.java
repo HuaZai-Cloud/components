@@ -1,12 +1,17 @@
 package cloud.huazai.dataaccesslayer.mybatis.core.query;
 
+
+import cloud.huazai.dataaccesslayer.mybatis.core.util.JdbcUtils;
 import cloud.huazai.tool.java.lang.ArrayUtils;
 import cloud.huazai.tool.java.lang.ObjectUtils;
 import cloud.huazai.tool.java.lang.StringUtils;
 import cloud.huazai.tool.java.util.CollectionUtils;
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import java.util.Collection;
+
+import static com.baomidou.mybatisplus.extension.ddl.DdlScriptErrorHandler.PrintlnLogErrorHandler.log;
 
 /**
  * 拓展 MyBatis Plus QueryWrapper 类，主要增加如下功能：
@@ -16,6 +21,11 @@ import java.util.Collection;
  * @param <T> 数据类型
  */
 public class QueryWrapperPro<T> extends QueryWrapper<T> {
+
+    private static final String SQL_LIMIT = "LIMIT %d";
+    private static final String SQL_ORACLE_ROWNUM = "ROWNUM <= %d";
+    private static final String SQL_SERVER_TOP = "TOP %d";
+
 
     public QueryWrapperPro<T> likeIfPresent(String column, String val) {
         if (StringUtils.isNotBlank(val)) {
@@ -111,60 +121,109 @@ public class QueryWrapperPro<T> extends QueryWrapper<T> {
         return this;
     }
 
-    // ========== 重写父类方法，方便链式调用 ==========
 
-    // @Override
-    // public QueryWrapperPro<T> eq(boolean condition, String column, Object val) {
-    //     super.eq(condition, column, val);
-    //     return this;
-    // }
-    //
-    // @Override
-    // public QueryWrapperPro<T> eq(String column, Object val) {
-    //     super.eq(column, val);
-    //     return this;
-    // }
-    //
-    // @Override
-    // public QueryWrapperPro<T> orderByDesc(String column) {
-    //     super.orderByDesc(true, column);
-    //     return this;
-    // }
-    //
-    // @Override
-    // public QueryWrapperPro<T> last(String lastSql) {
-    //     super.last(lastSql);
-    //     return this;
-    // }
-    //
-    // @Override
-    // public QueryWrapperPro<T> in(String column, Collection<?> coll) {
-    //     super.in(column, coll);
-    //     return this;
-    // }
 
-    // /**
-    //  * 设置只返回最后一条
-    //  *
-    //  * TODO 不是完美解，需要在思考下。如果使用多数据源，并且数据源是多种类型时，可能会存在问题：实现之返回一条的语法不同
-    //  *
-    //  * @return this
-    //  */
-    // public QueryWrapperPro<T> limitN(int n) {
-    //     DbType dbType = JdbcUtils.getDbType();
-    //     switch (dbType) {
-    //         case ORACLE:
-    //         case ORACLE_12C:
-    //             super.le("ROWNUM", n);
-    //             break;
-    //         case SQL_SERVER:
-    //         case SQL_SERVER2005:
-    //             super.select("TOP " + n + " *"); // 由于 SQL Server 是通过 SELECT TOP 1 实现限制一条，所以只好使用 * 查询剩余字段
-    //             break;
-    //         default: // MySQL、PostgreSQL、DM 达梦、KingbaseES 大金都是采用 LIMIT 实现
-    //             super.last("LIMIT " + n);
-    //     }
-    //     return this;
-    // }
+    /**
+     * 限制查询结果条数（基础版）
+     * @param n 限制条数，<=0 时不生效
+     * @return 当前 QueryWrapperPro 实例
+     */
+    public QueryWrapperPro<T> limit(int n) {
+        return limit(0, n);
+    }
+
+    /**
+     * 分页查询（支持偏移量）
+     * @param offset 偏移量（起始位置，从 0 开始）
+     * @param limit  每页条数
+     * @return 当前 QueryWrapperPro 实例
+     */
+    public QueryWrapperPro<T> limit(long offset, long limit) {
+        if (limit <= 0) {
+            return this;
+        }
+
+        try {
+            DbType dbType = JdbcUtils.getDbType();
+            if (dbType == null) {
+                log.warn("无法获取数据库类型，默认使用 LIMIT 语法");
+                appendLimitSql(offset, limit);
+                return this;
+            }
+
+            if (JdbcUtils.isOracle(dbType)) {
+                appendOracleLimitSql(offset, limit);
+            } else if (JdbcUtils.isSQLServer(dbType)) {
+                appendSqlServerLimitSql(offset, limit);
+            } else if (JdbcUtils.isMySQL(dbType) || JdbcUtils.isPostgreSQL(dbType)
+                    || JdbcUtils.isDM(dbType) || JdbcUtils.isKingbaseES(dbType)) {
+                appendLimitSql(offset, limit);
+            } else {
+                log.warn(StringUtils.format("不支持的数据库类型：{}，默认使用 LIMIT 语法", dbType.getDesc()));
+                appendLimitSql(offset, limit);
+            }
+        } catch (Exception e) {
+            log.error("获取数据库类型或拼接分页 SQL 失败", e);
+            appendLimitSql(offset, limit);
+        }
+
+        return this;
+    }
+
+    /**
+     * 只返回一条记录
+     *
+     * @return this
+     */
+    public QueryWrapperPro<T> limitOne() {
+        return limit(1);
+    }
+
+    /**
+     * 拼接 MySQL/PostgreSQL 等通用 LIMIT 语法
+     */
+    private void appendLimitSql(long offset, long limit) {
+        if (offset <= 0) {
+            super.last(String.format(SQL_LIMIT, limit));
+        } else {
+            super.last(String.format("LIMIT %d OFFSET %d", limit, offset));
+        }
+    }
+
+    /**
+     * 拼接 Oracle 分页语法
+     * <p>
+     * 简单场景：直接使用 ROWNUM <= n
+     * 复杂场景（带偏移量）：使用子查询 + ROWNUM 实现
+     */
+    private void appendOracleLimitSql(long offset, long limit) {
+        if (offset <= 0) {
+            super.le(SQL_ORACLE_ROWNUM, limit);
+        } else {
+            String sql = String.format(
+                    ") T WHERE ROWNUM <= %d AND RN > %d",
+                    offset + limit, offset
+            );
+            super.last("SELECT * FROM (SELECT TMP.*, ROWNUM RN FROM (" + sql);
+        }
+    }
+
+    /**
+     * 拼接 SQL Server 分页语法
+     * <p>
+     * 简单场景：使用 TOP n
+     * 复杂场景（带偏移量）：使用 OFFSET FETCH（SQL Server 2012+）
+     */
+    private void appendSqlServerLimitSql(long offset, long limit) {
+        if (offset <= 0) {
+            super.last(String.format(SQL_SERVER_TOP, limit));
+        } else {
+            String sql = String.format(
+                    "OFFSET %d ROWS FETCH NEXT %d ROWS ONLY",
+                    offset, limit
+            );
+            super.last(sql);
+        }
+    }
 
 }

@@ -112,8 +112,17 @@ public class JdbcUtils {
      * @param dbType DB 类型
      * @return 是否为 PostgreSQL 数据库
      */
+
     public static boolean isPostgreSQL(DbType dbType) {
         return dbType == DbType.POSTGRE_SQL;
+    }
+
+    public static boolean isDM(DbType dbType) {
+        return dbType == DbType.DM;
+    }
+
+    public static boolean isKingbaseES(DbType dbType) {
+        return dbType == DbType.KINGBASE_ES;
     }
 
 }

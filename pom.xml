@@ -57,6 +57,7 @@
         <module>component-tool</module>
         <module>component-objectstorage-spring-boot-starter</module>
         <module>component-dataaccesslayer-spring-boot-starter</module>
+        <module>component-uni-notify-spring-boot-starter</module>
     </modules>
 
     <properties>

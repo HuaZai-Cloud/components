@@ -2,6 +2,7 @@ package cloud.huazai.tool.java.util;
 
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageInputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -48,5 +49,15 @@ public class IOUtils {
         if (writer != null) {
             writer.dispose();
         }
+    }
+
+    public static void safeClose(Closeable closeable) {
+        if (null != closeable) {
+            try {
+                closeable.close();
+            } catch (Exception var2) {
+            }
+        }
+
     }
 }

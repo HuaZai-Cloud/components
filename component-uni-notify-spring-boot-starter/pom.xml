@@ -3,7 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>cloud.huazai.component</groupId>
         <artifactId>components</artifactId>
@@ -11,9 +10,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>component-operationlog-spring-boot-starter</artifactId>
-    <name>operationlog-starter</name>
-    <description>Use AOP to record the operation log,Ready to use out of the box</description>
+    <artifactId>component-uni-notify-spring-boot-starter</artifactId>
+    <name>uni-notify-starter</name>
+    <description>Unified notice,Ready to use out of the box</description>
     <packaging>jar</packaging>
 
     <url>https://github.com/HuaZai-Cloud/huazai-components</url>
@@ -52,7 +51,6 @@
         <url>https://github.com/HuaZai-Cloud/huazai-components</url>
     </scm>
 
-
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -62,38 +60,25 @@
 
     <dependencies>
 
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-
-
-        <!-- 工具包 -->
-        <!-- <dependency> -->
-        <!--     <groupId>com.alibaba.fastjson2</groupId> -->
-        <!--     <artifactId>fastjson2</artifactId> -->
-        <!-- </dependency> -->
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-            <scope>provided</scope>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <scope>provided</scope>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.angus</groupId>
+            <artifactId>jakarta.mail</artifactId>
         </dependency>
 
         <dependency>
             <groupId>cloud.huazai.component</groupId>
             <artifactId>component-tool</artifactId>
-            <scope>provided</scope>
         </dependency>
-
 
         <!--lombok-->
         <dependency>
@@ -101,7 +86,10 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+
+
     </dependencies>
+
 
 
 </project>
